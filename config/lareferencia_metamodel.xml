@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~   Copyright (c) 2013-2022. LA Referencia / Red CLARA and others
+  ~
+  ~   This program is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU Affero General Public License as published by
+  ~   the Free Software Foundation, either version 3 of the License, or
+  ~   (at your option) any later version.
+  ~
+  ~   This program is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU Affero General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU Affero General Public License
+  ~   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~   This file is part of LA Referencia software platform LRHarvester v4.x
+  ~   For any further information please contact Lautaro Matas <lmatas@gmail.com>
+  -->
+
+<!--
+	RCAAP configuration it's based on https://schema.org/ flat model
+	we use it also to describe the relations
+ -->
+ <!-- TODO: rever ???; rever cardinalidade; rever campos em falta -->
+<entity-relation-metamodel>
+    <entities>
+
+        <entity name="Publication"> <!-- https://schema.org/CreativeWork: https://schema.org/Dataset / https://schema.org/Article / https://schema.org/Book -->
+
+            <field name="Source.acroym"/>
+            <field name="Source.reponame"/>
+            <field name="Source.instname"/>
+
+            <field name="CreativeWork.name"/>
+            <field name="CreativeWork.headline" subject="Headline of the article."/> <!-- title -->
+            <field name="CreativeWork.alternativeHeadline" description="A secondary title of the CreativeWork."/> <!-- datacite:title @titleType=/AlternativeTitle/Subtitle/TranslatedTitle/Other -->
+            <field name="CreativeWorkSeries.issn"/>
+            <field name="Book.isbn"/>
+            <field name="CreativeWork.identifier"
+                description="The identifier property represents any kind of identifier for any kind of Thing, such as ISBNs, GTIN codes, UUIDs etc."/> <!-- owned identifiers -->
+            <!-- the following identifiers aren't described in Schema.org -->
+            <field name="CreativeWork.identifier.doi"/> <!-- relatedIdentifier.doi -->
+            <field name="CreativeWork.identifier.handle"/> <!-- identifier.handle -->
+            <field name="CreativeWork.identifier.url"/> <!-- identifier.url -->
+            <field name="CreativeWork.identifier.oai"/> <!-- identifier.url -->
+
+            <!-- TODO identify use cases for related identifiers -->
+            <!--  upc//purl//pmid//lsid//lissn//istc//igsn//eissn//ean13//bibcode//arxiv//ark//URN// -->
+            <field name="CreativeWork.identifier.other"/>
+
+            <!-- // -->
+            <field name="CreativeWork.dateCreated" description="The date on which the CreativeWork was created or the item was added to a DataFeed"/> <!-- @system date / harvesting date -->
+            <field name="CreativeWork.datePublished" description="Date of first broadcast/publication."/> <!-- date.available -->
+            <field name="CreativeWork.dateAccepted" description="Date of first broadcast/publication."/> <!-- date.accepted (non schema.org mapping) -->
+
+            <field name="CreativeWork.sdDatePublished" description="Indicates the date on which the current structured data was generated / published"/> <!-- date.issued -->
+            <field name="CreativeWork.inLanguage"  description="The language of the content or performance or used in an action"/> <!-- language -->
+            <field name="CreativeWork.publisher.name" description="The publisher of the creative work. - The name of the item."/> <!-- publisher -->
+            <field name="CreativeWork.genre" description="Genre of the creative work"/> <!-- resourceType @resourceTypeGeneral -->
+            <field name="CreativeWork.additionalType" description="Genre of the creative work"/> <!-- resourceType @COAR -->
+            <field name="CreativeWork.additionalType.url" description="Genre of the creative work"/> <!-- resourceType @COAR URI  (non schema.org mapping) -->
+            <field name="CreativeWork.description" description="A description of the item."/> <!-- description -->
+            <field name="CreativeWork.encodingFormat" description="Media type typically expressed using a MIME format"/> <!-- format -->
+            <field name="CreativeWork.isAccessibleForFree"  description="A flag to signal that the item, event, or place is accessible for free"/> <!-- rights = open access? -->
+            <field name="CreativeWork.conditionsOfAccess" description="Conditions that affect the availability of, or method(s) of access to, an item."/> <!-- rights -->
+            <field name="CreativeWork.conditionsOfAccess.uri"  description="Conditions that affect the availability of, or method(s) of access to, an item."/> <!-- rights.uri (non schema.org mapping) -->
+
+            <field name="CreativeWork.keyword" description="Keywords or tags used to describe this content."/> <!-- subject description -->
+
+            <field name="MediaObject.contentSize" description="File size in (mega/kilo) bytes."/> <!-- size -->
+            <field name="CreativeWork.version"
+                description="The version of the CreativeWork embodied by a specified resource."/> <!-- version ??? -->
+            <field name="CreativeWork.schemaVersion"
+                description="Indicates (by URL or string) a particular version of a schema used in some CreativeWork"/> <!-- version ??? -->
+
+            <field name="MediaObject"> <!-- ???? -->
+                <field name="MediaObject.contentUrl"
+                    description="Actual bytes of the media object, for example the image file or video file."/> <!-- file.url -->
+                <field name="MediaObject.encodingFormat"
+                    description="Media type typically expressed using a MIME format."/> <!-- file@mimeType  -->
+                <field name="MediaObject.additionalType" description="An additional type for the item."/> <!-- file.type: full text/dataset -->
+                <field name="MediaObject.conditionsOfAccess.uri"
+                    description="Conditions that affect the availability of, or method(s) of access to, an item."/> <!-- file@accessRightsURI (non schema.org mapping) -->
+            </field>
+
+            <field name="CreativeWork.license"> <!-- oaire:licenseCondition  -->
+                <field name="CreativeWork.license.url" description="License uri"/> <!-- oaire:licenseCondition uri  -->
+                <field name="CreativeWork.license.description" description="License description"/> <!-- oaire:licenseCondition description -->
+                <field name="CreativeWork.license.datePublished" description="License start date"/> <!-- oaire:licenseCondition startdate -->
+            </field>
+
+            <field name="Source.acronym"/>
+            <field name="CreativeWork.author"/>
+        </entity>
+    </entities>
+
+    <relations>
+    </relations>
+
+</entity-relation-metamodel>

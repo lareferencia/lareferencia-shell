@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- indexing configurations, maybe we can integrate search configurations 
+	here under a search tag -->
+<entity-indexing-config>
+
+	<!-- We can index all entities in one index or in different indexes -->
+	<index name="entity" indexer="entityIndexerSolr">
+
+		<!-- Each indexed entity can be configured separatelly -->
+		<indexed-entity source-type="Person">
+
+			<index-fields>
+				<index-field name="name" source-field="Person.name" sortable="true"/>
+				<!--index-field name="citationName" source-field="citationName" sortable="true"/-->
+			</index-fields>
+
+			<index-related-ids>
+				<related-id name="author" source-relation="CreativeWork.author" source-member="Publication" />
+			</index-related-ids>
+
+		</indexed-entity>
+		
+		
+		<!-- Each indexed entity can be configured separatelly -->
+		<indexed-entity source-type="Publication">
+
+			<index-fields>
+				<index-field name="title" source-field="CreativeWork.headline" />
+				<index-field name="keyword" source-field="CreativeWork.about" />				
+			</index-fields>
+
+		
+			<index-related-ids>
+				<related-id name="CreativeWork.author" source-relation="CreativeWork.author" source-member="Person" />
+			</index-related-ids>
+
+		</indexed-entity>
+
+	</index>
+
+	<!-- We can index all entities in one index or in different indexes -->
+	<index name="elastic" indexer="entityIndexerElastic">
+
+		<!-- Each indexed entity can be configured separatelly -->
+		<indexed-entity source-type="Person">
+
+			<index-fields>
+				<index-field name="name" source-field="name" sortable="true"/>
+				<index-field name="citationName" source-field="citationName" sortable="true"/>
+			</index-fields>
+
+			<index-related-ids>
+				<related-id name="author" source-relation="Authorship" source-member="Publication" />
+			</index-related-ids>
+
+		</indexed-entity>
+		
+		
+		<!-- Each indexed entity can be configured separatelly -->
+		<indexed-entity source-type="Publication">
+
+			<index-fields>
+				<index-field name="title" source-field="CreativeWork.headline" />
+				<index-field name="keyword" source-field="CreativeWork.about" />				
+			</index-fields>
+
+		
+			<index-related-ids>
+				<related-id name="CreativeWork.author" source-relation="CreativeWork.author" source-member="Person" />
+			</index-related-ids>
+
+		</indexed-entity>
+
+	</index>
+
+
+</entity-indexing-config>
+

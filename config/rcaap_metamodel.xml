@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~   Copyright (c) 2013-2022. LA Referencia / Red CLARA and others
+  ~
+  ~   This program is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU Affero General Public License as published by
+  ~   the Free Software Foundation, either version 3 of the License, or
+  ~   (at your option) any later version.
+  ~
+  ~   This program is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU Affero General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU Affero General Public License
+  ~   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~   This file is part of LA Referencia software platform LRHarvester v4.x
+  ~   For any further information please contact Lautaro Matas <lmatas@gmail.com>
+  -->
+
+<!--
+	RCAAP configuration it's based on https://schema.org/ flat model
+	we use it also to describe the relations
+ -->
+ <!-- TODO: rever ???; rever cardinalidade; rever campos em falta -->
+<entity-relation-metamodel>
+    <entities>
+        <entity name="Person">	<!-- https://schema.org/Person -->
+            <field name="Person.familyName"/>
+            <field name="Person.givenName"/>
+            <field name="Person.name"/> <!-- ???? -->
+            <field name="Person.alternateName" description="An alias for the item."/>
+            <field name="Person.email"/>
+            <!-- identifier -->
+            <field name="Person.identifier"
+                description="The identifier property represents any kind of identifier for any kind of Thing, such as ISBNs, GTIN codes, UUIDs etc."/>
+            <!-- the following identifiers aren't described in Schema.org -->
+            <field name="Person.identifier.orcid"/>
+            <field name="Person.identifier.researcherID"/>
+            <field name="Person.identifier.scopusAuthorID"/>
+            <field name="Person.identifier.cienciaID"/>
+            <field name="Person.identifier.other"/>
+
+            <!-- // -->
+
+            <!--
+            relation: Person.affiliation
+            -->
+        </entity>
+
+        <entity name="Publication"> <!-- https://schema.org/CreativeWork: https://schema.org/Dataset / https://schema.org/Article / https://schema.org/Book -->
+            <field name="CreativeWork.name"/>
+            <field name="CreativeWork.headline" subject="Headline of the article."/> <!-- title -->
+            <field name="CreativeWork.alternativeHeadline" description="A secondary title of the CreativeWork."/> <!-- datacite:title @titleType=/AlternativeTitle/Subtitle/TranslatedTitle/Other -->
+            <field name="CreativeWorkSeries.issn"/>
+            <field name="Book.isbn"/>
+            <field name="CreativeWork.identifier"
+                description="The identifier property represents any kind of identifier for any kind of Thing, such as ISBNs, GTIN codes, UUIDs etc."/> <!-- owned identifiers -->
+            <!-- the following identifiers aren't described in Schema.org -->
+            <field name="CreativeWork.identifier.doi"/> <!-- relatedIdentifier.doi -->
+            <field name="CreativeWork.identifier.handle"/> <!-- identifier.handle -->
+            <field name="CreativeWork.identifier.url"/> <!-- identifier.url -->
+            
+            <!-- TODO identify use cases for related identifiers -->
+            <!--  upc//purl//pmid//lsid//lissn//istc//igsn//eissn//ean13//bibcode//arxiv//ark//URN// -->
+            <field name="CreativeWork.identifier.other"/>
+
+            <!-- // -->
+            <field name="CreativeWork.dateCreated"
+                description="The date on which the CreativeWork was created or the item was added to a DataFeed"/> <!-- @system date / harvesting date -->
+            <field name="CreativeWork.datePublished" description="Date of first broadcast/publication."/> <!-- date.available -->
+            <field name="CreativeWork.dateAccepted" description="Date of first broadcast/publication."/> <!-- date.accepted (non schema.org mapping) -->
+
+            <field name="CreativeWork.sdDatePublished"
+                description="Indicates the date on which the current structured data was generated / published"/> <!-- date.issued -->
+            <field name="CreativeWork.inLanguage"
+                description="The language of the content or performance or used in an action"/> <!-- language -->
+            <field name="CreativeWork.publisher.name"
+                description="The publisher of the creative work. - The name of the item."/> <!-- publisher -->
+            <field name="CreativeWork.genre" description="Genre of the creative work"/> <!-- resourceType @resourceTypeGeneral -->
+            <field name="CreativeWork.additionalType" description="Genre of the creative work"/> <!-- resourceType @COAR -->
+            <field name="CreativeWork.additionalType.url" description="Genre of the creative work"/> <!-- resourceType @COAR URI  (non schema.org mapping) -->
+            <field name="CreativeWork.description" description="A description of the item."/> <!-- description -->
+            <field name="CreativeWork.encodingFormat"
+                description="Media type typically expressed using a MIME format"/> <!-- format -->
+            <field name="CreativeWork.isAccessibleForFree"
+                description="A flag to signal that the item, event, or place is accessible for free"/> <!-- rights = open access? -->
+            <field name="CreativeWork.conditionsOfAccess"
+                description="Conditions that affect the availability of, or method(s) of access to, an item."/> <!-- rights -->
+            <field name="CreativeWork.conditionsOfAccess.uri"
+                description="Conditions that affect the availability of, or method(s) of access to, an item."/> <!-- rights.uri (non schema.org mapping) -->
+
+            <field name="CreativeWork.about" description="The subject matter of the content."> <!-- subject -->
+                <field name="CreativeWork.about.url" description="About uri"/> <!-- subject valueURI  -->
+                <field name="CreativeWork.about.name" description="About description"/> <!-- subject subjectScheme  -->
+                <field name="CreativeWork.about.additionalType" description="About description"/> <!-- subject schemeURI -->
+                <field name="CreativeWork.keywords" description="Keywords or tags used to describe this content."/> <!-- subject description -->
+            </field>
+
+            <field name="MediaObject.contentSize" description="File size in (mega/kilo) bytes."/> <!-- size -->
+            <field name="CreativeWork.version"
+                description="The version of the CreativeWork embodied by a specified resource."/> <!-- version ??? -->
+            <field name="CreativeWork.schemaVersion"
+                description="Indicates (by URL or string) a particular version of a schema used in some CreativeWork"/> <!-- version ??? -->
+
+            <field name="MediaObject"> <!-- ???? -->
+                <field name="MediaObject.contentUrl"
+                    description="Actual bytes of the media object, for example the image file or video file."/> <!-- file.url -->
+                <field name="MediaObject.encodingFormat"
+                    description="Media type typically expressed using a MIME format."/> <!-- file@mimeType  -->
+                <field name="MediaObject.additionalType" description="An additional type for the item."/> <!-- file.type: full text/dataset -->
+                <field name="MediaObject.conditionsOfAccess.uri"
+                    description="Conditions that affect the availability of, or method(s) of access to, an item."/> <!-- file@accessRightsURI (non schema.org mapping) -->
+            </field>
+
+            <field name="CreativeWork.citation"
+                description="A citation or reference to another creative work, such as another publication, web page, scholarly article, etc.">
+                <field name="CreativeWork.citation.name"/> <!-- citationTitle -->
+                <field name="PublicationVolume.volumeNumber"
+                    description="Identifies the volume of publication or multi-part work; for example, iii or 2."/> <!-- citationVolume -->
+                <field name="PublicationIssue.pageStart" description="The page on which the work starts"/> <!-- citationStartPage -->
+                <field name="PublicationIssue.pageEnd" description="The page on which the work ends"/> <!-- citationEndPage -->
+                <field name="PublicationIssue.issueNumber" description="Identifies the issue of publication"/> <!-- citationIssue -->
+                <field name="PublicationIssue.bookEdition" description="The edition of the book"/> <!-- citationEdition (non schema.org mapping) -->
+                <field name="Event.startDate" description="The start date and time of the item."/> <!-- citationConferenceDate -->
+                <field name="Event.location"
+                    description="The location of for example where the event is happening."/> <!-- citationConferencePlace -->
+            </field>
+
+
+            <field name="CreativeWork.license"> <!-- oaire:licenseCondition  -->
+                <field name="CreativeWork.license.url" description="License uri"/> <!-- oaire:licenseCondition uri  -->
+                <field name="CreativeWork.license.description" description="License description"/> <!-- oaire:licenseCondition description -->
+                <field name="CreativeWork.license.datePublished" description="License start date"/> <!-- oaire:licenseCondition startdate -->
+            </field>
+
+
+            <!-- 
+            relation: CreativeWork.author
+            relation: CreativeWork.contributor.person
+            relation: CreativeWork.contributor.organization
+            relation: CreativeWork.provider
+            relation: Grant.fundedItem
+             -->
+        </entity>
+
+        <entity name="Organization"> <!-- https://schema.org/Organization -->
+            <field name="Organization.legalName"
+                description="The official name of the organization, e.g. the registered company name."/>
+            <field name="Organization.name" description="The name of the item."/>
+            <field name="Organization.alternateName" description="An alias for the item."/> <!-- can be used for the acronym -->
+            <field name="Organization.identifier"/>
+            <field name="Organization.url" description="URL of the item."/>
+            <field name="Organization.taxID"/>
+            <field name="Organization.email"/>
+            <field name="Organization.contactPoint" description="A contact point for a person or organization."
+                indexing="false">
+                <field name="Organization.contactPoint.name" description="The name of the item." indexing="false"/>
+                <field name="Organization.contactPoint.email" indexing="false"/>
+                <field name="Organization.contactPoint.telephone" indexing="false"/>
+            </field>
+            <!-- the following identifiers aren't described in Schema.org -->
+            <field name="Organization.identifier.ringgold"/> <!-- ringgold -->
+            <field name="Organization.identifier.isni"/> <!-- isni -->
+            <field name="Organization.identifier.ror"/> <!-- ror -->
+            <!-- // -->
+            <!--
+            relation: Organization.parentOrganization
+            -->
+        </entity>
+
+        <entity name="Funding"> <!-- https://schema.org/ResearchProject https://schema.org/Grant https://schema.org/MonetaryGrant -->
+            <field name="Funding.name" description="The name of the item."/> <!-- fundingStream example:"Horizon 2020 Framework Programme" -->
+            <field name="Funding.alternateName" description="An alias for the item."/> <!-- can be used for the acronym -->
+
+            <field name="ResearchProject.award.identifier" description="The identifier of the item."/> <!-- awardNumber (non schema.org mapping)  -->
+            <field name="ResearchProject.award.name" description="The name of the item."/> <!-- awardTitle (non schema.org mapping)  -->
+            <field name="ResearchProject.award.url" description="URL of the item."/> <!-- award.uri (non schema.org mapping) -->
+            <!-- field name="MonetaryGrant.amount" description="The amount of money."/ -->
+
+            <!-- 
+            relation: MonetaryGrant.funder
+            -->
+        </entity>
+
+        <entity name="Service"> <!-- https://schema.org/Service and https://schema.org/ArchiveOrganization -->
+            <field name="Service.name" description="The name of the item."/> <!-- name -->
+            <field name="Service.identifier.other"/>
+            <field name="Service.alternateName"/> <!-- acronym -->
+            <field name="Service.url" description="URL of the item."/> <!-- url -->
+            <field name="Service.description" description="A description of the item"/> <!-- description_pt + description_en -->
+            <field name="Service.areaServed"
+                description="The geographic area where a service or offered item is provided"/> <!-- country -->
+            <field name="Organization.email"/>
+            <field name="RCAAP.oaipmh">
+                <field name="Thing.url" description="URL of the item."/> <!-- oaiURL -->
+                <field name="SoftwareApplication.applicationCategory"
+                    description="Type of software application, e.g. 'Game, Multimedia'"/> <!-- software ??? -->
+            </field>
+            <field name="Service.serviceType" description="The type of service being offered."/> <!-- type -->
+            <field name="Service.category"
+                description="A category for the item. Greater signs or slashes can be used to informally indicate a category hierarchy"/> <!-- tags -->
+            <field name="RCAAP.directory">
+                <field name="Thing.url" description="URL of the item."/> <!-- directoryURL -->
+            </field>
+            <field name="RCAAP.repository"> <!-- Entity ??? -->
+                <field name="RCAAP.handlePrefix"/> <!-- handlePrefix -->
+                <field name="RCAAP.roarMap.url" description="URL of the item."/> <!-- roarMap -->
+                <field name="RCAAP.openDoar.url" description="URL of the item."/> <!-- directoryURL -->
+            </field>
+            <field name="RCAAP.periodical"> <!-- Entity ??? -->
+                <field name="RCAAP.doiPrefix"/> <!-- doiPrefix -->
+                <field name="CreativeWorkSeries.issn"
+                    description="The International Standard Serial Number (ISSN) that identifies this serial publication."/> <!-- issn -->
+                <!-- the following identifiers aren't described in Schema.org -->
+                <field name="RCAAP.identifier.pissn"
+                    description="The International Standard Serial Number (ISSN) that identifies this serial publication."/> <!-- pissn -->
+                <field name="RCAAP.identifier.eissn"
+                    description="The International Standard Serial Number (ISSN) that identifies this serial publication."/> <!-- eissn -->
+                <field name="RCAAP.identifier.issnL"
+                    description="The International Standard Serial Number (ISSN) that identifies this serial publication."/> <!-- issnL -->
+                <!-- // -->
+                <field name="RCAAP.sherpa.url" description="URL of the item."/> <!-- sherpa -->
+            </field>
+            <field name="RCAAP.additionalCategories"/> <!-- driver,openAIRE,fulltext,fct,thesis,cienciaVitae,cienciaId,openAIRE4,accessibleContent -->
+            <field name="RCAAP.description"/> <!-- internalNotes -->
+
+            <!-- 
+            relation: Service.provider
+            -->
+        </entity>
+
+    </entities>
+
+    <relations>
+        <relation name="CreativeWork.author" description="The author of this content or rating." fromEntity="Publication" toEntity="Person">
+            <attributes>
+                <field name="CreativeWork.author.name"
+                    description="A person (alive, dead, undead, or fictional). - The name of the item."/>
+                <field name="CreativeWork.author.affiliation.name"
+                    description="An organization such as a school, NGO, corporation, club, etc. - The name of the item."/>
+            </attributes>
+        </relation>
+        <relation name="CreativeWork.author.organization" description="The author of this content or rating. - Organization" fromEntity="Publication" toEntity="Organization">
+            <attributes>
+                <field name="CreativeWork.author.name" description="The name of the item."/>
+            </attributes>
+        </relation>
+        <relation name="CreativeWork.contributor.person" description="A secondary contributor to the CreativeWork or Event - Person" fromEntity="Publication" toEntity="Person">
+            <attributes>
+                <field name="CreativeWork.contributor.name"
+                    description="A person (alive, dead, undead, or fictional). - The name of the item."/>
+                <field name="CreativeWork.contributor.affiliation.name"
+                    description="An organization such as a school, NGO, corporation, club, etc. - The name of the item."/>
+            </attributes>
+        </relation>
+        <relation name="CreativeWork.contributor.organization" description="The author of this content or rating. - Organization" fromEntity="Publication" toEntity="Organization">
+            <attributes>
+                <field name="CreativeWork.contributor.name" description="The name of the item."/>
+            </attributes>
+        </relation>
+        <relation name="CreativeWork.provider" description="The service provider, service operator, or service performer. - Service" fromEntity="Publication" toEntity="Service">
+            <attributes>
+                <field name="CreativeWork.contributor.name" description="The name of the item."/>
+				<field name="CreativeWork.contributor.alternateName" description="An alias for the item."/> <!-- can be used for the acronym -->
+            </attributes>
+        </relation>
+        <relation name="Person.affiliation" description="An organization that this person is affiliated with. For example, a school/university, a club, or a team." fromEntity="Person" toEntity="Organization">
+        </relation>
+        <relation name="MonetaryGrant.funder" description="A person or organization that supports (sponsors) something through some kind of financial contribution" fromEntity="Funding" toEntity="Organization">
+            <attributes>
+                <field name="MonetaryGrant.funder.name"
+                    description="A person or organization that supports (sponsors) something through some kind of financial contribution - The name of the item."/>
+				<field name="MonetaryGrant.funder.alternateName"/>					
+                <field name="MonetaryGrant.funder.identifier"/>
+            </attributes>
+        </relation>
+        <relation name="Grant.fundedItem" description="Indicates an item funded or sponsored through a Grant" fromEntity="Publication" toEntity="Funding">
+			<attributes>
+                <field name="MonetaryGrant.funder.name"
+                    description="A person or organization that supports (sponsors) something through some kind of financial contribution - The name of the item."/>
+				<field name="MonetaryGrant.funder.alternateName"/>					
+                <field name="MonetaryGrant.funder.identifier"/>
+
+            </attributes>
+        </relation>
+        <relation name="Organization.parentOrganization" description="The larger organization that this organization is a subOrganization of, if any. Supersedes branchOf. Inverse property: subOrganization." fromEntity="Organization" toEntity="Organization">
+        </relation>
+        <relation name="Service.provider" description="The service provider, service operator, or service performer; the goods producer." fromEntity="Service" toEntity="Organization">
+            <attributes>
+                <field name="Organization.legalName"/>
+            </attributes>
+        </relation>
+    </relations>
+
+</entity-relation-metamodel>

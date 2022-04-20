@@ -1,0 +1,4140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entity-mapping-config>
+
+	<outputs>
+		<!--RDF creation only, at least the output of type "triplestore" must be defined, files are optional-->
+		<output type="triplestore" path="/usr/local/databases/rdf/"/>
+		<!--<output type="file" path="/tmp/rdf/" name="brcris_data.nt" format="NT"/>-->
+		<output type="file" path="/tmp/rdf/" name="brcris_data.n3" format="N3"/>
+		<!--RDF creation and immediate transfer to a target destination, the output of type "post" must be defined-->
+		<output type="post" url="http://192.168.0.76:8081/vivo/api/sparqlUpdate" user="vivo_root@mydomain.edu" password="vivoadmn" graph="&lt;http://vitro.mannlib.cornell.edu/default/vitro-kb-2&gt;"/>
+	</outputs>
+
+	<namespaces>
+		<namespace prefix="local" url="https://ibict.br/brcris/individual/"/><!--individuals, temporary-->
+		<namespace prefix="brcris" url="https://ibict.br/brcris/ontology/"/><!--ontology, temporary-->
+		<namespace prefix="owl" url="http://www.w3.org/2002/07/owl#"/>
+		<namespace prefix="rdfs" url="http://www.w3.org/2000/01/rdf-schema#"/>
+		<namespace prefix="xsd" url="http://www.w3.org/2001/XMLSchema#"/>
+		<namespace prefix="orcid" url="https://orcid.org/"/>
+		<namespace prefix="foaf" url="http://xmlns.com/foaf/0.1/"/>
+		<namespace prefix="vcard" url="http://www.w3.org/2006/vcard/ns#"/>
+		<namespace prefix="vivo" url="http://vivoweb.org/ontology/core#"/>
+		<namespace prefix="obo" url="http://purl.obolibrary.org/obo/"/>
+		<namespace prefix="geo" url="http://aims.fao.org/aos/geopolitical.owl#"/>
+		<namespace prefix="skos" url="http://www.w3.org/2004/02/skos/core#"/>
+		<namespace prefix="bibo" url="http://purl.org/ontology/bibo/"/>
+		<namespace prefix="biro" url="http://purl.org/spar/biro/"/>
+		<namespace prefix="dcterms" url="http://purl.org/dc/terms/"/>
+		<namespace prefix="event" url="http://purl.org/NET/c4dm/event.owl#"/>
+	</namespaces>
+
+	<source-entities>
+
+		<source-entity type="Person">
+
+			<source-attributes>
+
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.lattes">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:lattesIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.lattesShort">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:lattesShortIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.cpf">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:cpfNumber"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.email">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasEmail"/>
+							<object type="vcard:Email" namespace="local" prefix="email_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Email" namespace="local" prefix="email_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:email"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.orcid">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:orcidId"/>
+							<object type="owl:Thing" namespace="orcid" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="owl:Thing" namespace="orcid" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+						<!--For correct visualization in VIVO, inverse property must also be populated-->
+						<triple>
+							<subject type="owl:Thing" namespace="orcid" idType="$value"/>
+							<predicate type="objectProperty" value="vivo:confirmedOrcidId"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.researcherID">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:researcherId"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.scopusAuthorID">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:scopusId"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.cienciaID">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:cienciaId"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.capes">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:capesIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.other">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:identifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="name">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="familyName">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasName"/>
+							<object type="vcard:Name" namespace="local" prefix="name_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Name" namespace="local" prefix="name_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:familyName"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="givenName">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasName"/>
+							<object type="vcard:Name" namespace="local" prefix="name_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Name" namespace="local" prefix="name_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:givenName"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="alternateName">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasName"/>
+							<object type="vcard:Name" namespace="local" prefix="name_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Name" namespace="local" prefix="name_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:additionalName"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="citationName">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasName"/>
+							<object type="vcard:Name" namespace="local" prefix="name_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Name" namespace="local" prefix="name_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:citationName"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="gender">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:gender"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="birthDate">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:birthdate"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="birthCountry">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:hasBirthLocation"/>
+							<object type="vcard:Location" namespace="local" prefix="loc_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Location" namespace="local" prefix="loc_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasAddress"/>
+							<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:country"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="birthState">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:hasBirthLocation"/>
+							<object type="vcard:Location" namespace="local" prefix="loc_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Location" namespace="local" prefix="loc_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasAddress"/>
+							<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:region"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="birthCity">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:hasBirthLocation"/>
+							<object type="vcard:Location" namespace="local" prefix="loc_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Location" namespace="local" prefix="loc_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasAddress"/>
+							<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:locality"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="nationality">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="geo:hasNationality"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<!--A concept representing a research area must be unique accross the database-->
+				<source-attribute name="researchArea">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="fone">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasTelephone"/>
+							<object type="vcard:Telephone" namespace="local" prefix="tel_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Telephone" namespace="local" prefix="tel_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:telephone"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="personalURL">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Individual" namespace="local" prefix="ind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasURL"/>
+							<object type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:url"/>
+							<object type="xsd:anyURI" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="miniBiography">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:overview"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+			</source-attributes>
+
+			<source-relations>
+
+				<source-relation name="Affiliation">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0000053"/>
+							<object type="vivo:MemberRole" namespace="local" prefix="affil_" idType="UUID" idSource="relation"/>
+						</triple>
+						<triple>
+							<subject type="vivo:MemberRole" namespace="local" prefix="affil_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="vivo:roleContributesTo"/>
+							<object type="foaf:Organization" namespace="local" prefix="org_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="Authorship">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Authorship" namespace="local" prefix="auths_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="vivo:relates"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:Authorship" namespace="local" prefix="auths_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="vivo:relates"/>
+							<object type="bibo:Document" namespace="local" prefix="publ_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+
+					<source-relation-attributes>
+
+						<source-attribute name="order">
+							<target-triples>
+								<triple>
+									<subject type="vivo:Authorship" namespace="local" prefix="auths_" idType="UUID" idSource="relation"/>
+									<predicate type="dataProperty" value="vivo:rank"/>
+									<object type="xsd:integer" value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+
+						<source-attribute name="role">
+							<target-triples>
+								<triple>
+									<subject type="vivo:Authorship" namespace="local" prefix="auths_" idType="UUID" idSource="relation"/>
+									<predicate type="dataProperty" value="rdfs:label"/>
+									<object value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+
+						<!-- affiliation-related fields to be addressed later, as no OrgUnit id is available here -->
+					</source-relation-attributes>
+
+				</source-relation>
+
+				<source-relation name="Adivisoring">
+					<target-triples>
+						<triple>
+							<subject type="vivo:AdvisingRelationship" namespace="local" prefix="advs_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="brcris:targetPublication"/>
+							<object type="bibo:Document" namespace="local" prefix="publ_" idType="UUID" idSource="target"/>
+						</triple>
+						<triple>
+							<subject type="vivo:AdvisingRelationship" namespace="local" prefix="advs_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="vivo:relates"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:AdvisingRelationship" namespace="local" prefix="advs_" idType="UUID" idSource="relation"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="Orientação de tese/dissertação"/>
+						</triple>
+					</target-triples>
+
+					<source-relation-attributes>
+
+						<source-attribute name="order">
+							<target-triples>
+								<triple>
+									<subject type="vivo:AdvisingRelationship" namespace="local" prefix="advs_" idType="UUID" idSource="relation"/>
+									<predicate type="dataProperty" value="vivo:rank"/>
+									<object type="xsd:integer" value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+
+						<!-- affiliation-related fields to be addressed later, as no OrgUnit id is available here -->
+					</source-relation-attributes>
+
+				</source-relation>
+
+				<source-relation name="CoAdivisoring">
+					<target-triples>
+						<triple>
+							<subject type="vivo:AdvisingRelationship" namespace="local" prefix="advs_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="brcris:targetPublication"/>
+							<object type="bibo:Document" namespace="local" prefix="publ_" idType="UUID" idSource="target"/>
+						</triple>
+						<triple>
+							<subject type="vivo:AdvisingRelationship" namespace="local" prefix="advs_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="vivo:relates"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:AdvisingRelationship" namespace="local" prefix="advs_" idType="UUID" idSource="relation"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="Co-orientação de tese/dissertação"/>
+						</triple>
+					</target-triples>
+
+					<source-relation-attributes>
+
+						<source-attribute name="order">
+							<target-triples>
+								<triple>
+									<subject type="vivo:AdvisingRelationship" namespace="local" prefix="advs_" idType="UUID" idSource="relation"/>
+									<predicate type="dataProperty" value="vivo:rank"/>
+									<object type="xsd:integer" value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+
+						<!-- affiliation-related fields to be addressed later, as no OrgUnit id is available here -->
+					</source-relation-attributes>
+
+				</source-relation>
+
+				<source-relation name="Referee">
+					<target-triples>
+						<triple>
+							<subject type="brcris:RefereeRole" namespace="local" prefix="refer_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="brcris:evaluates"/>
+							<object type="bibo:Document" namespace="local" prefix="publ_" idType="UUID" idSource="target"/>
+						</triple>
+						<triple>
+							<subject type="brcris:RefereeRole" namespace="local" prefix="refer_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="obo:RO_0000052"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="brcris:RefereeRole" namespace="local" prefix="refer_" idType="UUID" idSource="relation"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="Membro de banca"/>
+						</triple>
+					</target-triples>
+
+					<source-relation-attributes>
+
+						<source-attribute name="order">
+							<target-triples>
+								<triple>
+									<subject type="brcris:RefereeRole" namespace="local" prefix="refer_" idType="UUID" idSource="relation"/>
+									<predicate type="dataProperty" value="vivo:rank"/>
+									<object type="xsd:integer" value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+
+						<!-- affiliation-related fields to be addressed later, as no OrgUnit id is available here -->
+					</source-relation-attributes>
+
+				</source-relation>
+
+				<source-relation name="Editoring">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Editorship" namespace="local" prefix="edits_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="vivo:relates"/>
+							<object type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID" idSource="target"/>
+						</triple>
+						<triple>
+							<subject type="vivo:Editorship" namespace="local" prefix="edits_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="vivo:relates"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+						</triple>
+					</target-triples>
+					<!-- affiliation-related fields to be addressed later, as no OrgUnit id is available here -->
+				</source-relation>
+
+				<source-relation name="Inventor">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID" idSource="target"/>
+							<predicate type="objectProperty" value="brcris:hasInventor"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="ConsortiumMembership">
+					<target-triples>
+						<triple>
+							<subject type="vivo:MemberRole" namespace="local" prefix="cmemb_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="obo:RO_0000052"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:MemberRole" namespace="local" prefix="cmemb_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="vivo:roleContributesTo"/>
+							<object type="vivo:Project" namespace="local" prefix="proj_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="TeamMembership">
+					<target-triples>
+						<triple>
+							<subject type="vivo:MemberRole" namespace="local" prefix="tmemb_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="obo:RO_0000052"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:MemberRole" namespace="local" prefix="tmemb_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="vivo:roleContributesTo"/>
+							<object type="vivo:Project" namespace="local" prefix="proj_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="ResearchGroupMembership">
+					<target-triples>
+						<triple>
+							<subject type="vivo:MemberRole" namespace="local" prefix="rmemb_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="obo:RO_0000052"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:MemberRole" namespace="local" prefix="rmemb_" idType="UUID" idSource="relation"/>
+							<predicate type="objectProperty" value="vivo:roleContributesTo"/>
+							<object type="foaf:Organization" namespace="local" prefix="org_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+
+					<source-relation-attributes>
+
+						<source-attribute name="role">
+							<target-triples>
+								<triple>
+									<subject type="vivo:MemberRole" namespace="local" prefix="rmemb_" idType="UUID" idSource="relation"/>
+									<predicate type="dataProperty" value="rdfs:label"/>
+									<object value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+
+						<source-attribute name="startDate">
+							<target-triples>
+								<triple>
+									<subject type="vivo:MemberRole" namespace="local" prefix="rmemb_" idType="UUID" idSource="relation"/>
+									<predicate type="objectProperty" value="vivo:dateTimeInterval"/>
+									<object type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID" idSource="relation"/>
+								</triple>
+								<triple>
+									<subject type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID" idSource="relation"/>
+									<predicate type="objectProperty" value="vivo:start"/>
+									<object type="vivo:DateTimeValue" namespace="local" prefix="sdate_" idType="UUID" idSource="relation"/>
+								</triple>
+								<triple>
+									<subject type="vivo:DateTimeValue" namespace="local" prefix="sdate_" idType="UUID" idSource="relation"/>
+									<predicate type="dataProperty" value="vivo:dateTime"/>
+									<object type="xsd:dateTime" value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+
+						<source-attribute name="endDate">
+							<target-triples>
+								<triple>
+									<subject type="vivo:MemberRole" namespace="local" prefix="rmemb_" idType="UUID" idSource="relation"/>
+									<predicate type="objectProperty" value="vivo:dateTimeInterval"/>
+									<object type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID" idSource="relation"/>
+								</triple>
+								<triple>
+									<subject type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID" idSource="relation"/>
+									<predicate type="objectProperty" value="vivo:end"/>
+									<object type="vivo:DateTimeValue" namespace="local" prefix="edate_" idType="UUID" idSource="relation"/>
+								</triple>
+								<triple>
+									<subject type="vivo:DateTimeValue" namespace="local" prefix="edate_" idType="UUID" idSource="relation"/>
+									<predicate type="dataProperty" value="vivo:dateTime"/>
+									<object type="xsd:dateTime" value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+
+						<!-- affiliation-related fields to be addressed later, as no OrgUnit id is available here -->
+					</source-relation-attributes>
+
+				</source-relation>
+
+			</source-relations>
+
+		</source-entity>
+
+		<source-entity type="Publication">
+
+			<source-attributes>
+
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.doi">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:doi"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.capes">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:capesIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.bdtd">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:bdtdIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.oasisbr">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:oasisbrIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.handle">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:handleIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.pmcid">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:pmcid"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.isi-number">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:isiNumber"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.scp-number">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:scpNumber"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.issn">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:issn"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.isbn">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:isbn10"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.other">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:identifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="type">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:type"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="language">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:language"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="title">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="subtitle">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:subtitle"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="defenceDay">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:defenseDate"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="ddate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="ddate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="publicationDate">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateTimeValue"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="pdate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="pdate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="degreeDate">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:associatedDegreeDate"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="dgdate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="dgdate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="number">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:number"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="volume">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:volume"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="issue">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:issue"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="series">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:series"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="edition">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:edition"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="startPage">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:pageStart"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="endPage">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:pageEnd"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="author">
+					<target-triples>
+						<!--TBD-->
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="advisor">
+					<target-triples>
+						<!--TBD-->
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="coadvisor">
+					<target-triples>
+						<!--TBD-->
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="referee">
+					<target-triples>
+						<!--TBD-->
+					</target-triples>
+				</source-attribute>
+
+				<!--A concept representing a research area must be unique accross the database-->
+				<source-attribute name="researchArea.cnpq">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="researchArea.capes">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="researchArea.other">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="resourceUrl">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasURL"/>
+							<object type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:url"/>
+							<object type="xsd:anyURI" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="rights">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:rights"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="license">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:license"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="keyword">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:freetextKeyword"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="abstract">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:abstract"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="status">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="bibo:status"/>
+							<object type="bibo:DocumentStatus" namespace="local" idType="$value"/>
+						</triple>
+						<triple>
+							<object type="bibo:DocumentStatus" namespace="local" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="coverage">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:coverage"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="references">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="dcterms:references"/>
+							<object type="biro:BibliographicReference" namespace="local" prefix="ref_" idType="UUID" idSource="new"/>
+						</triple>
+						<triple>
+							<subject type="biro:BibliographicReference" namespace="local" prefix="ref_" idType="UUID" idSource="new"/>
+							<predicate type="dataProperty" value="dcterms:bibliographicCitation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="accessType">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:accessRights"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+			</source-attributes>
+
+			<source-relations>
+
+				<source-relation name="ThesisSponsorship">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:sponsoredBy"/>
+							<object type="foaf:Organization" namespace="local" prefix="org_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="PublisherJournal">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasPublicationVenue"/>
+							<object type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="Publisher">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasPublicationVenue"/>
+							<object type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="PartOf">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:BFO_0000051"/>
+							<object type="bibo:Document" namespace="local" prefix="publ_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="ProgramThesis">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID" idSource="target"/>
+							<predicate type="objectProperty" value="brcris:hasPublication"/>
+							<object type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="CourseThesis">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID" idSource="target"/>
+							<predicate type="objectProperty" value="brcris:hasPublication"/>
+							<object type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="PublicationEvent">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Document" namespace="local" prefix="publ_" idType="UUID"/>
+							<predicate type="objectProperty" value="bibo:presentedAt"/>
+							<object type="event:Event" namespace="local" prefix="event_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+			</source-relations>
+
+		</source-entity>
+
+		<source-entity type="OrgUnit">
+
+			<source-attributes>
+
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.ror">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:rorIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.grid">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:gridIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.isni">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:isniIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.wikidata">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:wikidataIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.fundref">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:fundrefIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.orgref">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:orgrefIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.cnpj">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:cnpjNumber"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.cnpq">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:cnpqIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.capes">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:capesIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.mec">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:mecIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.inep">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:inepIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.other">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:identifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="type">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:type"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="juridicNature">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:organizationNature"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="acronym">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:abbreviation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="name">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="electronicAddress">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasEmail"/>
+							<object type="vcard:Email" namespace="local" prefix="email_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Email" namespace="local" prefix="email_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:email"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="coordinate.latitude">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasGeo"/>
+							<object type="vcard:Geo" namespace="local" prefix="geo_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Geo" namespace="local" prefix="geo_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:geo"/>
+							<object type="xsd:anyURI" value="$concat" storeAs="$latitude" parts="geo:;$latitude;,;$longitude"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="coordinate.longitude">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasGeo"/>
+							<object type="vcard:Geo" namespace="local" prefix="geo_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Geo" namespace="local" prefix="geo_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:geo"/>
+							<object type="xsd:anyURI" value="$concat" storeAs="$longitude" parts="geo:;$latitude;,;$longitude"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="address.description">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasAddress"/>
+							<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:streetAddress"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="address.cep">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasAddress"/>
+							<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:postalCode"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="address.city">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasAddress"/>
+							<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:locality"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="address.neighborhood">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasAddress"/>
+							<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:neighborhood"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="address.state">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasAddress"/>
+							<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:region"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="address.country">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasAddress"/>
+							<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:country"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="phone">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasTelephone"/>
+							<object type="vcard:Telephone" namespace="local" prefix="tel_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Telephone" namespace="local" prefix="tel_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:telephone"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="websiteUrl">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasURL"/>
+							<object type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:url"/>
+							<object type="xsd:anyURI" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+			</source-attributes>
+
+			<source-relations>
+
+				<source-relation name="IsUnitOf">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:BFO_0000051"/>
+							<object type="foaf:Organization" namespace="local" prefix="org_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="OrgUnitProgram">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:hasGraduateProgram"/>
+							<object type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="OrgUnitProject">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:hasProject"/>
+							<object type="vivo:Project" namespace="local" prefix="proj_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="CourseOrgUnit">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:offers"/>
+							<object type="vivo:Course" namespace="local" prefix="cour_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="ServiceOrgUnit">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ERO_0000037"/>
+							<object type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+				<source-relation name="PatentOrgUnit">
+					<target-triples>
+						<triple>
+							<subject type="foaf:Organization" namespace="local" prefix="org_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:assigneeFor"/>
+							<object type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+			</source-relations>
+
+		</source-entity>
+
+		<source-entity type="Course">
+
+			<source-attributes>
+
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.capes">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:capesIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.mec">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:mecIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.inep">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:inepIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.cnpq">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:cnpqIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.other">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:identifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="name">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="degree">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:degreeLevel"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="type">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:type"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="startDate">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateTimeInterval"/>
+							<object type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:start"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="sdate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="sdate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="endDate">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateTimeInterval"/>
+							<object type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:end"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="edate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="edate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+			</source-attributes>
+
+			<source-relations>
+
+				<source-relation name="IsProgramOf">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID" idSource="target"/>
+							<predicate type="objectProperty" value="vivo:offers"/>
+							<object type="vivo:Course" namespace="local" prefix="cour_" idType="UUID"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+			</source-relations>
+
+		</source-entity>
+
+		<source-entity type="Program">
+
+			<source-attributes>
+
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.capes">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:capesIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.cnpq">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:cnpqIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="name">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="researchArea.capes">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="researchArea.cnpq">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="evaluationArea">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:hasEvaluationArea"/>
+							<object type="skos:Concept" namespace="local" prefix="earea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="earea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="phone">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasTelephone"/>
+							<object type="vcard:Telephone" namespace="local" prefix="tel_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Telephone" namespace="local" prefix="tel_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:telephone"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="email">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasEmail"/>
+							<object type="vcard:Email" namespace="local" prefix="email_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Email" namespace="local" prefix="email_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:email"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="websiteUrl">
+					<target-triples>
+						<triple>
+							<subject type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasURL"/>
+							<object type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:url"/>
+							<object type="xsd:anyURI" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+			</source-attributes>
+
+		</source-entity>
+
+		<source-entity type="Journal">
+
+			<source-attributes>
+
+				<source-attribute name="identifier.diadorim">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:diadorimIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.latindex">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:latindexIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.ulrichsweb">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:ulrichswebIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.issn">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:issn"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.issnl">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:issnl"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.oai">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:oaiIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.uri">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:uriIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.eissn">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:eissn"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.opendoarId">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:opendoarIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="identifier.other">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:identifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="compatibility">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:compatibility"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="acronym">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:abbreviation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="status">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:journalStatus"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="accessType">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:accessRights"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="ccLicence">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:license"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="rightsType">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:rights"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="researchArea">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="researchSubarea">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="researchArea.cnpq">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="title">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="subtitle">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:subtitle"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="oldestTitle">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:oldTitle"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="editor">
+					<!--TBD-->
+				</source-attribute>
+
+				<source-attribute name="description">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:description"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="note">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:notes"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="websiteURL">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasURL"/>
+							<object type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:url"/>
+							<object type="xsd:anyURI" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="OAIPMHBaseURL">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:oaipmhUrl"/>
+							<object type="xsd:anyURI" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="subjectHeadingsURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="type">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:type"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="posPrintDeposit">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:posPrintDeposit"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="embargedTime">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:embargoedTime"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="rightsTime">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:rightsTime"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="dateAccessionedDiadorim">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:diadorimAccessionedDate"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="dadate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="dadate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="provenance">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:provenance"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="rightsAccessDiadorim">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:diadorimAccessRights"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="aggregator">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:aggregator"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="keywords">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:freetextKeyword"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="fullTextFormats">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:fullTextFormats"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="language">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:language"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="reviewProcess">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:reviewProcess"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="licenceURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="copyrightURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="rightsURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="apcURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="apcAmount">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:apcAmount"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="apcCurrency">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:apcCurrency"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="submissionURL">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:submissionUrl"/>
+							<object type="xsd:anyURI" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="submissionAmount">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:submissionAmmount"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="submissionCurrency">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:submissionCurrency"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="waiverPolicyURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="digitalArchivingPolicy">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:digitalArchivingPolicy"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="nationalArchiving">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:nationalArchiving"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="archivingURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="startYear">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateTimeInterval"/>
+							<object type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:start"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="sdate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="sdate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="endYear">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateTimeInterval"/>
+							<object type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:end"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="edate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="edate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="firstYearOpenAccessContent">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:firstYearOpenAccessContent"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="oadate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="oadate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="statisticsInformationURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="editorialBoardURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="reviewInformationURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="aimsURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="authorsInstructionsURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="plagiarismInformationURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="openAccessStatementURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="licenseURL">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="licenseAttributes">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:licenseAttributes"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="timeForPublication">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:timeToPublication"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="allowUnrestrictedReuseBOAI">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:allowUnrestrictedReuseBOAI"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="depositPolicyDirectory">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:depositPolicyDirectory"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="copyrightWithoutRestrictions">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:copyrightWithoutRestrictions"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="publicationRightsWithoutRestrictions">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:publicationRightsWithoutRestrictions"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="DOAJSeal">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:DOAJSeal"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="DOAJAcceptedAfterMarch2014">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:DOAJAcceptedAfterMarch2014"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="DateAdded">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="numberArticleRecords">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:totalRecordedArticles"/>
+							<object type="xsd:integer" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="mostRecentArticleAdded">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="objectProperty" value="brcris:dateMostRecentArticleAdded"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="mrdate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="mrdate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="meioPublicacao">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:medium"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="frequencia">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:publicationFrequency"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="publicationType">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="nature">
+					<!--Not mapped-->
+				</source-attribute>
+
+				<source-attribute name="geographicDistribution">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:geographicDistribution"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="distributionType">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:distributionType"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="distributionRoutes">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:distributionRoutes"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="DeweyClassification">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:DeweyClassification"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="circulation">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:circulation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="decimalClassification">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:decimalClassification"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="publicationFormat">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:publicationFormat"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+			</source-attributes>
+
+		</source-entity>
+
+		<source-entity type="Project">
+
+			<source-attributes>
+
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="identifier.proccessNumber">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:processNumber"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="type">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:type"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="acronym">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:abbreviation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="title">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="startDate">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateTimeInterval"/>
+							<object type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:start"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="sdate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="sdate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="endDate">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateTimeInterval"/>
+							<object type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:end"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="edate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="edate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<!--Subject represented as a Subject Area, similar to Reseach Area-->
+				<source-attribute name="subject">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasSubjectArea"/>
+							<object type="skos:Concept" namespace="local" prefix="sarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="sarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="keyword">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:freetextKeyword"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="abstract">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:description"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="status">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:projectStatus"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="modalityCode">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:modalityCode"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="modalityName">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:modalityName"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="callAbbreviation">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:callAbbreviation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="callName">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:callName"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<!--A concept representing a research area must be unique accross the database-->
+				<source-attribute name="researchAreas">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="researchAreas.cnpq">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasResearchArea"/>
+							<object type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="rarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="uses">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:uses"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+
+				<source-attribute name="OAMandate">
+					<sub-attributes>
+						<source-attribute name="mandated">
+							<target-triples>
+								<triple>
+									<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+									<predicate type="dataProperty" value="brcris:OAMandateMandated"/>
+									<object value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+
+						<source-attribute name="uri">
+							<target-triples>
+								<triple>
+									<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+									<predicate type="dataProperty" value="brcris:OAMandateUri"/>
+									<object value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+					</sub-attributes>
+				</source-attribute>
+
+			</source-attributes>
+
+			<source-relations>
+
+				<source-relation name="FundedBy">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Project" namespace="local" prefix="proj_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasFundingVehicle"/>
+							<object type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+
+			</source-relations>
+
+		</source-entity>
+		
+		<source-entity type="Community">
+		
+			<source-attributes>
+			
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="name">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="description">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:description"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+			
+			</source-attributes>
+			
+			<source-relations>
+			
+				<source-relation name="OrgUnitCommunity">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0002351"/>
+							<object type="foaf:Organization" namespace="local" prefix="org_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="PublicationCommunity">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0002351"/>
+							<object type="bibo:Document" namespace="local" prefix="publ_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="ServiceCommunity">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0002351"/>
+							<object type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="CourseCommunity">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0002351"/>
+							<object type="vivo:Course" namespace="local" prefix="cour_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="PatentCommunity">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0002351"/>
+							<object type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="ProgramCommunity">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0002351"/>
+							<object type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="ProjectCommunity">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0002351"/>
+							<object type="vivo:Project" namespace="local" prefix="proj_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="FundingCommunity">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0002351"/>
+							<object type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="PersonCommunity">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0002351"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="EventCommunity">
+					<target-triples>
+						<triple>
+							<subject type="brcris:Community" namespace="local" prefix="comm_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:RO_0002351"/>
+							<object type="event:Event" namespace="local" prefix="event_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+			
+			</source-relations>
+		
+		</source-entity>
+
+		<source-entity type="Service">
+		
+			<source-attributes>
+			
+				<source-attribute name="identifier.oai">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:oaiIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="identifier.issn">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:issn"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="identifier.isbn">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="dataProperty" value="bibo:isbn10"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="identifier.other">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:identifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="acronym">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:abbreviation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="title">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="OAIPMHBaseURL">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:oaipmhUrl"/>
+							<object type="xsd:anyURI" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="sourceType">
+					<triple>
+						<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+						<predicate type="dataProperty" value="brcris:sourceType"/>
+						<object type="xsd:anyURI" value="$value"/>
+					</triple>
+				</source-attribute>
+				
+				<source-attribute name="phoneNumber">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasTelephone"/>
+							<object type="vcard:Telephone" namespace="local" prefix="tel_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Telephone" namespace="local" prefix="tel_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:telephone"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="email">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasEmail"/>
+							<object type="vcard:Email" namespace="local" prefix="email_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Email" namespace="local" prefix="email_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:email"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="url">
+					<target-triples>
+						<triple>
+							<subject type="obo:ERO_0000005" namespace="local" prefix="serv_" idType="UUID"/>
+							<predicate type="objectProperty" value="obo:ARG_2000028"/>
+							<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+							<predicate type="objectProperty" value="vcard:hasURL"/>
+							<object type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vcard:URL" namespace="local" prefix="url_" idType="UUID"/>
+							<predicate type="dataProperty" value="vcard:url"/>
+							<object type="xsd:anyURI" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+			
+			</source-attributes>
+			
+		</source-entity>
+		
+		<source-entity type="Event">
+		
+			<source-attributes>
+			
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="internalIdentifier">
+					<target-triples>
+						<triple>
+							<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:identifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="type">
+					<target-triples>
+						<triple>
+							<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:type"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="acronym">
+					<target-triples>
+						<triple>
+							<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:abbreviation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="name">
+					<target-triples>
+						<triple>
+							<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="place">
+					<sub-attributes>
+						<source-attribute name="location">
+							<target-triples>
+								<triple>
+									<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+									<predicate type="objectProperty" value="obo:ARG_2000028"/>
+									<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+								</triple>
+								<triple>
+									<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+									<predicate type="objectProperty" value="vcard:hasAddress"/>
+									<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+								</triple>
+								<triple>
+									<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+									<predicate type="dataProperty" value="vcard:streetAddress"/>
+									<object value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+						
+						<source-attribute name="city">
+							<target-triples>
+								<triple>
+									<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+									<predicate type="objectProperty" value="obo:ARG_2000028"/>
+									<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+								</triple>
+								<triple>
+									<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+									<predicate type="objectProperty" value="vcard:hasAddress"/>
+									<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+								</triple>
+								<triple>
+									<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+									<predicate type="dataProperty" value="vcard:locality"/>
+									<object value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+						
+						<source-attribute name="state">
+							<target-triples>
+								<triple>
+									<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+									<predicate type="objectProperty" value="obo:ARG_2000028"/>
+									<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+								</triple>
+								<triple>
+									<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+									<predicate type="objectProperty" value="vcard:hasAddress"/>
+									<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+								</triple>
+								<triple>
+									<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+									<predicate type="dataProperty" value="vcard:region"/>
+									<object value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+						
+						<source-attribute name="country">
+							<target-triples>
+								<triple>
+									<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+									<predicate type="objectProperty" value="obo:ARG_2000028"/>
+									<object type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+								</triple>
+								<triple>
+									<subject type="vcard:Kind" namespace="local" prefix="kind_" idType="UUID"/>
+									<predicate type="objectProperty" value="vcard:hasAddress"/>
+									<object type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+								</triple>
+								<triple>
+									<subject type="vcard:Address" namespace="local" prefix="addr_" idType="UUID"/>
+									<predicate type="dataProperty" value="vcard:country"/>
+									<object value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+					</sub-attributes>
+				</source-attribute>
+				
+				<source-attribute name="startDate">
+					<target-triples>
+						<triple>
+							<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateTimeInterval"/>
+							<object type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:start"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="sdate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="sdate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="endDate">
+					<target-triples>
+						<triple>
+							<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateTimeInterval"/>
+							<object type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeInterval" namespace="local" prefix="tintv_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:end"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="edate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="edate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="description">
+					<target-triples>
+						<triple>
+							<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:description"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<!--Subject represented as a Subject Area, similar to Reseach Area-->
+				<source-attribute name="subject">
+					<target-triples>
+						<triple>
+							<subject type="event:Event" namespace="local" prefix="event_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasSubjectArea"/>
+							<object type="skos:Concept" namespace="local" prefix="sarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="sarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+			
+			</source-attributes>
+			
+		</source-entity>
+		
+		<source-entity type="Funding">
+		
+			<source-attributes>
+			
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="type">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+							<predicate type="dataProperty" value="dcterms:type"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+					
+				<source-attribute name="acronym">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:abbreviation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+					
+				<source-attribute name="name">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="amount">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:totalAwardAmount"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="description">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:description"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<!--Subject represented as a Subject Area, similar to Reseach Area-->
+				<source-attribute name="subject">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:hasSubjectArea"/>
+							<object type="skos:Concept" namespace="local" prefix="sarea_" idType="$value"/>
+						</triple>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="sarea_" idType="$value"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="keyword">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:freetextKeyword"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="duration">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:duration"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="OAMandate">
+					<sub-attributes>
+						<source-attribute name="mandated">
+							<target-triples>
+								<triple>
+									<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+									<predicate type="dataProperty" value="brcris:OAMandateMandated"/>
+									<object value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+						
+						<source-attribute name="uri">
+							<target-triples>
+								<triple>
+									<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+									<predicate type="dataProperty" value="brcris:OAMandateUri"/>
+									<object value="$value"/>
+								</triple>
+							</target-triples>
+						</source-attribute>
+					</sub-attributes>
+				</source-attribute>
+				
+			</source-attributes>
+			
+			<source-relations>
+			
+				<source-relation name="SubFunding">
+					<target-triples>
+						<triple>
+							<subject type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID"/>
+							<predicate type="dataProperty" value="obo:BFO_0000051"/>
+							<object type="vivo:Grant" namespace="local" prefix="fund_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+			
+			</source-relations>
+			
+		</source-entity>
+		
+		<source-entity type="ClassificationSchema">
+		
+			<source-attributes>
+			
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="skos:ConceptScheme" namespace="local" prefix="cschem_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="acronym">
+					<target-triples>
+						<triple>
+							<subject type="skos:ConceptScheme" namespace="local" prefix="cschem_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:abbreviation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="name">
+					<target-triples>
+						<triple>
+							<subject type="skos:ConceptScheme" namespace="local" prefix="cschem_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="description">
+					<target-triples>
+						<triple>
+							<subject type="skos:ConceptScheme" namespace="local" prefix="cschem_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:description"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+			
+			</source-attributes>
+		
+		</source-entity>
+		
+		<source-entity type="Concept">
+		
+			<source-attributes>
+			
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="identifier.class">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:schemaIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="name">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="dataProperty" value="rdfs:label"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="description">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:description"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+			
+			</source-attributes>
+			
+			<source-relations>
+			
+				<source-relation name="Class">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="objectProperty" value="skos:inScheme"/>
+							<object type="skos:ConceptScheme" namespace="local" prefix="cschem_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="ClassSynonym">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="objectProperty" value="skos:exactMatch"/>
+							<object type="skos:Concept" namespace="local" prefix="conc_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="ClassParenthood">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="objectProperty" value="skos:broader"/>
+							<object type="skos:Concept" namespace="local" prefix="conc_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="JournalArea">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:researchAreaOf"/>
+							<object type="bibo:Journal" namespace="local" prefix="journ_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="PublicationSubject">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:researchAreaOf"/>
+							<object type="bibo:Document" namespace="local" prefix="publ_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="PersonKnowledgeArea">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:researchAreaOf"/>
+							<object type="foaf:Person" namespace="local" prefix="pers_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+				
+				<source-relation name="ProgramArea">
+					<target-triples>
+						<triple>
+							<subject type="skos:Concept" namespace="local" prefix="conc_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:researchAreaOf"/>
+							<object type="brcris:GraduateProgram" namespace="local" prefix="gprog_" idType="UUID" idSource="target"/>
+						</triple>
+					</target-triples>
+				</source-relation>
+			
+			</source-relations>
+		
+		</source-entity>
+		
+		<source-entity type="Patent">
+		
+			<source-attributes>
+			
+				<source-attribute name="identifier.brcris">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:brcrisIdentifier"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="identifier.lattesNumber">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:lattesNumber"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="identifier.espacenetNumber">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:espacenetNumber"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="{kindCode.espacenet, country}">
+					<!-- TDB, attribute needs to be fixed -->
+				</source-attribute>
+				
+				<source-attribute name="title.espacenet">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:espacenetTitle"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="title.lattes">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:lattesTitle"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="depositDate">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateFiled"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="pdate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="pdate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="publicationDate">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="objectProperty" value="vivo:dateTimeValue"/>
+							<object type="vivo:DateTimeValue" namespace="local" prefix="pdate_" idType="UUID"/>
+						</triple>
+						<triple>
+							<subject type="vivo:DateTimeValue" namespace="local" prefix="pdate_" idType="UUID"/>
+							<predicate type="dataProperty" value="vivo:dateTime"/>
+							<object type="xsd:dateTime" value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="countryCode">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:countryCode"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="inventor">
+					<!--TBD-->
+				</source-attribute>
+				
+				<source-attribute name="applicant">
+					<!--TBD-->
+				</source-attribute>
+				
+				<source-attribute name="classification.ipc">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:ipcClassification"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="classification.cpc">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:cpcClassification"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="numberOfInventors">
+					<!--Not mapped-->
+				</source-attribute>
+				
+				<source-attribute name="numberOfApplicants">
+					<!--Not mapped-->
+				</source-attribute>
+				
+				<source-attribute name="abstract.lattes">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:lattesAbstract"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="abstract.espacenet">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="dataProperty" value="brcris:espacenetAbstract"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="originatesFrom">
+					<!--TBD-->
+				</source-attribute>
+				
+				<source-attribute name="predecessor">
+					<!--TBD-->
+				</source-attribute>
+				
+				<source-attribute name="bilbiographicReferences">
+					<target-triples>
+						<triple>
+							<subject type="bibo:Patent" namespace="local" prefix="pat_" idType="UUID"/>
+							<predicate type="objectProperty" value="dcterms:references"/>
+							<object type="biro:BibliographicReference" namespace="local" prefix="ref_" idType="UUID" idSource="new"/>
+						</triple>
+						<triple>
+							<subject type="biro:BibliographicReference" namespace="local" prefix="ref_" idType="UUID" idSource="new"/>
+							<predicate type="dataProperty" value="dcterms:bibliographicCitation"/>
+							<object value="$value"/>
+						</triple>
+					</target-triples>
+				</source-attribute>
+				
+				<source-attribute name="patentReferences">
+					<!--TBD-->
+				</source-attribute>
+				
+				<source-attribute name="backwardPatentReferences">
+					<!--Not mapped-->
+				</source-attribute>
+			
+			</source-attributes>
+			
+		</source-entity>
+
+	</source-entities>
+
+</entity-mapping-config>

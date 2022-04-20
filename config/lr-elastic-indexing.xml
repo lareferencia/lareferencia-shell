@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~   Copyright (c) 2013-2022. LA Referencia / Red CLARA and others
+  ~
+  ~   This program is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU Affero General Public License as published by
+  ~   the Free Software Foundation, either version 3 of the License, or
+  ~   (at your option) any later version.
+  ~
+  ~   This program is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU Affero General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU Affero General Public License
+  ~   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~   This file is part of LA Referencia software platform LRHarvester v4.x
+  ~   For any further information please contact Lautaro Matas <lmatas@gmail.com>
+  -->
+
+<entity-indexing-config>
+		
+		<!-- Each indexed entity can be configured separately -->
+        <indexed-entity name="entity" source-type="Publication" indexSemanticIds="true" indexEntityType="false">
+
+            <index-fields>
+
+                <index-field name="acronym" source-field="Source.acronym" />
+                <index-field name="reponame" source-field="Source.reponame"/>
+                <index-field name="instname" source-field="Source.instname"/>
+
+                <index-field name="title" source-field="CreativeWork.headline" />
+                <index-field name="description" source-field="CreativeWork.description"/>
+                <index-field name="keyword" source-field="CreativeWork.keyword"/>
+                
+				<!-- date.available -->
+                <index-field name="datePublished" source-field="CreativeWork.datePublished"/>
+                <index-field name="dateAccepted" source-field="CreativeWork.dateAccepted"/>
+
+				<!-- identifier -->
+                <index-field name="doi" source-field="CreativeWork.identifier.doi"/>
+                <index-field name="url" source-field="CreativeWork.identifier.handle"/>
+                <index-field name="url" source-field="CreativeWork.identifier.url"/>
+                <index-field name="oai_identifier" source-field="CreativeWork.identifier.oai"/>
+
+                <!-- version -->
+                <index-field name="version" source-field="CreativeWork.version"/>
+
+                <!-- tipo -->
+				<index-field name="type" source-field="CreativeWork.additionalType"/>
+
+                <index-field name="access" source-field="CreativeWork.conditionsOfAccess.url"/>
+
+				<!-- language -->
+                <index-field name="lang" source-field="CreativeWork.inLanguage"/>
+
+                <!-- author -->
+                <index-field name="author" source-field="CreativeWork.author"/>
+
+                <!-- country -->
+                <index-field name="acronym" source-field="Source.acronym"/>
+
+
+            </index-fields>
+
+            <index-nested-entities/>
+
+
+
+        </indexed-entity>      
+        
+        
+</entity-indexing-config>

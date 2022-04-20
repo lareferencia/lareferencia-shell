@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~   Copyright (c) 2013-2022. LA Referencia / Red CLARA and others
+  ~
+  ~   This program is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU Affero General Public License as published by
+  ~   the Free Software Foundation, either version 3 of the License, or
+  ~   (at your option) any later version.
+  ~
+  ~   This program is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU Affero General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU Affero General Public License
+  ~   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~   This file is part of LA Referencia software platform LRHarvester v4.x
+  ~   For any further information please contact Lautaro Matas <lmatas@gmail.com>
+  -->
+
+<!-- indexing configurations, maybe we can integrate search configurations
+	here under a search tag -->
+<entity-indexing-config>
+
+	<!-- We can index all entities in one index or in different indexes -->
+    <index name="entity" indexer="entityIndexerSolr">
+
+		<!-- Each indexed entity can be configured separately -->
+        <indexed-entity source-type="Person">
+
+            <index-fields>
+                <index-field name="Person.name" source-field="Person.name" sortable="true"/>
+                <index-field name="Person.familyName" source-field="Person.familyName" sortable="true"/>
+                <index-field name="Person.givenName" source-field="Person.givenName" sortable="true"/>
+
+                <index-field name="Person.identifier.orcid" source-field="Person.identifier.orcid"/>
+                <index-field name="Person.identifier.researcherID"
+                    source-field="Person.identifier.researcherID"/>
+                <index-field name="Person.identifier.scopusAuthorID"
+                    source-field="Person.identifier.scopusAuthorID"/>
+                <index-field name="Person.identifier.cienciaID" source-field="Person.identifier.cienciaID"/>
+                <index-field name="Person.identifier.other" source-field="Person.identifier.other"/>
+
+                <index-field name="Person.affiliation..Organization.legalName"
+                    source-relation="Person.affiliation" source-member="Organization"
+                    source-field="Organization.legalName"/>
+
+                <index-field name="Person.affiliation..Organization.identifier.isni"
+                    source-relation="Person.affiliation" source-member="Organization"
+                    source-field="Organization.identifier.isni"/>
+                <index-field name="Person.affiliation..Organization.identifier.ringgold"
+                    source-relation="Person.affiliation" source-member="Organization"
+                    source-field="Organization.identifier.ringgold"/>
+            </index-fields>
+
+            <index-related-ids>
+                <related-id name="Person.affiliation" source-relation="Person.affiliation"
+                    source-member="Organization"/>
+            </index-related-ids>
+
+        </indexed-entity>
+		
+		
+		<!-- Each indexed entity can be configured separately -->
+        <indexed-entity source-type="Publication">
+
+            <index-fields>
+				<!-- publication metadata -->
+                <index-field name="CreativeWork.headline" source-field="CreativeWork.headline"
+                    sortable="true"/>
+                <index-field name="CreativeWork.description" source-field="CreativeWork.description"/>
+
+				<!-- subject -->
+                <index-field name="CreativeWork.about" source-field="CreativeWork.about"/>
+                <index-field name="CreativeWork.about..CreativeWork.keywords"
+                    source-field="CreativeWork.about" source-subfield="CreativeWork.keywords"/>
+                <index-field name="CreativeWork.about..CreativeWork.about.url"
+                    source-field="CreativeWork.about" source-subfield="CreativeWork.about.url"/>
+
+				<!-- dates -->
+                <index-field name="CreativeWork.sdDatePublished" source-field="CreativeWork.sdDatePublished"
+                    sortable="true"/>
+				<!-- date.available -->
+                <index-field name="CreativeWork.datePublished" source-field="CreativeWork.datePublished"
+                    sortable="true" type="DATE"/>
+
+				<!-- identifier -->
+                <index-field name="CreativeWork.identifier.doi" source-field="CreativeWork.identifier.doi"/>
+                <index-field name="CreativeWork.identifier.handle"
+                    source-field="CreativeWork.identifier.handle"/>
+                <index-field name="CreativeWork.identifier.url" source-field="CreativeWork.identifier.url"/>
+                <index-field name="CreativeWork.identifier.other"
+                    source-field="CreativeWork.identifier.other"/>
+
+				<!-- access -->
+                <index-field name="CreativeWork.isAccessibleForFree"
+                    source-field="CreativeWork.isAccessibleForFree"/>
+                <index-field name="CreativeWork.conditionsOfAccess"
+                    source-field="CreativeWork.conditionsOfAccess"/>
+                <index-field name="CreativeWork.conditionsOfAccess.uri"
+                    source-field="CreativeWork.conditionsOfAccess.uri"/>
+				
+				<!-- version -->
+                <index-field name="CreativeWork.version" source-field="CreativeWork.version"/>
+                <index-field name="CreativeWork.schemaVersion" source-field="CreativeWork.schemaVersion"/>
+
+				<!-- type -->
+                <index-field name="CreativeWork.additionalType" source-field="CreativeWork.additionalType"
+                    sortable="true"/>
+                <index-field name="CreativeWork.additionalType.url"
+                    source-field="CreativeWork.additionalType.url"/>
+				
+				<!-- format -->
+                <index-field name="CreativeWork.encodingFormat" source-field="CreativeWork.encodingFormat"/>
+				
+				<!-- language -->
+                <index-field name="CreativeWork.inLanguage" source-field="CreativeWork.inLanguage"/>
+
+				<!-- license -->
+                <index-field name="CreativeWork.license" source-field="CreativeWork.license"/>
+                <index-field name="CreativeWork.license..CreativeWork.license.description"
+                    source-field="CreativeWork.license" source-subfield="CreativeWork.license.description"/>
+                <index-field name="CreativeWork.license..CreativeWork.license.url"
+                    source-field="CreativeWork.license" source-subfield="CreativeWork.license.url"/>
+
+				<!-- author -->
+                <index-field name="CreativeWork.author..CreativeWork.author.name"
+                    source-relation="CreativeWork.author" source-field="CreativeWork.author.name"/>
+                <index-field name="CreativeWork.author..CreativeWork.author.affiliation.name"
+                    source-relation="CreativeWork.author" source-field="CreativeWork.author.affiliation.name"/>
+                <index-field name="CreativeWork.author..Person.identifier.orcid"
+                    source-relation="CreativeWork.author" source-member="Person" source-field="Person.identifier.orcid"/>
+                <index-field name="CreativeWork.author..Person.identifier.cienciaID"
+                    source-relation="CreativeWork.author" source-member="Person"
+                    source-field="Person.identifier.cienciaID"/>
+                <index-field name="CreativeWork.author..Person.affiliation..Organization.identifier.isni"
+                    source-relation="Person.affiliation" source-member="Organization"
+                    source-field="Organization.identifier.isni"/>
+
+                <index-field name="CreativeWork.author..Person.givenName"
+                    source-relation="CreativeWork.author" source-member="Person" source-field="Person.givenName"/>
+                <index-field name="CreativeWork.author..Person.familyName"
+                    source-relation="CreativeWork.author" source-member="Person" source-field="Person.familyName"/>
+                <index-field name="CreativeWork.author..CreativeWork.author.affiliation.name"
+                    source-relation="CreativeWork.author" source-field="CreativeWork.author.affiliation.name"/>
+
+                <index-field name="CreativeWork.author.organization..CreativeWork.author.name"
+                    source-relation="CreativeWork.author.organization" source-field="CreativeWork.author.name"/>				
+				
+				<!-- contributor -->
+                <index-field name="CreativeWork.contributor.person..CreativeWork.contributor.name"
+                    source-relation="CreativeWork.contributor.person" source-field="CreativeWork.contributor.name"/>
+                <index-field
+                    name="CreativeWork.contributor.person..CreativeWork.contributor.affiliation.name"
+                    source-relation="CreativeWork.contributor.person"
+                    source-field="CreativeWork.contributor.affiliation.name"/>
+                <index-field name="CreativeWork.contributor.organization..CreativeWork.contributor.name"
+                    source-relation="CreativeWork.contributor.organization" source-field="CreativeWork.contributor.name"/>
+				
+				<!-- service -->
+                <index-field name="CreativeWork.provider..CreativeWork.contributor.name"
+                    source-relation="CreativeWork.provider" source-field="CreativeWork.contributor.name"/>
+                <index-field name="CreativeWork.provider..Service.name"
+                    source-relation="CreativeWork.provider" source-member="Service" source-field="Service.name"/>
+                <index-field name="CreativeWork.provider..Service.areaServed"
+                    source-relation="CreativeWork.provider" source-member="Service" source-field="Service.areaServed"/>
+                <index-field name="CreativeWork.provider..Service.alternateName"
+                    source-relation="CreativeWork.provider" source-member="Service" source-field="Service.alternateName"/>
+                <index-field name="CreativeWork.provider..RCAAP.repository..RCAAP.handlePrefix"
+                    source-relation="CreativeWork.provider" source-member="Service" source-field="RCAAP.repository"
+                    source-subfield="RCAAP.handlePrefix"/>
+				
+				<!--funding -->
+                <index-field name="Grant.fundedItem..Funding.name" source-relation="Grant.fundedItem"
+                    source-member="Funding" source-field="Funding.name"/>
+                <index-field name="Grant.fundedItem..Funding.alternateName"
+                    source-relation="Grant.fundedItem" source-member="Funding" source-field="Funding.alternateName"/>
+                <index-field name="Grant.fundedItem..ResearchProject.award.identifier"
+                    source-relation="Grant.fundedItem" source-member="Funding"
+                    source-field="ResearchProject.award.identifier"/>
+                <index-field name="Grant.fundedItem..ResearchProject.award.name"
+                    source-relation="Grant.fundedItem" source-member="Funding" source-field="ResearchProject.award.name"/>
+                <index-field name="Grant.fundedItem..MonetaryGrant.funder.name"
+                    source-relation="Grant.fundedItem" source-field="MonetaryGrant.funder.name"/>
+                <index-field name="Grant.fundedItem..MonetaryGrant.funder.alternateName"
+                    source-relation="Grant.fundedItem" source-field="MonetaryGrant.funder.alternateName"/>
+                <index-field name="Grant.fundedItem..MonetaryGrant.funder.identifier"
+                    source-relation="Grant.fundedItem" source-field="MonetaryGrant.funder.identifier"/>
+				<!-- TODO -->
+				
+				<!--  file -->
+				<index-field name="MediaObject" source-field="MediaObject"/>
+				<index-field name="MediaObject..MediaObject.contentUrl" source-field="MediaObject" source-subfield="MediaObject.contentUrl"/>
+				
+
+            </index-fields>
+
+
+            <index-related-ids>
+                <related-id name="CreativeWork.author" source-relation="CreativeWork.author"
+                    source-member="Person"/>
+                <related-id name="CreativeWork.author.organization"
+                    source-relation="CreativeWork.author.organization" source-member="Organization"/>
+                <related-id name="CreativeWork.contributor.person"
+                    source-relation="CreativeWork.contributor.person" source-member="Person"/>
+                <related-id name="CreativeWork.contributor.organization"
+                    source-relation="CreativeWork.contributor.organization" source-member="Organization"/>
+                <related-id name="Grant.fundedItem"
+                    source-relation="Grant.fundedItem" source-member="Funding"/>
+                <related-id name="CreativeWork.provider" source-relation="CreativeWork.provider"
+                    source-member="Service"/>
+
+            </index-related-ids>
+
+        </indexed-entity>
+        
+        <!-- Each indexed entity can be configured separately -->
+        <indexed-entity source-type="Service">
+
+            <index-fields>
+                <index-field name="Service.name" source-field="Service.name" sortable="true"/>
+                <index-field name="Service.alternateName" source-field="Service.alternateName"
+                    sortable="true"/>
+
+                <index-field name="Service.areaServed" source-field="Service.areaServed"/>
+                <index-field name="Service.category" source-field="Service.category"/>
+                <index-field name="Service.serviceType" source-field="Service.serviceType"/>
+
+                <index-field name="Service.description" source-field="Service.description"/>
+                <index-field name="Service.provider..Organization.legalName"
+                    source-relation="Service.provider" source-member="Organization"
+                    source-field="Organization.legalName"/>
+                <index-field name="Service.provider..Organization.identifier.isni"
+                    source-relation="Service.provider" source-member="Organization"
+                    source-field="Organization.identifier.isni"/>
+                <index-field name="Service.provider..Organization.identifier.ringgold"
+                    source-relation="Service.provider" source-member="Organization"
+                    source-field="Organization.identifier.ringgold"/>
+            </index-fields>
+
+            <index-related-ids>
+                <related-id name="Service.provider" source-relation="Service.provider"
+                    source-member="Organization"/>
+            </index-related-ids>
+
+        </indexed-entity>
+        
+        <!-- Each indexed entity can be configured separately -->
+        <indexed-entity source-type="Organization">
+
+            <index-fields>
+                <index-field name="Organization.name" source-field="Organization.name" sortable="true"/>
+                <index-field name="Organization.legalName" source-field="Organization.legalName"
+                    sortable="true"/>
+                <index-field name="Organization.alternateName" source-field="Organization.alternateName"
+                    sortable="true"/>
+
+                <index-field name="Organization.identifier.ringgold"
+                    source-field="Organization.identifier.ringgold"/>
+                <index-field name="Organization.identifier.isni" source-field="Organization.identifier.isni"/>
+				
+                <index-field name="Organization.identifier.ror" source-field="Organization.identifier.ror"/>
+				
+                <index-field name="Organization.identifier" source-field="Organization.identifier"/>
+            </index-fields>
+
+            <index-related-ids>
+                <related-id name="Organization.parentOrganization"
+                    source-relation="Organization.parentOrganization" source-member="Organization"/>
+                <!-- PG: 2021-09-29 We will not use this, there isn't any point in storing this   
+                <related-id name="MonetaryGrant.funder" source-relation="MonetaryGrant.funder"
+                    source-member="Funding"/>
+                 // -->
+            </index-related-ids>
+
+        </indexed-entity>
+        
+        <!-- Each indexed entity can be configured separately -->
+        <indexed-entity source-type="Funding">
+
+            <index-fields>
+                <index-field name="Funding.name" source-field="Funding.name" sortable="true"/>
+                <index-field name="Funding.alternateName" source-field="Funding.alternateName"
+                    sortable="true"/>
+                <index-field name="ResearchProject.award.identifier"
+                    source-field="ResearchProject.award.identifier" sortable="true"/>
+                <index-field name="ResearchProject.award.name" source-field="ResearchProject.award.name"
+                    sortable="true"/>
+
+                <index-field name="MonetaryGrant.funder..MonetaryGrant.funder.name"
+                    source-relation="MonetaryGrant.funder" source-field="MonetaryGrant.funder.name"/>
+            </index-fields>
+
+            <index-related-ids>
+				<!-- PG: 2021-09-29 We think we will not use this            
+                <related-id name="Grant.fundedItem" source-relation="Grant.fundedItem"
+                    source-member="Publication"/>
+                // -->
+                <related-id name="MonetaryGrant.funder" source-relation="MonetaryGrant.funder"
+                    source-member="Organization"/>
+            </index-related-ids>
+
+        </indexed-entity>
+
+    </index>
+
+</entity-indexing-config>
