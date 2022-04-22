@@ -32,7 +32,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 		
-	<!-- import resource="rcaap-context.xml"/ -->
+	<import resource="third-party-context.xml"/>
 
 
 </beans>

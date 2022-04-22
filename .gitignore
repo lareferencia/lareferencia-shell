@@ -30,3 +30,4 @@ HELP.md
 .DS_Store
 config/application.properties
 spring-shell.log
+lareferencia-shell.jar

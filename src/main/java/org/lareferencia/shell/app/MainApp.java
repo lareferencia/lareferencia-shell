@@ -20,17 +20,24 @@
  */
 package org.lareferencia.shell.app;
 
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.solr.SolrAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 
-@SpringBootApplication(exclude=ElasticsearchDataAutoConfiguration.class)
+@SpringBootApplication(exclude={ ElasticsearchDataAutoConfiguration.class, SolrAutoConfiguration.class})
 @ImportResource({"classpath*:application-context.xml"}) // please configure commands scanning in the context file
+@Configuration
 public class MainApp {
 	
 	
@@ -46,5 +53,11 @@ public class MainApp {
 	     springApplication.run(args).close();	
 	}
 
-    
- }
+	@Bean
+	public SolrClient solrClient(@Value("${solr.host}") String solrHost) {
+		return new HttpSolrClient.Builder(solrHost).build();
+	}
+
+
+
+}

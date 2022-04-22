@@ -32,26 +32,12 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-    <context:component-scan base-package="org.lareferencia.shell.commands.harvester.HarvesterConfiguration"/>
-    <context:component-scan base-package="org.lareferencia.shell.commands.harvester"/>
 
-    <context:component-scan base-package="org.lareferencia.shell.commands.flyway.FlywayConfiguration"/>
-	<context:component-scan base-package="org.lareferencia.shell.commands.flyway"/>
+  <context:component-scan base-package="org.lareferencia.core.entity"/>
+	<context:component-scan base-package="org.lareferencia.shell.commands.entity"/>
 
+	<bean id="entityDataService" class="org.lareferencia.core.entity.services.EntityDataService" scope="singleton"/>
+	<bean id="entityIndexerElasticJSON" class="org.lareferencia.core.entity.indexing.elastic.JSONElasticEntityIndexerImpl" scope="prototype"/>
+	<bean id="entityIndexerRDF" class="org.lareferencia.core.entity.indexing.vivo.EntityIndexerRDFImpl" scope="prototype"/>
 
-    <bean id="dateHelper" class="org.lareferencia.core.util.date.DateHelper">
-        <property name="dateTimeFormatters">
-            <set value-type="org.lareferencia.core.util.date.IDateTimeFormatter">
-                <bean class="org.lareferencia.core.util.date.SystemDateFormatter"/>
-                <bean class="org.lareferencia.core.util.date.YearDateFormatter"/>
-                <bean class="org.lareferencia.core.util.date.YearMonthDateFormatter"/>
-                <bean class="org.lareferencia.core.util.date.YearMonthDayDateFormatter"/>
-                <bean class="org.lareferencia.core.util.date.YearMonthDayHourDateFormatter"/>
-            </set>
-        </property>
-    </bean>
-
-    <import resource="file:config/custom-context.xml"/>
-
-	
 </beans>

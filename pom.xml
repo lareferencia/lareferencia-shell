@@ -71,6 +71,152 @@
 
 	</dependencies>
 
+
+	<profiles>
+
+		<profile>
+			<id>lite</id>
+			<properties></properties>
+			<dependencies>
+			</dependencies>
+		</profile>
+
+        <!-- lareferencia profile -->
+		<profile>
+			<id>lareferencia</id>
+			<properties></properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.lareferencia</groupId>
+					<artifactId>lareferencia-entity-lib</artifactId>
+					<version>4.1.0</version>
+				</dependency>
+				<dependency>
+					<groupId>org.lareferencia</groupId>
+					<artifactId>lareferencia-shell-entity-plugin</artifactId>
+					<version>4.1.0</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-third-party-context</id>
+								<phase>package</phase>
+								<configuration>
+									<target>
+										<copy overwrite="true" file="config/lareferencia-context.xml" tofile="config/third-party-context.xml" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+        <!-- rcaap profile -->
+		<profile>
+			<id>rcaap</id>
+			<properties></properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.lareferencia</groupId>
+					<artifactId>lareferencia-entity-lib</artifactId>
+					<version>4.1.0</version>
+				</dependency>
+				<dependency>
+					<groupId>org.lareferencia</groupId>
+					<artifactId>lareferencia-contrib-rcaap</artifactId>
+					<version>4.1.0</version>
+				</dependency>
+				<dependency>
+					<groupId>org.lareferencia</groupId>
+					<artifactId>lareferencia-shell-entity-plugin</artifactId>
+					<version>4.1.0</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-third-party-context</id>
+								<phase>package</phase>
+								<configuration>
+									<target>
+										<copy overwrite="true" file="config/rcaap-context.xml" tofile="config/third-party-context.xml" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+        <!-- ibict profile -->
+		<profile>
+			<id>ibict</id>
+			<properties></properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.lareferencia</groupId>
+					<artifactId>lareferencia-entity-lib</artifactId>
+					<version>4.1.0</version>
+				</dependency>
+				<dependency>
+					<groupId>org.lareferencia</groupId>
+					<artifactId>lareferencia-shell-entity-plugin</artifactId>
+					<version>4.1.0</version>
+				</dependency>
+				<dependency>
+					<groupId>org.lareferencia</groupId>
+					<artifactId>lareferencia-contrib-rcaap</artifactId>
+					<version>4.1.0</version>
+				</dependency>
+				<dependency>
+					<groupId>org.lareferencia</groupId>
+					<artifactId>lareferencia-contrib-ibict</artifactId>
+					<version>4.1.0</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-third-party-context</id>
+								<phase>package</phase>
+								<configuration>
+									<target>
+										<copy overwrite="true" file="config/ibict-context.xml" tofile="config/third-party-context.xml" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -86,11 +232,24 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>copy-app-jar</id>
 						<phase>package</phase>
 						<configuration>
 							<target>
-								<copy file="target/${project.artifactId}-${project.version}.jar" tofile="${lareferencia.shell.appname}.jar" />
+								<copy overwrite="true" file="target/${project.artifactId}-${project.version}.jar" tofile="${lareferencia.shell.appname}.jar" />
 								<chmod file="${lareferencia.shell.appname}.jar" perm="ugo+rx"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>copy-third-party-context</id>
+						<phase>package</phase>
+						<configuration>
+							<target>
+								<copy overwrite="true" file="config/empty-context.xml" tofile="config/third-party-context.xml" />
 							</target>
 						</configuration>
 						<goals>
