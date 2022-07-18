@@ -35,3 +35,6 @@ elastic.host=localhost
 elastic.port=9200 
 elastic.username=elastic 
 elastic.password=elastic
+
+# Logging file if different from the default one
+#spring.application.name=/var/log/spring-shell
