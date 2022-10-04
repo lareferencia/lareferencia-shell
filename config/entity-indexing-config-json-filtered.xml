@@ -44,6 +44,16 @@
 
         </indexed-entity>
         
+        <indexed-entity name="patent" source-type="Patent" >
+       
+            <index-fields>
+				<index-field name="number" source-field="alternateIdentifier" filter="subfields-format" filter-subfields="country,number,kind" filter-format="%s%s%s" />
+				
+			</index-fields>
+
+        </indexed-entity>
+        
+        
         
           <!-- Each indexed entity can be configured separately -->
        <indexed-entity name="person" source-type="Person" >
