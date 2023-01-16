@@ -30,7 +30,6 @@ import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDa
 import org.springframework.boot.autoconfigure.solr.SolrAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
@@ -57,7 +56,4 @@ public class MainApp {
 	public SolrClient solrClient(@Value("${solr.host}") String solrHost) {
 		return new HttpSolrClient.Builder(solrHost).build();
 	}
-
-
-
 }
