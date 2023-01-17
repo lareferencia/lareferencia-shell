@@ -21,13 +21,13 @@
   -->
 
 <!--
-	RCAAP configuration it's based on https://schema.org/ flat model
-	we use it also to describe the relations
+    RCAAP configuration it's based on https://schema.org/ flat model
+    we use it also to describe the relations
  -->
  <!-- TODO: rever ???; rever cardinalidade; rever campos em falta -->
 <entity-relation-metamodel>
     <entities>
-        <entity name="Person">	<!-- https://schema.org/Person -->
+        <entity name="Person">    <!-- https://schema.org/Person -->
             <field name="Person.familyName"/>
             <field name="Person.givenName"/>
             <field name="Person.name"/> <!-- ???? -->
@@ -62,10 +62,17 @@
             <field name="CreativeWork.identifier.doi"/> <!-- relatedIdentifier.doi -->
             <field name="CreativeWork.identifier.handle"/> <!-- identifier.handle -->
             <field name="CreativeWork.identifier.url"/> <!-- identifier.url -->
-            
-            <!-- TODO identify use cases for related identifiers -->
+
+
             <!--  upc//purl//pmid//lsid//lissn//istc//igsn//eissn//ean13//bibcode//arxiv//ark//URN// -->
             <field name="CreativeWork.identifier.other"/>
+            
+            <!-- for related identifiers -->
+            <field name="CreativeWork.isPartOf.identifier" description="Indicates an item or CreativeWork that this item, or CreativeWork (in some sense), is part of.
+Inverse property: hasPart"/>
+            <field name="CreativeWork.hasPart.identifier" description="Indicates an item or CreativeWork that is part of this item, or CreativeWork (in some sense).
+Inverse property: isPartOf"/>
+            <field name="CreativeWork.isBasedOn.identifier" description="A resource from which this work is derived or from which it is a modification or adaption."/>
 
             <!-- // -->
             <field name="CreativeWork.dateCreated"
@@ -264,7 +271,7 @@
         <relation name="CreativeWork.provider" description="The service provider, service operator, or service performer. - Service" fromEntity="Publication" toEntity="Service">
             <attributes>
                 <field name="CreativeWork.contributor.name" description="The name of the item."/>
-				<field name="CreativeWork.contributor.alternateName" description="An alias for the item."/> <!-- can be used for the acronym -->
+                <field name="CreativeWork.contributor.alternateName" description="An alias for the item."/> <!-- can be used for the acronym -->
             </attributes>
         </relation>
         <relation name="Person.affiliation" description="An organization that this person is affiliated with. For example, a school/university, a club, or a team." fromEntity="Person" toEntity="Organization">
@@ -273,15 +280,15 @@
             <attributes>
                 <field name="MonetaryGrant.funder.name"
                     description="A person or organization that supports (sponsors) something through some kind of financial contribution - The name of the item."/>
-				<field name="MonetaryGrant.funder.alternateName"/>					
+                <field name="MonetaryGrant.funder.alternateName"/>                    
                 <field name="MonetaryGrant.funder.identifier"/>
             </attributes>
         </relation>
         <relation name="Grant.fundedItem" description="Indicates an item funded or sponsored through a Grant" fromEntity="Publication" toEntity="Funding">
-			<attributes>
+            <attributes>
                 <field name="MonetaryGrant.funder.name"
                     description="A person or organization that supports (sponsors) something through some kind of financial contribution - The name of the item."/>
-				<field name="MonetaryGrant.funder.alternateName"/>					
+                <field name="MonetaryGrant.funder.alternateName"/>                    
                 <field name="MonetaryGrant.funder.identifier"/>
 
             </attributes>
