@@ -34,7 +34,20 @@ solr.host = http://localhost:8983/solr
 elastic.host=localhost
 elastic.port=9200 
 elastic.username=elastic 
-elastic.password=elastic
+elastic.password=admin12345
+elastic.useSSL = false
+elastic.authenticate = false
 
 # Logging file if different from the default one
 #spring.application.name=/var/log/spring-shell
+
+
+# DEBUG
+# uncomment the following setting to activade logging debugging mode
+# for root class level
+#logging.level.root=DEBUG
+
+# uncomment the following setting to activade logging debugging mode
+# for oai harvester
+#logging.level.org.*=DEBUG
+
