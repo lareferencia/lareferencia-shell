@@ -32,3 +32,4 @@ config/application.properties
 spring-shell.log
 lareferencia-shell.jar
 config/third-party-context.xml
+pom.xml.versionsBackup
