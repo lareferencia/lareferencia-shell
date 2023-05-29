@@ -38,6 +38,5 @@
 
 	<bean id="entityDataService" class="org.lareferencia.core.entity.services.EntityDataService" scope="singleton"/>
 	<bean id="entityIndexerElasticJSON" class="org.lareferencia.core.entity.indexing.elastic.JSONElasticEntityIndexerImpl" scope="prototype"/>
-	<bean id="entityIndexerRDF" class="org.lareferencia.core.entity.indexing.vivo.EntityIndexerRDFImpl" scope="prototype"/>
 
 </beans>
