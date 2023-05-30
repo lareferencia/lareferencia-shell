@@ -51,3 +51,10 @@ elastic.authenticate = false
 # for oai harvester
 #logging.level.org.*=DEBUG
 
+
+#JMX Monitor Spring Configuration
+spring.jmx.enabled=true
+management.endpoints.jmx.exposure.include=*
+
+
+
