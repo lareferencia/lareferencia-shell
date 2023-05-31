@@ -33,3 +33,7 @@ spring-shell.log
 lareferencia-shell.jar
 config/third-party-context.xml
 pom.xml.versionsBackup
+*.xml
+*.json
+*.log
+*.zip
