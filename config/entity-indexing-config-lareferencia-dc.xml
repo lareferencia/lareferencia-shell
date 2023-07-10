@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~   Copyright (c) 2013-2022. LA Referencia / Red CLARA and others
+  ~
+  ~   This program is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU Affero General Public License as published by
+  ~   the Free Software Foundation, either version 3 of the License, or
+  ~   (at your option) any later version.
+  ~
+  ~   This program is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU Affero General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU Affero General Public License
+  ~   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~   This file is part of LA Referencia software platform LRHarvester v4.x
+  ~   For any further information please contact Lautaro Matas <lmatas@gmail.com>
+  -->
+
+<!-- indexing configurations, maybe we can integrate search configurations
+	here under a search tag -->
+<entity-indexing-config>
+
+    <!-- Each indexed entity can be configured separately -->
+    <indexed-entity name="publication" source-type="Publication">
+
+        <index-fields>
+            <index-field name="type" source-field="dc.type" type="keyword"/>
+            <index-field name="title" source-field="dc.title" type="text"/>
+            <index-field name="description" source-field="dc.description" type="text"/>
+            <index-field name="creator" source-field="dc.creator" type="keyword"/>
+            <index-field name="subject" source-field="dc.subject" type="keyword"/>
+            <index-field name="date" source-field="dc.date" type="keyword"/>
+            <index-field name="identifier" source-field="dc.identifier" type="keyword"/>
+            <index-field name="source" source-field="dc.source" type="keyword"/>
+            <index-field name="rights" source-field="dc.rights" type="keyword"/>
+            <index-field name="language" source-field="dc.language" type="keyword"/>
+
+        </index-fields>
+
+    </indexed-entity>
+
+</entity-indexing-config>
