@@ -2,16 +2,23 @@
 <entity-relation-metamodel>
    <entities>
       <entity name="Publication">
+         <field name="semanticIdentifier" />
          <field name="dc.title" />
          <field name="dc.creator" />
          <field name="dc.subject" />
-         <field name="dc.description" />
          <field name="dc.date" />
          <field name="dc.identifier"/>
          <field name="dc.source" />
          <field name="dc.rights" />
          <field name="dc.type" />
          <field name="dc.language" />
+         <field name="dc.description" />
+         <field name="dc.publisher" />
+         <field name="dc.relation" />
+         <field name="dc.format" />
+         <field name="dc.contributor" />
+         <field name="dc.coverage" />
+
       </entity>
    </entities>
    <relations></relations>
