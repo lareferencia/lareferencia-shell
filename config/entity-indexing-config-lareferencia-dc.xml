@@ -28,17 +28,37 @@
     <indexed-entity name="publication" source-type="Publication">
 
         <index-fields>
-            <index-field name="type" source-field="dc.type" type="keyword"/>
+
+            <index-field name="fingerprint" source-field="semanticIdentifier" type="keyword" />
+            <index-field name="country" source-field="semanticIdentifier" type="keyword" filter="regex" filter-search="([A-Z]{2})_.*" filter-replace="$1"/>
+
+            <index-field name="coar_type" source-field="dc.type" type="keyword" filter="regex" filter-search="http://purl.org/coar/resource_type/(.+)" filter-replace="$1"/>
+            <index-field name="driver_type" source-field="dc.type" type="keyword" filter="regex" filter-search="info:eu-repo/semantics/(article|report|masterThesis|doctoralThesis|book|bookPart|dataSet|dataset)" filter-replace="$1"/>
+
             <index-field name="title" source-field="dc.title" type="text"/>
             <index-field name="description" source-field="dc.description" type="text"/>
-            <index-field name="creator" source-field="dc.creator" type="keyword"/>
-            <index-field name="subject" source-field="dc.subject" type="keyword"/>
-            <index-field name="date" source-field="dc.date" type="keyword"/>
-            <index-field name="identifier" source-field="dc.identifier" type="keyword"/>
-            <index-field name="source" source-field="dc.source" type="keyword"/>
-            <index-field name="rights" source-field="dc.rights" type="keyword"/>
-            <index-field name="language" source-field="dc.language" type="keyword"/>
 
+            <index-field name="creator" source-field="dc.creator" type="keyword"/>
+            <index-field name="orcid" source-field="dc.creator" type="keyword" filter="regex" filter-search=".*(\d{4}-\d{4}-\d{4}-\d{3}[\dX]).*" filter-replace="$1"/>
+
+            <index-field name="subject" source-field="dc.subject" type="keyword"/>
+
+            <index-field name="date" source-field="dc.date" type="keyword"/>
+
+            <index-field name="doi" source-field="dc.identifier" filter="regex" type="keyword" filter-search=".*(10\.\d{4,9}/[-._;()/:A-Za-z0-9]+).*" filter-replace="$1"/>
+            <index-field name="url" source-field="dc.identifier" filter="regex" type="keyword" filter-search=".*(https?://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|])" filter-replace="$1"/>
+
+            <index-field name="issn" source-field="dc.identifier" type="keyword" filter="regex" filter-search=".*(\d{4}-\d{3}[\dX]).*" filter-replace="$1"/>
+            <index-field name="issn" source-field="dc.source"     type="keyword" filter="regex" filter-search=".*(\d{4}-\d{3}[\dX]).*" filter-replace="$1"/>
+
+            <index-field name="identifier" source-field="dc.identifier" type="text"/>
+            <index-field name="source" source-field="dc.source" type="text"/>
+
+            <index-field name="institution" source-field="dc.source" filter="regex" filter-search="instname:(.+)" filter-replace="$1" type="keyword"/>
+            <index-field name="repository" source-field="dc.source" filter="regex" filter-search="reponame:(.+)" filter-replace="$1" type="keyword"/>
+
+            <index-field name="access" source-field="dc.rights" type="keyword" filter="regex" filter-search="info:eu-repo/semantics/(.+)" filter-replace="$1"/>
+            <index-field name="language" source-field="dc.language" type="keyword" filter="regex" filter-search="[a-zA-Z]{3}"/>
         </index-fields>
 
     </indexed-entity>
