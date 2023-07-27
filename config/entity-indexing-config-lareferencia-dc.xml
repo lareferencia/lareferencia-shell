@@ -44,6 +44,7 @@
             <index-field name="subject" source-field="dc.subject" type="keyword"/>
 
             <index-field name="date" source-field="dc.date" type="keyword"/>
+            <index-field name="year" source-field="dc.date" filter="oldest-date" filter-limit="1" filter-date-format="YYYY"/>
 
             <index-field name="doi" source-field="dc.identifier" filter="regex" type="keyword" filter-search=".*(10\.\d{4,9}/[-._;()/:A-Za-z0-9]+).*" filter-replace="$1"/>
             <index-field name="url" source-field="dc.identifier" filter="regex" type="keyword" filter-search=".*(https?://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|])" filter-replace="$1"/>
@@ -58,7 +59,7 @@
             <index-field name="repository" source-field="dc.source" filter="regex" filter-search="reponame:(.+)" filter-replace="$1" type="keyword"/>
 
             <index-field name="access" source-field="dc.rights" type="keyword" filter="regex" filter-search="info:eu-repo/semantics/(.+)" filter-replace="$1"/>
-            <index-field name="language" source-field="dc.language" type="keyword" filter="regex" filter-search="[a-zA-Z]{3}"/>
+            <index-field name="language" source-field="dc.language" type="keyword" filter="regex" filter-search="ˆ([a-zA-Z]{3})$" filter-replace="$1"/>
         </index-fields>
 
     </indexed-entity>
