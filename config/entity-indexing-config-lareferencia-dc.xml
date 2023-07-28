@@ -42,10 +42,9 @@
             <index-field name="orcid" source-field="dc.creator" type="keyword" filter="regex" filter-search=".*(\d{4}-\d{4}-\d{4}-\d{3}[\dX]).*" filter-replace="$1"/>
 
             <index-field name="subject" source-field="dc.subject" type="keyword"/>
-            <index-field name="discipline" source-field="dc.subject" type="keyword" filter-search=".*purl.*|.*eu-repo.*|^cnpq.*|[0-9]+.*" />
+            <index-field name="discipline" source-field="dc.subject" type="keyword" filter-search="(.*purl.*|.*eu-repo.*|^cnpq.*|[0-9]+.*)" filter-replace="$1"/>
 
-            <index-field name="license" source-field="dc.rights" type="keyword" filter-search=".*(creativecommons|Attribution|Atribución).*" />
-            <index-field name="license-cc" source-field="dc.rights" type="keyword" filter-search=".*creativecommons\.org\/licenses\/(.+)\/.*" filter-replace="$1" />
+            <index-field name="license-cc" source-field="dc.rights" type="keyword" filter-search=".*creativecommons\.org\/licenses\/(.+?)\/.*" filter-replace="$1" />
 
             <index-field name="date" source-field="dc.date" type="keyword"/>
             <index-field name="year" source-field="dc.date" filter="oldest-date" filter-limit="1" filter-date-format="YYYY"/>
@@ -56,7 +55,7 @@
             <index-field name="issn" source-field="dc.identifier" type="keyword" filter="regex" filter-search=".*(\d{4}-\d{3}[\dX]).*" filter-replace="$1"/>
             <index-field name="issn" source-field="dc.source"     type="keyword" filter="regex" filter-search=".*(\d{4}-\d{3}[\dX]).*" filter-replace="$1"/>
 
-            <index-field name="handle" source-field="dc.identifier" type="keyword" filter="regex" filter-search=".*handle\.net.*" />
+            <index-field name="handle" source-field="dc.identifier" type="keyword" filter="regex" filter-search=".*http(s):\/\/(.+?handle.net\/.+?\/[a-zA-Z0-9\-]+).*" filter-replace="$2"/>
 
             <index-field name="identifier" source-field="dc.identifier" type="text"/>
             <index-field name="source" source-field="dc.source" type="text"/>
