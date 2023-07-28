@@ -34,6 +34,7 @@
 
             <index-field name="coar_type" source-field="dc.type" type="keyword" filter="regex" filter-search="http://purl.org/coar/resource_type/(.+)" filter-replace="$1"/>
             <index-field name="driver_type" source-field="dc.type" type="keyword" filter="regex" filter-search="info:eu-repo/semantics/(article|report|masterThesis|doctoralThesis|book|bookPart|dataSet|dataset)" filter-replace="$1"/>
+            <index-field name="driver_status" source-field="dc.type" type="keyword" filter="regex" filter-search="info:eu-repo/semantics/(draft|submittedVersion|acceptedVersion|publishedVersion|updatedVersion)" filter-replace="$1"/>
 
             <index-field name="title" source-field="dc.title" type="text"/>
             <index-field name="description" source-field="dc.description" type="text"/>
