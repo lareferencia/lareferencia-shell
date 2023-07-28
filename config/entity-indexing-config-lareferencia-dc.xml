@@ -25,7 +25,7 @@
 <entity-indexing-config>
 
     <!-- Each indexed entity can be configured separately -->
-    <indexed-entity name="publication" source-type="Publication">
+    <indexed-entity name="lareferencia" source-type="Publication">
 
         <index-fields>
 
