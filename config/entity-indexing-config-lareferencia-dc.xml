@@ -25,7 +25,7 @@
 <entity-indexing-config>
 
     <!-- Each indexed entity can be configured separately -->
-    <indexed-entity name="lareferencia" source-type="Publication">
+    <indexed-entity name="publication-v2" source-type="Publication">
 
         <index-fields>
 
@@ -48,7 +48,7 @@
             <index-field name="license-cc" source-field="dc.rights" type="keyword" filter="regex" filter-search=".*creativecommons\.org\/licenses\/(.+?)\/.*" filter-replace="$1" />
 
             <index-field name="date" source-field="dc.date" type="keyword"/>
-            <index-field name="year" source-field="dc.date" filter="oldest-date" filter-limit="1" filter-date-format="YYYY"/>
+            <index-field name="year" source-field="dc.date" filter="regex" filter-limit="1" filter-search="^(\d{4})-?.+" filter-replace="$1"/>
 
             <index-field name="doi" source-field="dc.identifier" filter="regex" type="keyword" filter-search=".*(10\.\d{4,9}/[-._;()/:A-Za-z0-9]+).*" filter-replace="$1"/>
             <index-field name="url" source-field="dc.identifier" filter="regex" type="keyword" filter-search=".*(https?://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|])" filter-replace="$1"/>
