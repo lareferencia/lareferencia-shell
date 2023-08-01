@@ -46,7 +46,7 @@
             <index-field name="discipline" source-field="dc.subject" type="keyword" filter="regex" filter-search=".*purl.*|.*eu-repo.*|^cnpq.*|^[0-9]+.*" />
             <index-field name="discipline_txt" source-field="dc.subject" type="text" filter="regex" filter-search=".*purl.*|.*eu-repo.*|^cnpq.*|^[0-9]+.*" />
 
-            <index-field name="license-cc" source-field="dc.rights" type="keyword" filter="regex" filter-search="(by.*|cc0)" />
+            <index-field name="license-cc" source-field="dc.rights" type="keyword" filter="regex" filter-search="(^by|^by-.+|cc0)" filter-replace="$1" />
 
             <index-field name="date" source-field="dc.date" type="keyword"/>
             <index-field name="year" source-field="dc.date" filter="regex" filter-limit="1" filter-search="^([12]\d{3})[-]?.*" filter-replace="$1"/>
