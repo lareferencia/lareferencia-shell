@@ -25,7 +25,7 @@
 <entity-indexing-config>
 
     <!-- Each indexed entity can be configured separately -->
-    <indexed-entity name="publication-v4" source-type="Publication">
+    <indexed-entity name="publication-v5" source-type="Publication">
 
         <index-fields>
 
@@ -60,6 +60,8 @@
             <index-field name="issn" source-field="dc.source"     type="keyword" filter="regex" filter-search=".*(\d{4}-\d{3}[\dX]).*" filter-replace="$1" filter-limit="1"/>
 
             <index-field name="handle" source-field="dc.identifier" type="keyword" filter="regex" filter-search=".*http[s]?:\/\/(.+?handle.net\/.+?\/[a-zA-Z0-9\-]+).*" filter-replace="$1"/>
+
+            <index-field name="funder" source-field="dc.relation" type="keyword" filter="regex" filter-search=".*info:eu-repo\/grantAgreement\/([A-Za-z0-9-\.]+).*" filter-replace="$1"/>
 
             <index-field name="identifier" source-field="dc.identifier" type="text"/>
             <index-field name="source" source-field="dc.source" type="text"/>
