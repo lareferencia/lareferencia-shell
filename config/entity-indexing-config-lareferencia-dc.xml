@@ -25,7 +25,7 @@
 <entity-indexing-config>
 
     <!-- Each indexed entity can be configured separately -->
-    <indexed-entity name="publication-v5" source-type="Publication">
+    <indexed-entity name="publication-v6" source-type="Publication">
 
         <index-fields>
 
@@ -54,12 +54,17 @@
             <index-field name="year" source-field="dc.date" filter="regex" filter-limit="1" filter-search="^([12]\d{3})[-]?.*" filter-replace="$1"/>
 
             <index-field name="doi" source-field="dc.identifier" filter="regex" type="keyword" filter-search=".*(10\.\d{4,9}/[-._;()/:A-Za-z0-9]+).*" filter-replace="$1" filter-limit="1"/>
+            <index-field name="handle" source-field="dc.identifier" type="keyword" filter="regex" filter-search=".*(hdl.handle.net\/.+?\/[a-zA-Z0-9\-\.]+).*" filter-replace="$1"/>
+            <index-field name="ark" source-field="dc.identifier" type="keyword" filter="regex" filter-search=".*(ark:\/.+?\/[a-zA-Z0-9\-\.]+).*" filter-replace="$1"/>
+
+            <index-field name="related_doi" source-field="dc.relation" filter="regex" type="keyword" filter-search=".*(10\.\d{4,9}/[-._;()/:A-Za-z0-9]+).*" filter-replace="$1" filter-limit="1"/>
+            <index-field name="related_handle" source-field="dc.relation" type="keyword" filter="regex" filter-search=".*(hdl.handle.net\/.+?\/[a-zA-Z0-9\-\.]+).*" filter-replace="$1"/>
+            <index-field name="related_ark" source-field="dc.relation" type="keyword" filter="regex" filter-search=".*(ark:\/.+?\/[a-zA-Z0-9\-\.]+).*" filter-replace="$1"/>
+
             <index-field name="url" source-field="dc.identifier" filter="regex" type="keyword" filter-search=".*(https?://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|])" filter-replace="$1" filter-limit="1"/>
 
             <index-field name="issn" source-field="dc.identifier" type="keyword" filter="regex" filter-search=".*(\d{4}-\d{3}[\dX]).*" filter-replace="$1" filter-limit="1"/>
             <index-field name="issn" source-field="dc.source"     type="keyword" filter="regex" filter-search=".*(\d{4}-\d{3}[\dX]).*" filter-replace="$1" filter-limit="1"/>
-
-            <index-field name="handle" source-field="dc.identifier" type="keyword" filter="regex" filter-search=".*http[s]?:\/\/(.+?handle.net\/.+?\/[a-zA-Z0-9\-]+).*" filter-replace="$1"/>
 
             <index-field name="funder" source-field="dc.relation" type="keyword" filter="regex" filter-search=".*info:eu-repo\/grantAgreement\/([A-Za-z0-9-\.]+).*" filter-replace="$1"/>
 
