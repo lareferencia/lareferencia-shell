@@ -81,7 +81,7 @@
 
                 <!-- dates -->
                 <index-field name="CreativeWork.sdDatePublished" source-field="CreativeWork.sdDatePublished"
-                    sortable="true"/>
+                    sortable="true" type="DATE"/>
                 <!-- date.available -->
                 <index-field name="CreativeWork.datePublished" source-field="CreativeWork.datePublished"
                     sortable="true" type="DATE"/>
