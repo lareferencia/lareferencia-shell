@@ -35,6 +35,7 @@ import org.lareferencia.backend.domain.ValidatorRule;
 import org.lareferencia.backend.repositories.jpa.NetworkRepository;
 import org.lareferencia.backend.repositories.jpa.TransformerRepository;
 import org.lareferencia.backend.repositories.jpa.ValidatorRepository;
+import org.lareferencia.core.metadata.IMetadataRecordStoreService;
 import org.lareferencia.core.util.JSONSerializerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
@@ -52,6 +53,9 @@ public class HarvesterCommands {
 
 	@Autowired
 	NetworkRepository networkRepository;
+
+	@Autowired
+	IMetadataRecordStoreService storeService;
 
 	private static Logger logger = LogManager.getLogger(HarvesterCommands.class);
 
@@ -390,6 +394,15 @@ public class HarvesterCommands {
 		} else {
 			System.out.println("File: " + filename + " does not exists. ");
 		}
+
+	}
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@ShellMethod("Optimize metadata store")
+	public void optimizeMetadataStore() throws Exception {
+
+		System.out.println("Cleaning and optimizing metadata store. ");
+		storeService.optimizeStore();
 
 	}
 
