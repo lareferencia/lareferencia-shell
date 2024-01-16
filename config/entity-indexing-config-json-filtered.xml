@@ -25,6 +25,9 @@
 <entity-indexing-config>
 
     <!-- Each indexed entity can be configured separately -->
+
+
+
     <indexed-entity name="publication-filtered" source-type="Publication">
 
         <index-fields>
@@ -36,7 +39,8 @@
         <index-nested-entities>
             <indexed-entity name="author" source-type="Person" source-relation="Authorship">
                 <index-fields>
-                    <index-field name="name" source-field="name" filter="longest-string" filter-limit="1" type="text"/>
+                    <index-field name="name" source-field="name" filter="longest-string" filter-limit="1" type="completion" 
+                        elastic-param-preserve_position_increments="false" elastic-param-analyzer="simple"  elastic-param-max_input_length="50" />
                     <index-field name="idlattes" source-field="identifier.lattes"/>
                 </index-fields>
             </indexed-entity>
@@ -59,7 +63,8 @@
     <indexed-entity name="person" source-type="Person">
 
         <index-fields>
-            <index-field name="name" source-field="name"/>
+            <index-field name="name" source-field="name" type="completion" 
+                    elastic-param-preserve_position_increments="false" elastic-param-analyzer="simple"  elastic-param-max_input_length="50" />            
             <index-field name="idlattes" source-field="identifier.lattes"/>
         </index-fields>
 
