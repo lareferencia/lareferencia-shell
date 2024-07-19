@@ -5,6 +5,7 @@ create table public.oaiidentifierdark
     id             bigserial
         primary key,
     darkidentifier varchar(255) not null,
+    rawdarkidentifier varchar(255) not null,
     metadata       boolean      not null,
     oaiidentifier  varchar(255) not null,
     datestamp timestamp without time zone NOT NULL
