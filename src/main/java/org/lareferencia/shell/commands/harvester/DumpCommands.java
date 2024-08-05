@@ -105,7 +105,7 @@ public class DumpCommands {
 								for (String value : metadata.getFieldOcurrences(field + ".*")) {
 									// add the field and value to the map
 									mdMap.put(field, value);
-									System.out.println("Field: " + field + " Value: " + value);
+									//System.out.println("Field: " + field + " Value: " + value);
 								}
 							}
 
