@@ -85,7 +85,7 @@ public class DumpCommands {
 							OAIRecordMetadata metadata = storeService.getPublishedMetadata(oaiRecord);
 
 							XmlMapper xmlMapper = new XmlMapper();
-							JsonNode node = xmlMapper.readTree(metadata.toString());
+							JsonNode node = xmlMapper.readTree(metadata.toString() + '\n');
 							ObjectMapper jsonMapper = new ObjectMapper();
 							writer.write(jsonMapper.writeValueAsString(node));
 						}
