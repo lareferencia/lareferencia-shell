@@ -38,6 +38,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 
 @ShellComponent
 public class DumpCommands {
@@ -79,7 +83,11 @@ public class DumpCommands {
 						// Escribir los metadatos de cada registro en el archivo
 						for (OAIRecord oaiRecord : page.getContent()) {
 							OAIRecordMetadata metadata = storeService.getPublishedMetadata(oaiRecord);
-							writer.write(metadata.toString() + "\n");
+
+							XmlMapper xmlMapper = new XmlMapper();
+							JsonNode node = xmlMapper.readTree(metadata.toString());
+							ObjectMapper jsonMapper = new ObjectMapper();
+							writer.write(jsonMapper.writeValueAsString(node));
 						}
 
 					} catch (IOException e) {
