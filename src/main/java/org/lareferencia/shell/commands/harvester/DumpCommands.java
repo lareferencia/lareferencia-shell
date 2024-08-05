@@ -42,6 +42,7 @@ import org.springframework.shell.standard.ShellMethod;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -64,10 +65,15 @@ public class DumpCommands {
 	@ShellMethod("Dump LGK Snaphot Metadata to disk")
 	public String lgkRecordsDump(String fullPath) throws Exception {
 
+		ObjectMapper jsonMapper = new ObjectMapper();
+		jsonMapper.registerModule(new GuavaModule());
+
+		Multimap<String, String> mdMap = null;
+
+
 		for (Network network : networkRepository.findAll()) {
 
 			Long lgkSnaphotId = storeService.findLastGoodKnownSnapshot(network);
-			Multimap<String, String> mdMap = null;
 
 			if (lgkSnaphotId != null) {
 
@@ -103,7 +109,6 @@ public class DumpCommands {
 								}
 							}
 
-							ObjectMapper jsonMapper = new ObjectMapper();
 							writer.write(jsonMapper.writeValueAsString( mdMap ) + "\n");
 						}
 
