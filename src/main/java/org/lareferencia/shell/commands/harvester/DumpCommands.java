@@ -96,7 +96,7 @@ public class DumpCommands {
 							// for each field in the metadata dcFields
 							for (String field : dcFields) {
 								// for each value in the field
-								for (String value : metadata.getFieldOcurrences(field)) {
+								for (String value : metadata.getFieldOcurrences(field + ".*")) {
 									// add the field and value to the map
 									mdMap.put(field, value);
 								}
