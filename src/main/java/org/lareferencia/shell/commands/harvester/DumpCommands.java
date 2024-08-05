@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.util.MultiMap;
 import org.lareferencia.backend.domain.Network;
 import org.lareferencia.backend.domain.OAIRecord;
 import org.lareferencia.backend.repositories.jpa.NetworkRepository;
@@ -41,6 +42,8 @@ import org.springframework.shell.standard.ShellMethod;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 
 @ShellComponent
@@ -54,12 +57,17 @@ public class DumpCommands {
 
 	private static Logger logger = LogManager.getLogger(HarvesterCommands.class);
 
+	private static final String[] dcFields = { "dc.title", "dc.creator", "dc.subject", "dc.description", "dc.publisher",
+			"dc.contributor", "dc.date", "dc.type", "dc.format", "dc.identifier", "dc.source", "dc.language",
+			"dc.relation", "dc.coverage", "dc.rights" }; 
+
 	@ShellMethod("Dump LGK Snaphot Metadata to disk")
 	public String lgkRecordsDump(String fullPath) throws Exception {
 
 		for (Network network : networkRepository.findAll()) {
 
 			Long lgkSnaphotId = storeService.findLastGoodKnownSnapshot(network);
+			Multimap<String, String> mdMap = null;
 
 			if (lgkSnaphotId != null) {
 
@@ -83,11 +91,19 @@ public class DumpCommands {
 						// Escribir los metadatos de cada registro en el archivo
 						for (OAIRecord oaiRecord : page.getContent()) {
 							OAIRecordMetadata metadata = storeService.getPublishedMetadata(oaiRecord);
+							mdMap = ArrayListMultimap.create();
 
-							XmlMapper xmlMapper = new XmlMapper();
-							JsonNode node = xmlMapper.readTree(metadata.toString());
+							// for each field in the metadata dcFields
+							for (String field : dcFields) {
+								// for each value in the field
+								for (String value : metadata.getFieldOcurrences(field)) {
+									// add the field and value to the map
+									mdMap.put(field, value);
+								}
+							}
+
 							ObjectMapper jsonMapper = new ObjectMapper();
-							writer.write(jsonMapper.writeValueAsString(node) + "\n");
+							writer.write(jsonMapper.writeValueAsString( mdMap ) + "\n");
 						}
 
 					} catch (IOException e) {
