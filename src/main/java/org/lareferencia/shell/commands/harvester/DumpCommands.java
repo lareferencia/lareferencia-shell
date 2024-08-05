@@ -70,6 +70,9 @@ public class DumpCommands {
 
 		Multimap<String, String> mdMap = null;
 
+		// creata string with the present date for put in the file name
+		// and increment the number of the file, avoid spaces in the name
+		String date = java.time.LocalDate.now().toString();
 
 		for (Network network : networkRepository.findAll()) {
 
@@ -78,7 +81,7 @@ public class DumpCommands {
 			if (lgkSnaphotId != null) {
 
 				IPaginator<OAIRecord> paginator = storeService.getNotInvalidRecordsPaginator(lgkSnaphotId);
-				paginator.setPageSize(1000);
+				paginator.setPageSize(10000);
 
 				// for each page in the paginator
 				
@@ -90,7 +93,8 @@ public class DumpCommands {
 
 					// create a file for each page of records
 					// and dump the metadata of each record in the page
-					File file = new File(fullPath + "/page_" + pageIndex + ".txt");
+					
+					File file = new File(fullPath + "/lr_" + date + String.format("-%04d", pageIndex) + ".json");
 					
 					try (FileWriter writer = new FileWriter(file)) {
 
