@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.jena.base.Sys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.util.MultiMap;
@@ -76,6 +77,8 @@ public class DumpCommands {
 
 		for (Network network : networkRepository.findAll()) {
 
+			System.out.println("Dumping metadata for network: " + network.getName());
+
 			Long lgkSnaphotId = storeService.findLastGoodKnownSnapshot(network);
 
 			if (lgkSnaphotId != null) {
@@ -87,9 +90,10 @@ public class DumpCommands {
 				
 				Page<OAIRecord> page = paginator.nextPage();
 				int pageIndex = 0;
+				int totalPages = paginator.getTotalPages();	
 
 
-				while (page != null) {
+				while (pageIndex < totalPages) {
 
 					// create a file for each page of records
 					// and dump the metadata of each record in the page
