@@ -120,8 +120,12 @@ public class DumpCommands {
 						logger.error("Error writing to file: " + file.getAbsolutePath(), e);
 					}
 
-					// Obtener la siguiente página
-					page = paginator.nextPage();
+					try {
+						// Obtener la siguiente página
+						page = paginator.nextPage();
+					} catch (Exception e) {
+						logger.error("Error getting next page", e);
+					}
 					pageIndex++;
 
 					System.out.println("Page " + pageIndex + " dumped to: " + file.getAbsolutePath());
