@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,8 +64,10 @@ public class DumpCommands {
 			"dc.contributor", "dc.date", "dc.type", "dc.format", "dc.identifier", "dc.source", "dc.language",
 			"dc.relation", "dc.coverage", "dc.rights" }; 
 
+	private static final String DefaultNetworkAcronym = "00";
+
 	@ShellMethod("Dump LGK Snaphot Metadata to disk")
-	public String lgkRecordsDump(String fullPath) throws Exception {
+	public String lgkRecordsDump(String fullPath, @ShellOption(defaultValue=DefaultNetworkAcronym)String networkAcronym) throws Exception {
 
 		ObjectMapper jsonMapper = new ObjectMapper();
 		jsonMapper.registerModule(new GuavaModule());
@@ -79,6 +82,11 @@ public class DumpCommands {
 
 			System.out.println("Dumping metadata for network: " + network.getName());
 			String acronym = network.getAcronym();
+
+			// if the networkAcronym is not the default and the network acronym is different
+			if (networkAcronym != DefaultNetworkAcronym && !network.getAcronym().equals(networkAcronym)) {
+				break;
+			}
 
 			Long lgkSnaphotId = storeService.findLastGoodKnownSnapshot(network);
 
