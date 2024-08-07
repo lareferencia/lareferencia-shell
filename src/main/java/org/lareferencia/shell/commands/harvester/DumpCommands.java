@@ -78,6 +78,7 @@ public class DumpCommands {
 		for (Network network : networkRepository.findAll()) {
 
 			System.out.println("Dumping metadata for network: " + network.getName());
+			String acronym = network.getAcronym();
 
 			Long lgkSnaphotId = storeService.findLastGoodKnownSnapshot(network);
 
@@ -98,7 +99,7 @@ public class DumpCommands {
 					// create a file for each page of records
 					// and dump the metadata of each record in the page
 					
-					File file = new File(fullPath + "/lr_" + date + String.format("-%04d", pageIndex) + ".json");
+					File file = new File(fullPath + "/lr_" + acronym + "_" + date + String.format("-%04d", pageIndex) + ".json");
 					
 					try (FileWriter writer = new FileWriter(file)) {
 
@@ -123,11 +124,12 @@ public class DumpCommands {
 						logger.error("Error writing to file: " + file.getAbsolutePath(), e);
 					}
 
-
+					System.out.println("Page " + pageIndex + " dumped to: " + file.getAbsolutePath());
+					
 					if (pageIndex == totalPages - 1) {
 						break;
 					}
-					
+
 					try {
 						// Obtener la siguiente página
 						page = paginator.nextPage();
@@ -135,7 +137,6 @@ public class DumpCommands {
 						logger.error("Error getting next page", e);
 					}
 					
-					System.out.println("Page " + pageIndex + " dumped to: " + file.getAbsolutePath());
 					pageIndex++;
 
 				}		
