@@ -123,6 +123,11 @@ public class DumpCommands {
 						logger.error("Error writing to file: " + file.getAbsolutePath(), e);
 					}
 
+
+					if (pageIndex == totalPages - 1) {
+						break;
+					}
+					
 					try {
 						// Obtener la siguiente página
 						page = paginator.nextPage();
