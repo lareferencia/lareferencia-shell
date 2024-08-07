@@ -113,11 +113,10 @@ public class DumpCommands {
 								for (String value : metadata.getFieldOcurrences(field + ".*")) {
 									// add the field and value to the map
 									mdMap.put(field, value);
-									//System.out.println("Field: " + field + " Value: " + value);
 								}
 							}
 
-							writer.write(jsonMapper.writeValueAsString( mdMap ) + "\n");
+							writer.write( jsonMapper.writeValueAsString( mdMap ) + "\n" );
 						}
 
 					} catch (IOException e) {
@@ -130,27 +129,11 @@ public class DumpCommands {
 					} catch (Exception e) {
 						logger.error("Error getting next page", e);
 					}
+					
+					System.out.println("Page " + pageIndex + " dumped to: " + file.getAbsolutePath());
 					pageIndex++;
 
-					System.out.println("Page " + pageIndex + " dumped to: " + file.getAbsolutePath());
-				}
-
-			
-
-				
-
-				paginator.nextPage().forEach(oaiRecord -> {
-					try {
-						OAIRecordMetadata metadata = storeService.getPublishedMetadata(oaiRecord);
-
-					} catch (Exception e) {
-						logger.error("Error dumping record: " + oaiRecord.getId(), e);
-					}
-				});
-
-				
-
-				
+				}		
 			}
 		}
 
