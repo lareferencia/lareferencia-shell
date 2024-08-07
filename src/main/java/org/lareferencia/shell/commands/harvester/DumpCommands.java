@@ -85,7 +85,7 @@ public class DumpCommands {
 
 			// if the networkAcronym is not the default and the network acronym is different
 			if (networkAcronym != DefaultNetworkAcronym && !network.getAcronym().equals(networkAcronym)) {
-				break;
+				continue;
 			}
 
 			Long lgkSnaphotId = storeService.findLastGoodKnownSnapshot(network);
