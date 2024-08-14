@@ -2,9 +2,8 @@ create sequence public.oaiidentifierdark_id_seq;
 
 create table public.oaiidentifierdark
 (
-    id             bigserial
+    darkidentifier varchar(255) not null
         primary key,
-    darkidentifier varchar(255) not null,
     rawdarkidentifier varchar(255) not null,
     metadata       boolean      not null,
     oaiidentifier  varchar(255) not null,
