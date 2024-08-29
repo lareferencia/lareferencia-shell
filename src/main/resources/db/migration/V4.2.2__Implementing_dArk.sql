@@ -2,13 +2,17 @@ create sequence public.oaiidentifierdark_id_seq;
 
 create table public.oaiidentifierdark
 (
-    darkidentifier varchar(255) not null
+    darkidentifier    varchar(255) not null
         primary key,
     rawdarkidentifier varchar(255) not null,
-    metadata       boolean      not null,
-    oaiidentifier  varchar(255) not null,
-    datestamp timestamp without time zone NOT NULL
+    oaiidentifier     varchar(255) not null,
+    datestamp         timestamp    not null
 );
+
+alter table public.oaiidentifierdark
+    owner to lrharvester;
+
+
 
 create table public.darkcredential
 (
