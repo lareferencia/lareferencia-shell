@@ -18,5 +18,12 @@ create table public.darkcredential
 (
     naan       bigint       not null
         primary key,
-    privatekey varchar(255) not null
+    privatekey varchar(255) not null,
+    network_id bigint      not null
+        constraint darkcredential_network_fk
+            references public.network
 );
+
+alter table public.darkcredential
+    owner to lrharvester;
+
