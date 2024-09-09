@@ -1,5 +1,8 @@
-create sequence public.oaiidentifierdark_id_seq;
+drop sequence if exists public.oaiidentifierdark_id_seq;
+create sequence public.oaiidentifierdark_id_seq start 1 increment 1;
 
+
+drop table if exists public.oaiidentifierdark;
 create table public.oaiidentifierdark
 (
     darkidentifier    varchar(255) not null
@@ -9,11 +12,7 @@ create table public.oaiidentifierdark
     datestamp         timestamp    not null
 );
 
-alter table public.oaiidentifierdark
-    owner to lrharvester;
-
-
-
+DROP TABLE IF EXISTS public.darkcredential;
 create table public.darkcredential
 (
     naan       bigint       not null
@@ -24,6 +23,4 @@ create table public.darkcredential
             references public.network
 );
 
-alter table public.darkcredential
-    owner to lrharvester;
 
