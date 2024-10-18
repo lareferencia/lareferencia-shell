@@ -27,14 +27,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
-import org.springframework.boot.autoconfigure.solr.SolrAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 
-@SpringBootApplication(exclude={ ElasticsearchDataAutoConfiguration.class, SolrAutoConfiguration.class})
+@SpringBootApplication(exclude={ ElasticsearchDataAutoConfiguration.class})
 @ImportResource({"classpath*:application-context.xml"}) // please configure commands scanning in the context file
 @Configuration
 public class MainApp {
