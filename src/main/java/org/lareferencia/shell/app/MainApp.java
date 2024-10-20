@@ -48,11 +48,12 @@ public class MainApp {
 	                .build();
 		 
 
-	     springApplication.run(args).close();	
+	     springApplication.run(args).close();
 	}
 
 	@Bean
 	public SolrClient solrClient(@Value("${solr.host}") String solrHost) {
 		return new HttpSolrClient.Builder(solrHost).build();
 	}
+
 }

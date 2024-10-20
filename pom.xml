@@ -31,6 +31,10 @@
 		<version>4.2.4</version>
 	</parent>
 
+	<properties>
+		<spring-shell.version>3.3.3</spring-shell.version>
+	</properties>
+
 	<dependencies>
 
 		<dependency>
@@ -42,7 +46,6 @@
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
 			<artifactId>spring-shell-starter</artifactId>
-			<version>2.0.0.RELEASE</version>
 		</dependency>
 
 		<dependency>
@@ -64,7 +67,18 @@
 
     </dependencies>
 
-
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.shell</groupId>
+				<artifactId>spring-shell-dependencies</artifactId>
+				<version>${spring-shell.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 	<profiles>
 
 		<profile>

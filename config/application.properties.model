@@ -3,7 +3,7 @@ spring.datasource.url=jdbc:postgresql://localhost:5432/lrharvester
 spring.datasource.username=lrharvester
 spring.datasource.password=lrharvester
 
-spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults = false
+spring.jpa.properties.hibernate.boot.allow_jdbc_metadata_access=false
 
 spring.main.web-application-type=none
 
@@ -29,6 +29,12 @@ spring.flyway.url=${spring.datasource.url}
 # Flyway table name
 #spring.flyway.table=db_versions
 
+
+# Shell
+spring.shell.interactive.enabled=true
+spring.shell.script.enabled=true
+
+# SolR
 solr.host = http://localhost:8983/solr
 
 elastic.host=localhost

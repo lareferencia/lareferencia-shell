@@ -30,7 +30,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @Configuration
-@EntityScan("org.lareferencia.backend.domain")
+@EntityScan(basePackages = "org.lareferencia.backend.domain")
 @EnableJpaRepositories(value="org.lareferencia.backend.repositories.jpa")
 public class HarvesterConfiguration {
 
