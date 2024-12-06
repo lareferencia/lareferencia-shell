@@ -34,9 +34,10 @@
             <index-field name="type" source-field="type" type="keyword"/>
             <index-field name="doi" source-field="identifier.doi" type="keyword"/>
             <index-field name="title" source-field="title" type="text"/>
+            <index-field name="author_name" source-to-relation="Authorship" source-member="Person" source-field="name"/>
         </index-fields>
 
-        <index-nested-entities>
+        <index-to-nested-entities>
             <indexed-entity name="author" source-type="Person" source-relation="Authorship">
                 <index-fields>
                     <index-field name="name" source-field="name" filter="longest-string" filter-limit="1" type="completion" 
@@ -44,7 +45,7 @@
                     <index-field name="idlattes" source-field="identifier.lattes"/>
                 </index-fields>
             </indexed-entity>
-        </index-nested-entities>
+        </index-to-nested-entities>
 
     </indexed-entity>
 
