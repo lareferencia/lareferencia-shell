@@ -38,6 +38,7 @@
 	<bean id="entityIndexerElasticJSON" class="org.lareferencia.core.entity.indexing.elastic.JSONElasticEntityIndexerImpl" scope="prototype"/>
 	<bean id="entityIndexerTDB" class="org.lareferencia.core.entity.indexing.vivo.EntityIndexerTDBImpl" scope="prototype"/>
   <bean id="entityIndexerTDB2" class="org.lareferencia.core.entity.indexing.vivo.EntityIndexerTDB2Impl" scope="prototype"/>
+  <bean id="entityIndexerTDB2MultiThreaded" class="org.lareferencia.core.entity.indexing.vivo.EntityIndexerTDB2ThreadedImpl" scope="prototype"/>
 
   
   <context:component-scan base-package="org.lareferencia.contrib.dark.services" />
