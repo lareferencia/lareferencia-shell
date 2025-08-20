@@ -39,6 +39,13 @@
 			<version>4.2.5</version>
 		</dependency>
 
+		<!-- Spring Data Solr - Optional dependency for Solr functionality -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-solr</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
 			<artifactId>spring-shell-starter</artifactId>
