@@ -28,7 +28,7 @@
 	<parent>
 		<groupId>org.lareferencia</groupId>
 		<artifactId>lareferencia-parent</artifactId>
-		<version>4.2.5</version>
+		<version>4.2.6</version>
 	</parent>
 
 	<dependencies>
@@ -94,7 +94,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-indexing-filters-lib</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
@@ -141,7 +141,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-contrib-rcaap</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
@@ -187,7 +187,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-indexing-filters-lib</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
@@ -197,7 +197,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-contrib-rcaap</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 					<exclusions>
 						<exclusion>  <!-- declare the exclusion here -->
 							<groupId>org.apache.lucene</groupId>
@@ -208,12 +208,12 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-contrib-ibict</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-dark-lib</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 			</dependencies>
 			<build>
