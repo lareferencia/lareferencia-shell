@@ -23,7 +23,7 @@
 	<artifactId>lareferencia-shell</artifactId>
 	<name>LA Referencia shell app</name>
 	<description>LA Referencia Shell App</description>
-	<version>4.2.5</version>
+	<version>4.2.6</version>
 
 	<parent>
 		<groupId>org.lareferencia</groupId>
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.lareferencia</groupId>
 			<artifactId>lareferencia-core-lib</artifactId>
-			<version>4.2.5</version>
+			<version>4.2.6</version>
 		</dependency>
 
 		<!-- Spring Data Solr - Optional dependency for Solr functionality -->
@@ -89,7 +89,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-entity-lib</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
@@ -99,7 +99,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 			</dependencies>
 			<build>
@@ -136,7 +136,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-entity-lib</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
@@ -146,7 +146,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 			</dependencies>
 			<build>
@@ -182,7 +182,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-entity-lib</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
@@ -192,7 +192,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
-					<version>4.2.5</version>
+					<version>4.2.6</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
