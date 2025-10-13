@@ -10,4 +10,3 @@ drop constraint darkcredential_pkey;
 alter table darkcredential
     add primary key (network_id);
 
-A
