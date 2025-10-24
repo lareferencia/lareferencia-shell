@@ -39,18 +39,22 @@
 			<version>4.2.6</version>
 		</dependency>
 
-		<!-- Spring Data Solr - Optional dependency for Solr functionality -->
+		<!-- REMOVED: spring-boot-starter-data-solr no longer exists in Spring Boot 3.x
+		     Spring Data Solr was deprecated and removed. Using direct Solr dependencies instead.
+		     The solr-core dependency is already inherited from parent POM (version 9.5.0)
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-solr</artifactId>
 			<optional>true</optional>
 		</dependency>
+		-->
 
-		<dependency>
-			<groupId>org.springframework.shell</groupId>
-			<artifactId>spring-shell-starter</artifactId>
-			<version>2.0.0.RELEASE</version>
-		</dependency>
+	<!-- UPGRADED: Spring Shell 3.x for Spring Boot 3.x compatibility -->
+	<dependency>
+		<groupId>org.springframework.shell</groupId>
+		<artifactId>spring-shell-starter</artifactId>
+		<version>3.3.3</version>
+	</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -67,6 +71,13 @@
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 			<version>7.5.4</version>
+		</dependency>
+
+		<!-- Apache POI for Excel export functionality -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.5</version>
 		</dependency>
 
     </dependencies>
