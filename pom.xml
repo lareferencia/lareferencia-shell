@@ -23,12 +23,12 @@
 	<artifactId>lareferencia-shell</artifactId>
 	<name>LA Referencia shell app</name>
 	<description>LA Referencia Shell App</description>
-	<version>4.2.6</version>
+	<version>5.0.0-alpha</version>
 
 	<parent>
 		<groupId>org.lareferencia</groupId>
 		<artifactId>lareferencia-parent</artifactId>
-		<version>4.2.6</version>
+		<version>5.0.0-alpha</version>
 	</parent>
 
 	<dependencies>
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.lareferencia</groupId>
 			<artifactId>lareferencia-core-lib</artifactId>
-			<version>4.2.6</version>
+			<version>5.0.0-alpha</version>
 		</dependency>
 
 		<!-- REMOVED: spring-boot-starter-data-solr no longer exists in Spring Boot 3.x
@@ -100,17 +100,17 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-entity-lib</artifactId>
-					<version>4.2.6</version>
+					<version>5.0.0-alpha</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-indexing-filters-lib</artifactId>
-					<version>4.2.6</version>
+					<version>5.0.0-alpha</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
-					<version>4.2.6</version>
+					<version>5.0.0-alpha</version>
 				</dependency>
 			</dependencies>
 			<build>
@@ -147,7 +147,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-entity-lib</artifactId>
-					<version>4.2.6</version>
+					<version>5.0.0-alpha</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
@@ -157,7 +157,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
-					<version>4.2.6</version>
+					<version>5.0.0-alpha</version>
 				</dependency>
 			</dependencies>
 			<build>
@@ -193,17 +193,17 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-entity-lib</artifactId>
-					<version>4.2.6</version>
+					<version>5.0.0-alpha</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-indexing-filters-lib</artifactId>
-					<version>4.2.6</version>
+					<version>5.0.0-alpha</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
-					<version>4.2.6</version>
+					<version>5.0.0-alpha</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
@@ -224,7 +224,7 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-dark-lib</artifactId>
-					<version>4.2.6</version>
+					<version>5.0.0-alpha</version>
 				</dependency>
 			</dependencies>
 			<build>
