@@ -48,8 +48,13 @@ public class MainApp {
 	                .web(WebApplicationType.NONE)
 	                .build();
 		 
-
-	     springApplication.run(args).close();	
+		 // If arguments are provided, run the command and close
+		 // Otherwise, keep the shell interactive
+		 if (args.length > 0) {
+			 springApplication.run(args).close();
+		 } else {
+			 springApplication.run(args);
+		 }
 	}
 
 	@Bean
