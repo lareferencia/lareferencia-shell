@@ -2,6 +2,11 @@
 # If you need Solr functionality, use Apache Solr Client directly
 # See SOLR_MIGRATION_NOTES.md for details
 
+# Spring Shell 3.x configuration
+spring.shell.interactive.enabled=true
+spring.shell.command.version.enabled=true
+spring.shell.command.help.enabled=true
+
 ## Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
 spring.datasource.url=jdbc:postgresql://localhost:5432/lrharvester
 spring.datasource.username=lrharvester
