@@ -151,11 +151,6 @@
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
-					<artifactId>lareferencia-contrib-rcaap</artifactId>
-					<version>4.2.6</version>
-				</dependency>
-				<dependency>
-					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
 					<version>5.0.0-alpha</version>
 				</dependency>
@@ -204,22 +199,6 @@
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
 					<version>5.0.0-alpha</version>
-				</dependency>
-				<dependency>
-					<groupId>org.lareferencia</groupId>
-					<artifactId>lareferencia-contrib-rcaap</artifactId>
-					<version>4.2.6</version>
-					<exclusions>
-						<exclusion>  <!-- declare the exclusion here -->
-							<groupId>org.apache.lucene</groupId>
-							<artifactId>lucene-queryparser</artifactId>	
-						</exclusion>
-					</exclusions>
-				</dependency>
-				<dependency>
-					<groupId>org.lareferencia</groupId>
-					<artifactId>lareferencia-contrib-ibict</artifactId>
-					<version>4.2.6</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
