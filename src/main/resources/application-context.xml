@@ -50,8 +50,9 @@
             </set>
         </property>
     </bean>
-
-    <bean id="metadataStore" class="org.lareferencia.core.metadata.MetadataStoreSQLImpl" scope="singleton"></bean>
+    
+    <bean id="metadataStore" class="org.lareferencia.core.metadata.MetadataStoreFSImpl" scope="singleton"></bean>
+    <bean id="snapshotStore" class="org.lareferencia.core.metadata.SnapshotStoreSQLImpl" scope="singleton"></bean>
     <bean id="hashingHelper" class="org.lareferencia.core.util.hashing.XXHash64Hashing" scope="singleton"></bean>
 
     <import resource="file:config/custom-context.xml"/>
