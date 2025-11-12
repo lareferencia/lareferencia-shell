@@ -22,20 +22,19 @@ package org.lareferencia.shell.commands.harvester;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Files;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.lareferencia.backend.domain.Network;
-import org.lareferencia.backend.domain.Transformer;
-import org.lareferencia.backend.domain.Validator;
-import org.lareferencia.backend.domain.ValidatorRule;
-import org.lareferencia.backend.repositories.jpa.NetworkRepository;
-import org.lareferencia.backend.repositories.jpa.TransformerRepository;
-import org.lareferencia.backend.repositories.jpa.ValidatorRepository;
-import org.lareferencia.core.metadata.IMetadataRecordStoreService;
+import org.lareferencia.core.domain.Network;
+import org.lareferencia.core.domain.Transformer;
+import org.lareferencia.core.domain.Validator;
+import org.lareferencia.core.repository.jpa.NetworkRepository;
+import org.lareferencia.core.repository.jpa.TransformerRepository;
+import org.lareferencia.core.repository.jpa.ValidatorRepository;
+import org.lareferencia.core.metadata.IMetadataStore;
+import org.lareferencia.core.metadata.ISnapshotStore;
 import org.lareferencia.core.util.JSONSerializerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
@@ -46,6 +45,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 
 @ShellComponent
@@ -54,8 +55,11 @@ public class HarvesterCommands {
 	@Autowired
 	NetworkRepository networkRepository;
 
-	@Autowired
-	IMetadataRecordStoreService storeService;
+	// @Autowired
+	// ISnapshotStore snapshotStore;
+
+	// @Autowired
+	// IMetadataStore metadataStore;
 
 	private static Logger logger = LogManager.getLogger(HarvesterCommands.class);
 
@@ -318,7 +322,19 @@ public class HarvesterCommands {
 	}
 
 	@ShellMethod("Export validator to json file")
-	public String exportValidator(Long validatorId, String filename) throws Exception {
+	public String exportValidator(
+			@org.springframework.shell.standard.ShellOption(value = "--id", help = "Validator ID") Long validatorId,
+			@org.springframework.shell.standard.ShellOption(value = "--filename", help = "Output JSON file path") String filename) throws Exception {
+
+		if (validatorId == null) {
+			System.err.println("Error: Validator ID is required (use --id)");
+			return "FAILED";
+		}
+
+		if (filename == null || filename.trim().isEmpty()) {
+			System.err.println("Error: Output filename is required (use --filename)");
+			return "FAILED";
+		}
 
 		Optional<Validator> optionalValidator = validatorRepository.findById(validatorId);
 
@@ -326,11 +342,18 @@ public class HarvesterCommands {
 
 			System.out.println("Exporting validator: " + validatorId + " to " + filename );
 
-			String serializedString = JSONSerializerHelper.serializeToJsonString( optionalValidator.get() );
-			Files.write(serializedString, new File(filename), Charset.forName("UTF-8"));
+			try {
+				String serializedString = JSONSerializerHelper.serializeToJsonString( optionalValidator.get() );
+				Files.write(new File(filename).toPath(), serializedString.getBytes(StandardCharsets.UTF_8));
+				System.out.println("Validator successfully exported to: " + filename);
+			} catch (Exception e) {
+				System.err.println("Error exporting validator: " + e.getMessage());
+				throw e;
+			}
 
 		} else {
-			System.out.println("Validator with id: " + validatorId + "does not exists. ");
+			System.err.println("Error: Validator with id: " + validatorId + " does not exist.");
+			return "FAILED";
 		}
 
 		return "OK";
@@ -338,27 +361,71 @@ public class HarvesterCommands {
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	@ShellMethod("Import Validator from json file")
-	public void importValidator(String filename) throws Exception {
+	public void importValidator(
+			@org.springframework.shell.standard.ShellOption(value = "--filename", help = "JSON file path") String filename,
+			@org.springframework.shell.standard.ShellOption(value = "--migrate", help = "Migrate package references from backend.* to core.*", defaultValue = "false") boolean migrate) throws Exception {
+
+		if (filename == null || filename.trim().isEmpty()) {
+			System.err.println("Error: Input filename is required (use --filename)");
+			return;
+		}
 
 		File file = new File(filename);
 
-		if ( file.exists() ) {
+		if ( !file.exists() ) {
+			System.err.println("Error: File not found: " + filename);
+			return;
+		}
 
-			Validator validator = (Validator) JSONSerializerHelper.deserializeFromFile(file, Validator.class);
+		try {
+			// Read JSON content from file using non-deprecated method
+			byte[] jsonBytes = Files.readAllBytes(file.toPath());
+			String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
+			
+			// Optionally migrate package references from old backend.* to new core.* structure
+			if (migrate) {
+				jsonContent = migratePackageReferencesInJson(jsonContent);
+				System.out.println("Package references migrated from backend.* to core.*");
+			}
+			
+			// Deserialize using ObjectMapper
+			ObjectMapper objectMapper = new ObjectMapper();
+			Validator validator = objectMapper.readValue(jsonContent, Validator.class);
+			
+			if (validator == null) {
+				System.err.println("Error: Invalid validator JSON - deserialization returned null");
+				return;
+			}
+			
 			validator.resetId();
 
 			validatorRepository.saveAndFlush(validator);
 
 			System.out.println("Validator: " + validator.getName() + " successfully loaded to db. ");
-
-		} else {
-			System.out.println("File: " + filename + " does not exists. ");
+		} catch (IOException e) {
+			System.err.println("Error reading or processing validator file: " + e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("Error importing validator: " + e.getMessage());
+			e.printStackTrace();
 		}
 
 	}
 
 	@ShellMethod("Export transformer to json file")
-	public String exportTransformer(Long transformerId, String filename) throws Exception {
+	public String exportTransformer(
+			@org.springframework.shell.standard.ShellOption(value = "--id", help = "Transformer ID") Long transformerId,
+			@org.springframework.shell.standard.ShellOption(value = "--filename", help = "Output JSON file path") String filename) throws Exception {
+
+		if (transformerId == null) {
+			System.err.println("Error: Transformer ID is required (use --id)");
+			return "FAILED";
+		}
+
+		if (filename == null || filename.trim().isEmpty()) {
+			System.err.println("Error: Output filename is required (use --filename)");
+			return "FAILED";
+		}
 
 		Optional<Transformer> optionalTransformer = transformerRepository.findById(transformerId);
 
@@ -366,11 +433,18 @@ public class HarvesterCommands {
 
 			System.out.println("Exporting transformer: " + transformerId + " to " + filename );
 
-			String serializedString = JSONSerializerHelper.serializeToJsonString( optionalTransformer.get() );
-			Files.write(serializedString, new File(filename), Charset.forName("UTF-8"));
+			try {
+				String serializedString = JSONSerializerHelper.serializeToJsonString( optionalTransformer.get() );
+				Files.write(new File(filename).toPath(), serializedString.getBytes(StandardCharsets.UTF_8));
+				System.out.println("Transformer successfully exported to: " + filename);
+			} catch (Exception e) {
+				System.err.println("Error exporting transformer: " + e.getMessage());
+				throw e;
+			}
 
 		} else {
-			System.out.println("Transformer with id: " + transformerId + "does not exists.");
+			System.err.println("Error: Transformer with id: " + transformerId + " does not exist.");
+			return "FAILED";
 		}
 
 		return "OK";
@@ -378,32 +452,77 @@ public class HarvesterCommands {
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	@ShellMethod("Import Transformer from json file")
-	public void importTransformer(String filename) throws Exception {
+	public void importTransformer(
+			@org.springframework.shell.standard.ShellOption(value = "--filename", help = "JSON file path") String filename,
+			@org.springframework.shell.standard.ShellOption(value = "--migrate", help = "Migrate package references from backend.* to core.*", defaultValue = "false") boolean migrate) throws Exception {
+
+		if (filename == null || filename.trim().isEmpty()) {
+			System.err.println("Error: Input filename is required (use --filename)");
+			return;
+		}
 
 		File file = new File(filename);
 
-		if ( file.exists() ) {
+		if ( !file.exists() ) {
+			System.err.println("Error: File not found: " + filename);
+			return;
+		}
 
-			Transformer transformer = (Transformer) JSONSerializerHelper.deserializeFromFile(file, Transformer.class);
+		try {
+			// Read JSON content from file using non-deprecated method
+			byte[] jsonBytes = Files.readAllBytes(file.toPath());
+			String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
+			
+			// Optionally migrate package references from old backend.* to new core.* structure
+			if (migrate) {
+				jsonContent = migratePackageReferencesInJson(jsonContent);
+				System.out.println("Package references migrated from backend.* to core.*");
+			}
+			
+			// Deserialize using ObjectMapper
+			ObjectMapper objectMapper = new ObjectMapper();
+			Transformer transformer = objectMapper.readValue(jsonContent, Transformer.class);
+			
+			if (transformer == null) {
+				System.err.println("Error: Invalid transformer JSON - deserialization returned null");
+				return;
+			}
+			
 			transformer.resetId();
 
 			transformerRepository.saveAndFlush(transformer);
 
 			System.out.println("Transformer: " + transformer.getName() + " successfully loaded to db. ");
-
-		} else {
-			System.out.println("File: " + filename + " does not exists. ");
+		} catch (IOException e) {
+			System.err.println("Error reading or processing transformer file: " + e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("Error importing transformer: " + e.getMessage());
+			e.printStackTrace();
 		}
 
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	@ShellMethod("Optimize metadata store")
-	public void optimizeMetadataStore() throws Exception {
-
-		System.out.println("Cleaning and optimizing metadata store. ");
-		storeService.optimizeStore();
-
+	/**
+	 * Migrates package references in JSON content from old backend.* structure to new core.* structure.
+	 * This ensures JSON exported from old versions can be imported into new versions.
+	 *
+	 * Mapping rules for transformer and validator rules only:
+	 * org.lareferencia.backend.validation.validator.* -> org.lareferencia.core.worker.validation.validator.*
+	 * org.lareferencia.backend.validation.transformer.* -> org.lareferencia.core.worker.validation.transformer.*
+	 *
+	 * @param jsonContent the JSON string to migrate
+	 * @return the migrated JSON with updated package references
+	 */
+	private String migratePackageReferencesInJson(String jsonContent) {
+		// Map transformer and validator rules from backend to core.worker
+		jsonContent = jsonContent.replace("org.lareferencia.backend.validation.validator.", "org.lareferencia.core.worker.validation.validator.");
+		jsonContent = jsonContent.replace("org.lareferencia.backend.validation.transformer.", "org.lareferencia.core.worker.validation.transformer.");
+		
+		return jsonContent;
 	}
+
+
+	
 
 }

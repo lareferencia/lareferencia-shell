@@ -20,12 +20,7 @@
  */
 package org.lareferencia.shell.commands.harvester;
 
-import org.apache.solr.client.solrj.SolrClient;
-import org.lareferencia.backend.services.SnapshotLogService;
-import org.lareferencia.core.metadata.IMetadataRecordStoreService;
-import org.lareferencia.core.metadata.MetadataRecordStoreServiceImpl;
-import org.lareferencia.core.util.hashing.IHashingHelper;
-import org.lareferencia.core.util.hashing.XXHash64Hashing;
+import org.lareferencia.core.service.management.SnapshotLogService;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,14 +29,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @Configuration
-@EntityScan("org.lareferencia.backend.domain")
-@EnableJpaRepositories(value="org.lareferencia.backend.repositories.jpa")
+@EntityScan("org.lareferencia.core.domain")
+@EnableJpaRepositories(value="org.lareferencia.core.repository.jpa")
 public class HarvesterConfiguration {
 
-   @Bean
-   public IMetadataRecordStoreService metadataRecordStoreService() {
-      return new MetadataRecordStoreServiceImpl();
-   }
+  
 
     // snapshotLogService bean
     @Bean
