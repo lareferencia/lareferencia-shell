@@ -32,41 +32,48 @@ import org.springframework.shell.Input;
 import org.springframework.shell.InputProvider;
 import org.springframework.stereotype.Component;
 
-
 /**
  * UPGRADED for Spring Boot 3.x / Spring Shell 3.x
  * Changes:
- * - Removed InteractiveShellApplicationRunner (no longer exists in Spring Shell 3.x)
+ * - Removed InteractiveShellApplicationRunner (no longer exists in Spring Shell
+ * 3.x)
  * - Using InputProvider to execute commands programmatically
  * - Direct precedence value instead of PRECEDENCE constant
  */
 @Component
 @Order(-1000)
 public class EntityShellApplication implements ApplicationRunner {
-	
+
 	private final Shell shell;
 
-
 	public static void main(String[] args) {
-		
-		 SpringApplication springApplication = 
-	                new SpringApplicationBuilder()
-	                .sources(EntityShellApplication.class)
-	                .web(WebApplicationType.NONE)
-	                .build();
-		 
 
-	     springApplication.run(args).close();	
+		SpringApplication springApplication = new SpringApplicationBuilder()
+				.sources(EntityShellApplication.class)
+				.web(WebApplicationType.NONE)
+				.build();
+
+		springApplication.run(args).close();
 	}
-	
-	
+
 	public EntityShellApplication(Shell shell) {
 		this.shell = shell;
 	}
-	
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		
+
+		// Skip if running via MainApp - Spring Shell will handle command execution
+		// automatically
+		// This prevents double execution when running commands via command line
+		// arguments
+		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+		for (StackTraceElement element : stackTrace) {
+			if (element.getClassName().contains("MainApp")) {
+				return; // MainApp handles command execution, skip EntityShellApplication
+			}
+		}
+
 		if (args.getNonOptionArgs().isEmpty() || args.getNonOptionArgs().stream().allMatch(s -> s.startsWith("@"))) {
 			// No command provided, allow interactive mode
 			return;
@@ -75,17 +82,17 @@ public class EntityShellApplication implements ApplicationRunner {
 			 * Execute the command and exit (non-interactive mode)
 			 * In Spring Shell 3.x, we use shell.run() with InputProvider
 			 */
-			
+
 			// Disable interactive mode by setting property
 			System.setProperty("spring.shell.interactive.enabled", "false");
-			
+
 			// Execute the command
 			String command = String.join(" ", args.getSourceArgs());
-			
+
 			// Create an InputProvider that returns the command
 			InputProvider inputProvider = new InputProvider() {
 				private boolean provided = false;
-				
+
 				@Override
 				public Input readInput() {
 					if (!provided) {
@@ -95,7 +102,7 @@ public class EntityShellApplication implements ApplicationRunner {
 					return null; // Signal end of input
 				}
 			};
-			
+
 			try {
 				// In Spring Shell 3.x, run() executes commands but doesn't return result
 				// Output is handled by the shell itself
@@ -105,7 +112,7 @@ public class EntityShellApplication implements ApplicationRunner {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
- }
+}
