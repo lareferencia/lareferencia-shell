@@ -1,50 +1,45 @@
-# NOTE: Spring Data Solr was removed in Spring Boot 3.x
-# If you need Solr functionality, use Apache Solr Client directly
-# See SOLR_MIGRATION_NOTES.md for details
+# ==============================================================================
+# LA REFERENCIA SHELL- APPLICATION CONFIGURATION TEMPLATE
+# ==============================================================================
+# This file serves as a template for configuring the LA Referencia LRHarvester
+# application. Copy this file to 'application.properties' and adjust the values
+# according to your environment.
+#
+# ==============================================================================
 
-# Spring Shell 3.x configuration
-spring.shell.interactive.enabled=true
-spring.shell.command.version.enabled=true
-spring.shell.command.help.enabled=true
 
-## Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+# ==============================================================================
+# 1. GENERAL CONFIGURATION
+# ==============================================================================
+
+
+# ==============================================================================
+# 2. DATABASE SETTINGS
+# ==============================================================================
+
+# PostgreSQL connection URL
+# Format: jdbc:postgresql://<host>:<port>/<database>
+# Default: jdbc:postgresql://localhost:5432/lrharvester
 spring.datasource.url=jdbc:postgresql://localhost:5432/lrharvester
+
+# Database credentials
+# Default: lrharvester
 spring.datasource.username=lrharvester
 spring.datasource.password=lrharvester
 
-# HikariCP connection pool settings (default in Spring Boot 3.x)
-spring.datasource.hikari.maximum-pool-size=10
-spring.datasource.hikari.minimum-idle=5
-spring.datasource.hikari.connection-timeout=30000
+# ==============================================================================
+# 3. SECURITY
+# ==============================================================================
 
-spring.main.web-application-type=none
 
-# The SQL dialect makes Hibernate generate better SQL for the chosen database
-# PostgreSQL dialect updated for Hibernate 6.x
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+# ==============================================================================
+# 4. STORAGE
+# ==============================================================================
 
-# Disable open-in-view to avoid lazy loading issues in Spring Boot 3.x
-spring.jpa.open-in-view=false
 
-# Hibernate ddl auto (create, create-drop, validate, update)
-# The 'none' value will give FlywayDB full control of data structure creation
-#   since it's loaded before Hibernate
-spring.jpa.hibernate.ddl-auto=none
-
-# Flyway configurations
-# Disable flyway from loading by default (enable it when needed)
-spring.flyway.enabled=false
-#spring.flyway.locations=classpath:db/migration
-spring.flyway.user=${spring.datasource.username}
-spring.flyway.password=${spring.datasource.password}
-spring.flyway.url=${spring.datasource.url}
-#spring.flyway.default-schema=public
-#spring.flyway.table=flyway_schema_history
-
-# Flyway baseline for existing databases
-#spring.flyway.baseline-on-migrate=true
-#spring.flyway.baseline-version=1
+# ==============================================================================
+# 5. INDEXING ENGINE
+# ==============================================================================
 
 # Solr configuration (using direct client in Spring Boot 3.x)
 solr.host=http://localhost:8983/solr
@@ -57,35 +52,15 @@ elastic.password=admin12345
 elastic.useSSL=false
 elastic.authenticate=false
 
-# Logging configuration
-# Logging file if different from the default one
-#logging.file.name=/var/log/spring-shell.log
-#logging.file.path=/var/log
-
-# Logging pattern for Spring Boot 3.x
-#logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%t] %-40.40logger{39} : %m%n
-#logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%t] %-40.40logger{39} : %m%n
+# ==============================================================================
+# 6. INTEGRATION SERVICES
+# ==============================================================================
 
 
-# DEBUG
-# Uncomment the following setting to activate logging debugging mode
-# for root class level
-#logging.level.root=DEBUG
+# ==============================================================================
+# ADDITIONAL CONFIGURATION
+# ==============================================================================
 
-# Uncomment the following setting to activate logging debugging mode
-# for specific packages
-#logging.level.org.lareferencia=DEBUG
-#logging.level.org.hibernate.SQL=DEBUG
-#logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
-#logging.level.org.springframework=INFO
-
-# JMX Monitor Spring Configuration (Management endpoints for Spring Boot 3.x)
-spring.jmx.enabled=true
-management.endpoints.jmx.exposure.include=*
-
-# Spring Boot 3.x Management endpoints
-#management.endpoints.web.exposure.include=health,info,metrics
-#management.endpoint.health.show-details=when-authorized
-
-
-
+# ==============================================================================
+# END OF CONFIGURATION
+# ==============================================================================
