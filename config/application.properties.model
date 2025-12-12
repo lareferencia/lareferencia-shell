@@ -27,6 +27,24 @@ spring.datasource.url=jdbc:postgresql://localhost:5432/lrharvester
 spring.datasource.username=lrharvester
 spring.datasource.password=lrharvester
 
+# ------------------------------------------------------------------------------
+# Alternative Database Configurations (Uncomment to use)
+# ------------------------------------------------------------------------------
+
+# H2 Database
+# spring.datasource.url=jdbc:h2:file:${store.basepath}/lrharvester-shell;DB_CLOSE_DELAY=-1
+# spring.datasource.username=sa
+# spring.datasource.password=
+# spring.datasource.driver-class-name=org.h2.Driver
+# spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+
+# SQLite Database
+# spring.datasource.url=jdbc:sqlite:${store.basepath}/lrharvester-shell.db
+# spring.datasource.username=
+# spring.datasource.password=
+# spring.datasource.driver-class-name=org.sqlite.JDBC
+# spring.jpa.database-platform=org.hibernate.community.dialect.SQLiteDialect
+
 # ==============================================================================
 # 3. SECURITY
 # ==============================================================================
