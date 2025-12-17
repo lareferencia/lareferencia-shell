@@ -29,6 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.lareferencia.core.domain.Network;
 import org.lareferencia.core.domain.Transformer;
 import org.lareferencia.core.domain.Validator;
+import org.lareferencia.core.flowable.WorkflowService;
 import org.lareferencia.core.metadata.ISnapshotStore;
 import org.lareferencia.core.repository.jpa.NetworkRepository;
 import org.lareferencia.core.repository.jpa.TransformerRepository;
@@ -40,7 +41,6 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -56,6 +56,25 @@ public class HarvesterCommands {
 	@Autowired
 	ISnapshotStore snapshotStore;
 
+	@Autowired
+	WorkflowService workflowService;
+
+	@ShellMethod(value = "Start harvesting process for a network", key = "start-harvesting")
+	public String startHarvesting(@ShellOption(help = "Network ID") Long networkId) {
+		Optional<Network> networkOpt = networkRepository.findById(networkId);
+		if (networkOpt.isPresent()) {
+			try {
+				String processInstanceId = workflowService.startHarvestingProcess(networkOpt.get()).getId();
+				return "Started harvesting process for network " + networkOpt.get().getAcronym()
+						+ ". Process Instance ID: " + processInstanceId;
+			} catch (Exception e) {
+				return "Error starting harvesting process: " + e.getMessage();
+			}
+		} else {
+			return "Network not found with ID: " + networkId;
+		}
+	}
+
 	// @Autowired
 	// IMetadataStore metadataStore;
 
@@ -67,14 +86,13 @@ public class HarvesterCommands {
 		StringBuilder result = new StringBuilder();
 		result.append(String.format("%-8s %-20s %-50s %-10s%n", "ID", "ACRONYM", "NAME", "PUBLISHED"));
 		result.append("=".repeat(90)).append("\n");
-		
+
 		for (Network network : networks) {
 			result.append(String.format("%-8d %-20s %-50s %-10s%n",
-				network.getId(),
-				network.getAcronym() != null ? network.getAcronym() : "-",
-				truncate(network.getName(), 48),
-				network.getPublished() != null && network.getPublished() ? "YES" : "NO"
-			));
+					network.getId(),
+					network.getAcronym() != null ? network.getAcronym() : "-",
+					truncate(network.getName(), 48),
+					network.getPublished() != null && network.getPublished() ? "YES" : "NO"));
 		}
 		return result.toString();
 	}
@@ -83,48 +101,51 @@ public class HarvesterCommands {
 	public String listSnapshotsByNetwork(
 			@ShellOption(help = "Network ID") Long networkId,
 			@ShellOption(help = "Include deleted snapshots", defaultValue = "false") boolean includeDeleted) {
-		
+
 		java.util.Optional<Network> optNetwork = networkRepository.findById(networkId);
 		if (!optNetwork.isPresent()) {
 			return "ERROR: Network " + networkId + " not found";
 		}
 		Network network = optNetwork.get();
-		
-		java.util.List<ISnapshotStore.SnapshotSummary> snapshots = snapshotStore.listSnapshotsSummary(networkId, includeDeleted);
-		
+
+		java.util.List<ISnapshotStore.SnapshotSummary> snapshots = snapshotStore.listSnapshotsSummary(networkId,
+				includeDeleted);
+
 		if (snapshots.isEmpty()) {
 			return "No snapshots found for network " + network.getAcronym() + " (ID: " + networkId + ")";
 		}
-		
+
 		StringBuilder result = new StringBuilder();
-		result.append("Snapshots for network: ").append(network.getAcronym()).append(" (ID: ").append(networkId).append(")\n");
-		result.append(String.format("%-10s %-6s %-25s %-20s %-20s %-10s %-10s %-10s %-8s%n", 
-			"ID", "LGK", "STATUS", "START TIME", "END TIME", "SIZE", "VALID", "TRANSF", "DELETED"));
+		result.append("Snapshots for network: ").append(network.getAcronym()).append(" (ID: ").append(networkId)
+				.append(")\n");
+		result.append(String.format("%-10s %-6s %-25s %-20s %-20s %-10s %-10s %-10s %-8s%n",
+				"ID", "LGK", "STATUS", "START TIME", "END TIME", "SIZE", "VALID", "TRANSF", "DELETED"));
 		result.append("=".repeat(130)).append("\n");
-		
-		java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		
+
+		java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter
+				.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 		for (ISnapshotStore.SnapshotSummary s : snapshots) {
 			String startTime = s.getStartTime() != null ? s.getStartTime().format(formatter) : "-";
 			String endTime = s.getEndTime() != null ? s.getEndTime().format(formatter) : "-";
 			result.append(String.format("%-10d %-6s %-25s %-20s %-20s %-10d %-10d %-10d %-8s%n",
-				s.getId(),
-				s.isLGK() ? "*" : "",
-				s.getStatus(),
-				startTime,
-				endTime,
-				s.getSize() != null ? s.getSize() : 0,
-				s.getValidSize() != null ? s.getValidSize() : 0,
-				s.getTransformedSize() != null ? s.getTransformedSize() : 0,
-				s.isDeleted() ? "YES" : "NO"
-			));
+					s.getId(),
+					s.isLGK() ? "*" : "",
+					s.getStatus(),
+					startTime,
+					endTime,
+					s.getSize() != null ? s.getSize() : 0,
+					s.getValidSize() != null ? s.getValidSize() : 0,
+					s.getTransformedSize() != null ? s.getTransformedSize() : 0,
+					s.isDeleted() ? "YES" : "NO"));
 		}
-		
+
 		return result.toString();
 	}
-	
+
 	private String truncate(String str, int maxLen) {
-		if (str == null) return "-";
+		if (str == null)
+			return "-";
 		return str.length() <= maxLen ? str : str.substring(0, maxLen - 2) + "..";
 	}
 
@@ -151,12 +172,11 @@ public class HarvesterCommands {
 		return "networks updated from: " + excelFileFullPath;
 	}
 
-
 	private void upload_fields(String filename) throws Exception {
 
 		File file = new File(filename);
 
-		if ( file.exists() ) {
+		if (file.exists()) {
 
 			InputStream inp = new FileInputStream(file);
 
@@ -201,7 +221,7 @@ public class HarvesterCommands {
 						Network network = optionalNetwork.get();
 
 						/**
-						 *  Update attributes
+						 * Update attributes
 						 */
 
 						Map<String, Object> attr_fields = network.getAttributes();
@@ -213,7 +233,6 @@ public class HarvesterCommands {
 							if (colIx == null)
 								continue;
 
-
 							if (dataRow.getCell(colIx) != null) {
 								try {
 									dataRow.getCell(colIx).setCellType(CellType.STRING);
@@ -223,7 +242,8 @@ public class HarvesterCommands {
 									if (value != null)
 										network.getAttributes().put(fieldName, value);
 								} catch (Exception e) {
-									System.out.println("Error al convertir fieldName " + fieldName + " del network " + network.getId() + ": " + e.getMessage());
+									System.out.println("Error al convertir fieldName " + fieldName + " del network "
+											+ network.getId() + ": " + e.getMessage());
 								}
 							}
 						}
@@ -232,11 +252,13 @@ public class HarvesterCommands {
 						 * Update properties
 						 */
 
-						String[] properties = {"scheduleCronExpression", "institutionName", "institutionAcronym", "name"};
+						String[] properties = { "scheduleCronExpression", "institutionName", "institutionAcronym",
+								"name" };
 
 						for (String fieldName : properties) {
 							Short colIx = columnsByName.get(fieldName);
-							if (colIx == null) continue;
+							if (colIx == null)
+								continue;
 
 							dataRow.getCell(colIx).setCellType(CellType.STRING);
 							String value = dataRow.getCell(colIx).getStringCellValue();
@@ -248,7 +270,8 @@ public class HarvesterCommands {
 						// Save network
 						networkRepository.save(network);
 
-					} else System.out.println("Network id: " + networkID + " not present in db");
+					} else
+						System.out.println("Network id: " + networkID + " not present in db");
 
 				}
 			} else {
@@ -257,7 +280,6 @@ public class HarvesterCommands {
 		} else {
 			System.out.println("File not exists: " + filename);
 		}
-
 
 	}
 
@@ -283,16 +305,16 @@ public class HarvesterCommands {
 
 			// Properties
 			LinkedHashMap<String, String> networkPropertiesMap = new LinkedHashMap<>();
-			networkPropertiesMap.put("id",network.getId().toString());
-			networkPropertiesMap.put("name",network.getName());
-			networkPropertiesMap.put("institutionAcronym",network.getInstitutionAcronym());
-			networkPropertiesMap.put("institutionName",network.getInstitutionName());
-			networkPropertiesMap.put("metadataPrefix",network.getMetadataPrefix());
-			networkPropertiesMap.put("originURL",network.getOriginURL());
+			networkPropertiesMap.put("id", network.getId().toString());
+			networkPropertiesMap.put("name", network.getName());
+			networkPropertiesMap.put("institutionAcronym", network.getInstitutionAcronym());
+			networkPropertiesMap.put("institutionName", network.getInstitutionName());
+			networkPropertiesMap.put("metadataPrefix", network.getMetadataPrefix());
+			networkPropertiesMap.put("originURL", network.getOriginURL());
 			networkPropertiesMap.put("metadataStoreSchema", network.getMetadataStoreSchema());
 			networkPropertiesMap.put("scheduleCronExpression", network.getScheduleCronExpression());
 
-			//System.out.println(networkPropertiesMap);
+			// System.out.println(networkPropertiesMap);
 			networkPropertiesData.add(networkPropertiesMap);
 			networkPropertiesFields.addAll(networkPropertiesMap.keySet());
 		}
@@ -354,21 +376,22 @@ public class HarvesterCommands {
 		workbook.close();
 	}
 
-	/******************************* Validator ***************************************/
+	/*******************************
+	 * Validator
+	 ***************************************/
 	@Autowired
 	ValidatorRepository validatorRepository;
 
 	@Autowired
 	TransformerRepository transformerRepository;
 
-
 	@ShellMethod("List validators")
 	public String listValidators() throws Exception {
 
 		System.out.println("Listing validators: \n");
 
-		for (Validator validator: validatorRepository.findAll() ) {
-			System.out.println( validator.getId() + "\t ----> " + validator.getName() );
+		for (Validator validator : validatorRepository.findAll()) {
+			System.out.println(validator.getId() + "\t ----> " + validator.getName());
 		}
 
 		return "";
@@ -379,8 +402,8 @@ public class HarvesterCommands {
 
 		System.out.println("Listing transformers: \n");
 
-		for (Transformer transformer: transformerRepository.findAll() ) {
-			System.out.println( transformer.getId() + "\t ----> " + transformer.getName() );
+		for (Transformer transformer : transformerRepository.findAll()) {
+			System.out.println(transformer.getId() + "\t ----> " + transformer.getName());
 		}
 
 		return "";
@@ -389,7 +412,8 @@ public class HarvesterCommands {
 	@ShellMethod("Export validator to json file")
 	public String exportValidator(
 			@org.springframework.shell.standard.ShellOption(value = "--id", help = "Validator ID") Long validatorId,
-			@org.springframework.shell.standard.ShellOption(value = "--filename", help = "Output JSON file path") String filename) throws Exception {
+			@org.springframework.shell.standard.ShellOption(value = "--filename", help = "Output JSON file path") String filename)
+			throws Exception {
 
 		if (validatorId == null) {
 			System.err.println("Error: Validator ID is required (use --id)");
@@ -403,12 +427,12 @@ public class HarvesterCommands {
 
 		Optional<Validator> optionalValidator = validatorRepository.findById(validatorId);
 
-		if ( optionalValidator.isPresent() ) {
+		if (optionalValidator.isPresent()) {
 
-			System.out.println("Exporting validator: " + validatorId + " to " + filename );
+			System.out.println("Exporting validator: " + validatorId + " to " + filename);
 
 			try {
-				String serializedString = JSONSerializerHelper.serializeToJsonString( optionalValidator.get() );
+				String serializedString = JSONSerializerHelper.serializeToJsonString(optionalValidator.get());
 				Files.write(new File(filename).toPath(), serializedString.getBytes(StandardCharsets.UTF_8));
 				System.out.println("Validator successfully exported to: " + filename);
 			} catch (Exception e) {
@@ -428,7 +452,8 @@ public class HarvesterCommands {
 	@ShellMethod("Import Validator from json file")
 	public void importValidator(
 			@org.springframework.shell.standard.ShellOption(value = "--filename", help = "JSON file path") String filename,
-			@org.springframework.shell.standard.ShellOption(value = "--migrate", help = "Migrate package references from backend.* to core.*", defaultValue = "false") boolean migrate) throws Exception {
+			@org.springframework.shell.standard.ShellOption(value = "--migrate", help = "Migrate package references from backend.* to core.*", defaultValue = "false") boolean migrate)
+			throws Exception {
 
 		if (filename == null || filename.trim().isEmpty()) {
 			System.err.println("Error: Input filename is required (use --filename)");
@@ -437,7 +462,7 @@ public class HarvesterCommands {
 
 		File file = new File(filename);
 
-		if ( !file.exists() ) {
+		if (!file.exists()) {
 			System.err.println("Error: File not found: " + filename);
 			return;
 		}
@@ -446,22 +471,23 @@ public class HarvesterCommands {
 			// Read JSON content from file using non-deprecated method
 			byte[] jsonBytes = Files.readAllBytes(file.toPath());
 			String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
-			
-			// Optionally migrate package references from old backend.* to new core.* structure
+
+			// Optionally migrate package references from old backend.* to new core.*
+			// structure
 			if (migrate) {
 				jsonContent = migratePackageReferencesInJson(jsonContent);
 				System.out.println("Package references migrated from backend.* to core.*");
 			}
-			
+
 			// Deserialize using ObjectMapper
 			ObjectMapper objectMapper = new ObjectMapper();
 			Validator validator = objectMapper.readValue(jsonContent, Validator.class);
-			
+
 			if (validator == null) {
 				System.err.println("Error: Invalid validator JSON - deserialization returned null");
 				return;
 			}
-			
+
 			validator.resetId();
 
 			validatorRepository.saveAndFlush(validator);
@@ -480,7 +506,8 @@ public class HarvesterCommands {
 	@ShellMethod("Export transformer to json file")
 	public String exportTransformer(
 			@org.springframework.shell.standard.ShellOption(value = "--id", help = "Transformer ID") Long transformerId,
-			@org.springframework.shell.standard.ShellOption(value = "--filename", help = "Output JSON file path") String filename) throws Exception {
+			@org.springframework.shell.standard.ShellOption(value = "--filename", help = "Output JSON file path") String filename)
+			throws Exception {
 
 		if (transformerId == null) {
 			System.err.println("Error: Transformer ID is required (use --id)");
@@ -494,12 +521,12 @@ public class HarvesterCommands {
 
 		Optional<Transformer> optionalTransformer = transformerRepository.findById(transformerId);
 
-		if ( optionalTransformer.isPresent() ) {
+		if (optionalTransformer.isPresent()) {
 
-			System.out.println("Exporting transformer: " + transformerId + " to " + filename );
+			System.out.println("Exporting transformer: " + transformerId + " to " + filename);
 
 			try {
-				String serializedString = JSONSerializerHelper.serializeToJsonString( optionalTransformer.get() );
+				String serializedString = JSONSerializerHelper.serializeToJsonString(optionalTransformer.get());
 				Files.write(new File(filename).toPath(), serializedString.getBytes(StandardCharsets.UTF_8));
 				System.out.println("Transformer successfully exported to: " + filename);
 			} catch (Exception e) {
@@ -519,7 +546,8 @@ public class HarvesterCommands {
 	@ShellMethod("Import Transformer from json file")
 	public void importTransformer(
 			@org.springframework.shell.standard.ShellOption(value = "--filename", help = "JSON file path") String filename,
-			@org.springframework.shell.standard.ShellOption(value = "--migrate", help = "Migrate package references from backend.* to core.*", defaultValue = "false") boolean migrate) throws Exception {
+			@org.springframework.shell.standard.ShellOption(value = "--migrate", help = "Migrate package references from backend.* to core.*", defaultValue = "false") boolean migrate)
+			throws Exception {
 
 		if (filename == null || filename.trim().isEmpty()) {
 			System.err.println("Error: Input filename is required (use --filename)");
@@ -528,7 +556,7 @@ public class HarvesterCommands {
 
 		File file = new File(filename);
 
-		if ( !file.exists() ) {
+		if (!file.exists()) {
 			System.err.println("Error: File not found: " + filename);
 			return;
 		}
@@ -537,22 +565,23 @@ public class HarvesterCommands {
 			// Read JSON content from file using non-deprecated method
 			byte[] jsonBytes = Files.readAllBytes(file.toPath());
 			String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
-			
-			// Optionally migrate package references from old backend.* to new core.* structure
+
+			// Optionally migrate package references from old backend.* to new core.*
+			// structure
 			if (migrate) {
 				jsonContent = migratePackageReferencesInJson(jsonContent);
 				System.out.println("Package references migrated from backend.* to core.*");
 			}
-			
+
 			// Deserialize using ObjectMapper
 			ObjectMapper objectMapper = new ObjectMapper();
 			Transformer transformer = objectMapper.readValue(jsonContent, Transformer.class);
-			
+
 			if (transformer == null) {
 				System.err.println("Error: Invalid transformer JSON - deserialization returned null");
 				return;
 			}
-			
+
 			transformer.resetId();
 
 			transformerRepository.saveAndFlush(transformer);
@@ -569,25 +598,28 @@ public class HarvesterCommands {
 	}
 
 	/**
-	 * Migrates package references in JSON content from old backend.* structure to new core.* structure.
-	 * This ensures JSON exported from old versions can be imported into new versions.
+	 * Migrates package references in JSON content from old backend.* structure to
+	 * new core.* structure.
+	 * This ensures JSON exported from old versions can be imported into new
+	 * versions.
 	 *
 	 * Mapping rules for transformer and validator rules only:
-	 * org.lareferencia.backend.validation.validator.* -> org.lareferencia.core.worker.validation.validator.*
-	 * org.lareferencia.backend.validation.transformer.* -> org.lareferencia.core.worker.validation.transformer.*
+	 * org.lareferencia.backend.validation.validator.* ->
+	 * org.lareferencia.core.worker.validation.validator.*
+	 * org.lareferencia.backend.validation.transformer.* ->
+	 * org.lareferencia.core.worker.validation.transformer.*
 	 *
 	 * @param jsonContent the JSON string to migrate
 	 * @return the migrated JSON with updated package references
 	 */
 	private String migratePackageReferencesInJson(String jsonContent) {
 		// Map transformer and validator rules from backend to core.worker
-		jsonContent = jsonContent.replace("org.lareferencia.backend.validation.validator.", "org.lareferencia.core.worker.validation.validator.");
-		jsonContent = jsonContent.replace("org.lareferencia.backend.validation.transformer.", "org.lareferencia.core.worker.validation.transformer.");
-		
+		jsonContent = jsonContent.replace("org.lareferencia.backend.validation.validator.",
+				"org.lareferencia.core.worker.validation.validator.");
+		jsonContent = jsonContent.replace("org.lareferencia.backend.validation.transformer.",
+				"org.lareferencia.core.worker.validation.transformer.");
+
 		return jsonContent;
 	}
-
-
-	
 
 }
