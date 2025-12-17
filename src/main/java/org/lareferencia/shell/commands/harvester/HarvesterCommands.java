@@ -20,7 +20,6 @@
  */
 package org.lareferencia.shell.commands.harvester;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
@@ -33,8 +32,6 @@ import org.lareferencia.core.domain.Validator;
 import org.lareferencia.core.repository.jpa.NetworkRepository;
 import org.lareferencia.core.repository.jpa.TransformerRepository;
 import org.lareferencia.core.repository.jpa.ValidatorRepository;
-import org.lareferencia.core.metadata.IMetadataStore;
-import org.lareferencia.core.metadata.ISnapshotStore;
 import org.lareferencia.core.util.JSONSerializerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
@@ -44,7 +41,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
