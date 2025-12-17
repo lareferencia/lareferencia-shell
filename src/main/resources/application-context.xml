@@ -37,7 +37,8 @@
 
     <context:component-scan base-package="org.lareferencia.shell.commands.flyway.FlywayConfiguration"/>
 	<context:component-scan base-package="org.lareferencia.shell.commands.flyway"/>
-
+    
+    <context:component-scan base-package="org.lareferencia.shell.commands.maintenance"/>
    
     <bean id="dateHelper" class="org.lareferencia.core.util.date.DateHelper">
         <property name="dateTimeFormatters">
@@ -55,13 +56,6 @@
     <bean id="snapshotStore" class="org.lareferencia.core.metadata.SnapshotStoreSQLImpl" scope="singleton"></bean>
     <bean id="hashingHelper" class="org.lareferencia.core.util.hashing.XXHash64Hashing" scope="singleton"></bean>
 
-    <!-- Parquet repositories (annotated with @Repository/@Service) -->
-    <context:component-scan base-package="org.lareferencia.core.repository.parquet"/>
-    <context:component-scan base-package="org.lareferencia.shell.commands.maintenance"/>
-
-
-
     <import resource="file:config/custom-context.xml"/>
 
-	
 </beans>

@@ -34,6 +34,8 @@ import org.lareferencia.core.repository.parquet.OAIRecordParquetRepository;
 import org.lareferencia.core.repository.parquet.RecordValidation;
 import org.lareferencia.core.repository.parquet.ValidationStatParquetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -55,6 +57,8 @@ import java.util.concurrent.atomic.AtomicLong;
  * kept, but no valid metadata will ever be deleted (safe operation).</p>
  */
 @ShellComponent
+@Configuration
+@ComponentScan(basePackages = {"org.lareferencia.core.repository.parquet"})
 public class MaintenanceCommands {
 
     private static final Logger logger = LogManager.getLogger(MaintenanceCommands.class);
@@ -104,16 +108,35 @@ public class MaintenanceCommands {
     @ShellMethod(value = "Clean orphan metadata entries not referenced by any record in the snapshot", 
                  key = "clean-orphan-metadata")
     public String cleanOrphanMetadata(
-            @ShellOption(help = "Snapshot ID to clean orphan metadata for") Long snapshotId,
+            @ShellOption(help = "Snapshot ID to clean orphan metadata for (optional if networkId is provided)", 
+                        defaultValue = ShellOption.NULL) Long snapshotId,
+            @ShellOption(help = "Network ID to get last good known snapshot (optional if snapshotId is provided)", 
+                        defaultValue = ShellOption.NULL) Long networkId,
             @ShellOption(help = "If true, only report without deleting", defaultValue = "false") boolean dryRun) {
 
-        logger.info("CLEAN ORPHAN METADATA: Starting for snapshot {} (dryRun={})", snapshotId, dryRun);
+        // Validate that at least one ID is provided
+        if (snapshotId == null && networkId == null) {
+            return "ERROR: Either snapshotId or networkId must be provided";
+        }
+
+        // Resolve effective snapshot ID: snapshotId takes priority over networkId
+        Long effectiveSnapshotId = snapshotId;
+        if (effectiveSnapshotId == null && networkId != null) {
+            effectiveSnapshotId = snapshotStore.findLastGoodKnownSnapshot(networkId);
+            if (effectiveSnapshotId == null) {
+                return String.format("ERROR: No valid snapshot found for network %d", networkId);
+            }
+            logger.info("CLEAN ORPHAN METADATA: Using last good known snapshot {} for network {}", 
+                       effectiveSnapshotId, networkId);
+        }
+
+        logger.info("CLEAN ORPHAN METADATA: Starting for snapshot {} (dryRun={})", effectiveSnapshotId, dryRun);
 
         try {
             // Step 1: Get SnapshotMetadata
-            SnapshotMetadata snapshotMetadata = snapshotStore.getSnapshotMetadata(snapshotId);
+            SnapshotMetadata snapshotMetadata = snapshotStore.getSnapshotMetadata(effectiveSnapshotId);
             if (snapshotMetadata == null) {
-                String error = String.format("Snapshot %d not found", snapshotId);
+                String error = String.format("Snapshot %d not found", effectiveSnapshotId);
                 logger.error(error);
                 return "ERROR: " + error;
             }
@@ -126,7 +149,7 @@ public class MaintenanceCommands {
             long totalRecords = totalOaiRecords + totalValidationRecords;
 
             if (totalRecords == 0) {
-                return "No records found in snapshot " + snapshotId + ". Nothing to clean.";
+                return "No records found in snapshot " + effectiveSnapshotId + ". Nothing to clean.";
             }
 
             logger.info("Total records to process: {} (OAI: {}, Validation: {})", 
@@ -166,7 +189,7 @@ public class MaintenanceCommands {
             // Build result summary
             String mode = dryRun ? "[DRY RUN] " : "";
             StringBuilder result = new StringBuilder();
-            result.append(mode).append("Orphan metadata cleanup completed for snapshot ").append(snapshotId).append("\n");
+            result.append(mode).append("Orphan metadata cleanup completed for snapshot ").append(effectiveSnapshotId).append("\n");
             result.append("Network: ").append(snapshotMetadata.getNetwork().getAcronym()).append("\n");
             result.append("----------------------------------------\n");
             result.append("OAI records processed: ").append(totalOaiRecords).append("\n");
@@ -182,7 +205,7 @@ public class MaintenanceCommands {
             }
 
             String summary = result.toString();
-            logger.info("CLEAN ORPHAN METADATA: Completed\n{}", summary);
+            logger.info("CLEAN ORPHAN METADATA: Completed for snapshot {}", effectiveSnapshotId);
             return summary;
 
         } catch (IOException e) {

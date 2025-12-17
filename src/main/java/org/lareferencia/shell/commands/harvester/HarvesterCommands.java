@@ -29,6 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.lareferencia.core.domain.Network;
 import org.lareferencia.core.domain.Transformer;
 import org.lareferencia.core.domain.Validator;
+import org.lareferencia.core.metadata.ISnapshotStore;
 import org.lareferencia.core.repository.jpa.NetworkRepository;
 import org.lareferencia.core.repository.jpa.TransformerRepository;
 import org.lareferencia.core.repository.jpa.ValidatorRepository;
@@ -36,6 +37,7 @@ import org.lareferencia.core.util.JSONSerializerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,13 +53,80 @@ public class HarvesterCommands {
 	@Autowired
 	NetworkRepository networkRepository;
 
-	// @Autowired
-	// ISnapshotStore snapshotStore;
+	@Autowired
+	ISnapshotStore snapshotStore;
 
 	// @Autowired
 	// IMetadataStore metadataStore;
 
 	private static Logger logger = LogManager.getLogger(HarvesterCommands.class);
+
+	@ShellMethod(value = "List all networks/repositories", key = "list-networks")
+	public String listNetworks() {
+		Iterable<Network> networks = networkRepository.findAll();
+		StringBuilder result = new StringBuilder();
+		result.append(String.format("%-8s %-20s %-50s %-10s%n", "ID", "ACRONYM", "NAME", "PUBLISHED"));
+		result.append("=".repeat(90)).append("\n");
+		
+		for (Network network : networks) {
+			result.append(String.format("%-8d %-20s %-50s %-10s%n",
+				network.getId(),
+				network.getAcronym() != null ? network.getAcronym() : "-",
+				truncate(network.getName(), 48),
+				network.getPublished() != null && network.getPublished() ? "YES" : "NO"
+			));
+		}
+		return result.toString();
+	}
+
+	@ShellMethod(value = "List snapshots for a network", key = "list-snapshots")
+	public String listSnapshotsByNetwork(
+			@ShellOption(help = "Network ID") Long networkId,
+			@ShellOption(help = "Include deleted snapshots", defaultValue = "false") boolean includeDeleted) {
+		
+		java.util.Optional<Network> optNetwork = networkRepository.findById(networkId);
+		if (!optNetwork.isPresent()) {
+			return "ERROR: Network " + networkId + " not found";
+		}
+		Network network = optNetwork.get();
+		
+		java.util.List<ISnapshotStore.SnapshotSummary> snapshots = snapshotStore.listSnapshotsSummary(networkId, includeDeleted);
+		
+		if (snapshots.isEmpty()) {
+			return "No snapshots found for network " + network.getAcronym() + " (ID: " + networkId + ")";
+		}
+		
+		StringBuilder result = new StringBuilder();
+		result.append("Snapshots for network: ").append(network.getAcronym()).append(" (ID: ").append(networkId).append(")\n");
+		result.append(String.format("%-10s %-6s %-25s %-20s %-20s %-10s %-10s %-10s %-8s%n", 
+			"ID", "LGK", "STATUS", "START TIME", "END TIME", "SIZE", "VALID", "TRANSF", "DELETED"));
+		result.append("=".repeat(130)).append("\n");
+		
+		java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
+		for (ISnapshotStore.SnapshotSummary s : snapshots) {
+			String startTime = s.getStartTime() != null ? s.getStartTime().format(formatter) : "-";
+			String endTime = s.getEndTime() != null ? s.getEndTime().format(formatter) : "-";
+			result.append(String.format("%-10d %-6s %-25s %-20s %-20s %-10d %-10d %-10d %-8s%n",
+				s.getId(),
+				s.isLGK() ? "*" : "",
+				s.getStatus(),
+				startTime,
+				endTime,
+				s.getSize() != null ? s.getSize() : 0,
+				s.getValidSize() != null ? s.getValidSize() : 0,
+				s.getTransformedSize() != null ? s.getTransformedSize() : 0,
+				s.isDeleted() ? "YES" : "NO"
+			));
+		}
+		
+		return result.toString();
+	}
+	
+	private String truncate(String str, int maxLen) {
+		if (str == null) return "-";
+		return str.length() <= maxLen ? str : str.substring(0, maxLen - 2) + "..";
+	}
 
 	@ShellMethod("Dump networks/repositories table data to excel")
 	public String networksTableDump(String excelFileFullPath) throws Exception {
