@@ -23,11 +23,11 @@ package org.lareferencia.shell.app;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.lareferencia.core.util.ConfigPathResolver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -46,9 +46,10 @@ import org.springframework.core.io.support.ResourcePropertySource;
 @Configuration
 public class MainApp {
 
-	private static final String PROPERTIES_DIR = "config/application.properties.d";
-
 	public static void main(String[] args) {
+		// Export config directory as system property for XML context files
+		// Must be set BEFORE Spring starts to be available for ${app.config.dir} in XML
+		System.setProperty(ConfigPathResolver.CONFIG_DIR_PROPERTY, ConfigPathResolver.getConfigDir());
 
 		SpringApplication springApplication = new SpringApplicationBuilder()
 				.sources(MainApp.class)
@@ -61,23 +62,23 @@ public class MainApp {
 		if (args.length > 0) {
 			springApplication.run(args).close();
 		} else {
-			springApplication.run(args);
+			springApplication.run(args).close();
 		}
 	}
 
 	/**
 	 * Listener that loads properties from
-	 * config/application.properties.d/*.properties
+	 * ${app.config.dir}/application.properties.d/*.properties
 	 */
 	private static class PropertiesDirectoryListener
 			implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 
 		@Override
 		public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-			Path dir = Paths.get(PROPERTIES_DIR);
+			Path dir = ConfigPathResolver.resolvePath("application.properties.d");
 
 			if (!Files.exists(dir) || !Files.isDirectory(dir)) {
-				System.out.println("[PropertiesLoader] Directory not found: " + PROPERTIES_DIR);
+				System.out.println("[PropertiesLoader] Directory not found: " + dir);
 				return;
 			}
 

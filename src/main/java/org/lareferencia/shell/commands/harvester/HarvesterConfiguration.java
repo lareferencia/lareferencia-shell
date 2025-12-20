@@ -23,17 +23,16 @@ package org.lareferencia.shell.commands.harvester;
 import org.lareferencia.core.service.management.SnapshotLogService;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 // REMOVED: SolrTemplate no longer exists in Spring Boot 3.x (Spring Data Solr eliminated)
 
-
 @Configuration
 @EntityScan("org.lareferencia.core.domain")
-@EnableJpaRepositories(value="org.lareferencia.core.repository.jpa")
+@EnableJpaRepositories(value = "org.lareferencia.core.repository.jpa")
+@ComponentScan(basePackages = "org.lareferencia.core")
 public class HarvesterConfiguration {
-
-  
 
     // snapshotLogService bean
     @Bean
@@ -41,6 +40,4 @@ public class HarvesterConfiguration {
         return new SnapshotLogService();
     }
 
-
-
- }
+}

@@ -32,6 +32,10 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
+	<import resource="file:${app.config.dir}/beans/mdformats.xml"/>
+	<import resource="file:${app.config.dir}/beans/fingerprint.xml"/>
+
+
     <context:component-scan base-package="org.lareferencia.shell.commands.harvester.HarvesterConfiguration"/>
     <context:component-scan base-package="org.lareferencia.shell.commands.harvester"/>
 
@@ -56,6 +60,6 @@
     <bean id="snapshotStore" class="org.lareferencia.core.metadata.SnapshotStoreSQLImpl" scope="singleton"></bean>
     <bean id="hashingHelper" class="org.lareferencia.core.util.hashing.XXHash64Hashing" scope="singleton"></bean>
 
-    <import resource="file:config/custom-context.xml"/>
+    <import resource="file:${app.config.dir}/custom-context.xml"/>
 
 </beans>
