@@ -96,6 +96,7 @@ public class WorkflowCommands {
 
         // Build process variables
         Map<String, Object> variables = new HashMap<>();
+        variables.put("laneId", "network:" + networkId);
         variables.put("networkId", networkId);
         variables.put("incremental", incremental);
 
@@ -208,7 +209,7 @@ public class WorkflowCommands {
     @ShellMethod(value = "List queued processes", key = "list-queued")
     public String listQueued() {
         int queuedCount = workflowService.getTotalQueuedCount();
-        List<Long> busyNetworks = workflowService.getBusyNetworks();
+        List<String> busyLanes = workflowService.getBusyLanes();
 
         StringBuilder result = new StringBuilder();
         result.append("Queue Status\n");
@@ -216,9 +217,9 @@ public class WorkflowCommands {
         result.append(String.format("Total Queued:     %d%n", queuedCount));
         result.append(String.format("Running Count:    %d%n", workflowService.getRunningCount()));
 
-        if (!busyNetworks.isEmpty()) {
-            result.append("\nBusy Networks: ");
-            result.append(busyNetworks.toString());
+        if (!busyLanes.isEmpty()) {
+            result.append("\nBusy Lanes: ");
+            result.append(busyLanes.toString());
             result.append("\n");
         }
 
