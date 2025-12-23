@@ -28,6 +28,7 @@ import org.lareferencia.core.flowable.dto.ProcessInstanceInfo;
 import org.lareferencia.core.flowable.exception.QueueFullException;
 import org.lareferencia.core.repository.jpa.NetworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -44,6 +45,7 @@ import java.util.Optional;
  * @author LA Referencia Team
  */
 @ShellComponent
+@ConditionalOnProperty(name = "workflow.engine", havingValue = "flowable")
 public class WorkflowCommands {
 
     private static final Logger logger = LogManager.getLogger(WorkflowCommands.class);
