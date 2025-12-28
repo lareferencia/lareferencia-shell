@@ -23,7 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lareferencia.core.domain.Network;
 import org.lareferencia.core.flowable.WorkflowService;
-import org.lareferencia.core.flowable.dto.ProcessDefinitionInfo;
+import org.lareferencia.core.flowable.dto.WorkflowDefinitionInfo;
 import org.lareferencia.core.flowable.dto.ProcessInstanceInfo;
 import org.lareferencia.core.flowable.exception.QueueFullException;
 import org.lareferencia.core.repository.jpa.NetworkRepository;
@@ -59,23 +59,23 @@ public class WorkflowCommands {
 
     // ========== List Processes ==========
 
-    @ShellMethod(value = "List available workflow process definitions", key = "list-processes")
-    public String listProcesses() {
-        List<ProcessDefinitionInfo> processes = workflowService.getAvailableProcesses();
+    @ShellMethod(value = "List available workflow definitions", key = "list-workflows")
+    public String listWorkflows() {
+        List<WorkflowDefinitionInfo> workflows = workflowService.getAvailableWorkflows();
 
-        if (processes.isEmpty()) {
-            return "No process definitions found. Make sure BPMN files are deployed.";
+        if (workflows.isEmpty()) {
+            return "No workflow definitions found. Make sure BPMN files are deployed.";
         }
 
         StringBuilder result = new StringBuilder();
-        result.append(String.format("%-30s %-40s %-10s%n", "KEY", "NAME", "VERSION"));
+        result.append(String.format("%-30s %-40s %-10s%n", "WORKFLOW KEY", "NAME", "VERSION"));
         result.append("=".repeat(82)).append("\n");
 
-        for (ProcessDefinitionInfo process : processes) {
+        for (WorkflowDefinitionInfo workflow : workflows) {
             result.append(String.format("%-30s %-40s %-10d%n",
-                    process.getProcessKey(),
-                    truncate(process.getName() != null ? process.getName() : "-", 38),
-                    process.getVersion()));
+                    workflow.getWorkflowKey(),
+                    truncate(workflow.getName() != null ? workflow.getName() : "-", 38),
+                    workflow.getVersion()));
         }
 
         return result.toString();
