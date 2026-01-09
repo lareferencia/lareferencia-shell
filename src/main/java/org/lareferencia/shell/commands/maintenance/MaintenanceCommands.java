@@ -28,6 +28,7 @@ import org.lareferencia.core.metadata.IMetadataStore;
 import org.lareferencia.core.metadata.ISnapshotStore;
 import org.lareferencia.core.metadata.MetadataRecordStoreException;
 import org.lareferencia.core.metadata.SnapshotMetadata;
+import org.lareferencia.core.repository.catalog.CatalogMigrationService;
 import org.lareferencia.core.repository.catalog.OAIRecord;
 import org.lareferencia.core.repository.catalog.OAIRecordCatalogRepository;
 import org.lareferencia.core.repository.validation.ValidationRecord;
@@ -86,6 +87,9 @@ public class MaintenanceCommands {
 
     @Autowired
     private RecordValidationRepository validationRepository;
+
+    @Autowired
+    private CatalogMigrationService catalogMigrationService;
 
     /**
      * Cleans orphan metadata entries that are not referenced by any record in the
@@ -334,5 +338,57 @@ public class MaintenanceCommands {
     private long estimateBloomFilterSize(int capacity, double fpp) {
         double bits = -capacity * Math.log(fpp) / (Math.log(2) * Math.log(2));
         return (long) Math.ceil(bits / 8);
+    }
+
+    // ============================================================================
+    // CATALOG MIGRATION COMMANDS
+    // ============================================================================
+
+    /**
+     * Migrates a snapshot's catalog from Parquet to SQLite format.
+     * 
+     * <p>
+     * This command reads records from legacy Parquet catalog files and writes them
+     * to the new SQLite catalog format. The original Parquet files are preserved.
+     * </p>
+     * 
+     * <h3>Usage:</h3>
+     * 
+     * <pre>
+     * migrate-catalog-parquet-to-sqlite --snapshot-id 123
+     * migrate-catalog-parquet-to-sqlite --snapshot-id 123 --dry-run true
+     * </pre>
+     * 
+     * @param snapshotId the snapshot ID to migrate
+     * @param dryRun     if true, only counts records without migrating
+     * @return summary of the migration operation
+     */
+    @ShellMethod(value = "Migrate catalog from Parquet to SQLite for a snapshot", key = "migrate-catalog-parquet-to-sqlite")
+    public String migrateCatalogParquetToSqlite(
+            @ShellOption(help = "Snapshot ID to migrate") Long snapshotId,
+            @ShellOption(help = "If true, only count records without migrating", defaultValue = "false") boolean dryRun) {
+
+        logger.info("MIGRATE CATALOG: Starting for snapshot {} (dryRun={})", snapshotId, dryRun);
+
+        try {
+            CatalogMigrationService.MigrationResult result = catalogMigrationService.migrate(snapshotId, dryRun);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(dryRun ? "[DRY RUN] " : "");
+            sb.append("Catalog Migration for Snapshot ").append(snapshotId).append("\n");
+            sb.append("----------------------------------------\n");
+            sb.append("Records migrated: ").append(result.recordsMigrated()).append("\n");
+            sb.append("Records skipped: ").append(result.recordsSkipped()).append("\n");
+            sb.append("Batches processed: ").append(result.batchesProcessed()).append("\n");
+            sb.append("Status: ").append(result.success() ? "SUCCESS" : "FAILED").append("\n");
+            sb.append("Message: ").append(result.message()).append("\n");
+
+            return sb.toString();
+
+        } catch (IOException e) {
+            String error = String.format("Migration failed: %s", e.getMessage());
+            logger.error(error, e);
+            return "ERROR: " + error;
+        }
     }
 }
