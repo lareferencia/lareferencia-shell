@@ -54,6 +54,11 @@ spring.datasource.password=lrharvester
 # 4. STORAGE
 # ==============================================================================
 
+# Base directory for data storage
+# This directory will contain OAI records catalog and validation statistics
+# Default: /tmp/data/
+store.basepath=/tmp/data/
+
 
 # ==============================================================================
 # 5. INDEXING ENGINE
