@@ -36,6 +36,8 @@
   <context:component-scan base-package="org.lareferencia.core.entity"/>
 	<context:component-scan base-package="org.lareferencia.shell.commands.entity"/>
 
-  <bean id="entityIndexerElasticJSON" class="org.lareferencia.core.entity.indexing.elastic.JSONElasticEntityIndexerImpl" scope="prototype"/>
+
+  <bean id="entityIndexerElastic" class="org.lareferencia.core.entity.indexing.elastic.JSONElasticEntityIndexerThreadedImpl" scope="prototype"/>
+
 
 </beans>
