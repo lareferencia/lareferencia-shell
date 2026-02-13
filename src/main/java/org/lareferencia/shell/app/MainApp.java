@@ -20,26 +20,16 @@
  */
 package org.lareferencia.shell.app;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.lareferencia.core.util.ConfigPathResolver;
+import org.lareferencia.core.util.PropertiesDirectoryListener;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.support.ResourcePropertySource;
 
 @SpringBootApplication(exclude = { ElasticsearchDataAutoConfiguration.class })
 @ImportResource({ "classpath*:application-context.xml" }) // please configure commands scanning in the context file
@@ -65,51 +55,4 @@ public class MainApp {
 			springApplication.run(args).close();
 		}
 	}
-
-	/**
-	 * Listener that loads properties from
-	 * ${app.config.dir}/application.properties.d/*.properties
-	 */
-	private static class PropertiesDirectoryListener
-			implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
-
-		@Override
-		public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-			Path dir = ConfigPathResolver.resolvePath("application.properties.d");
-
-			if (!Files.exists(dir) || !Files.isDirectory(dir)) {
-				System.out.println("[PropertiesLoader] Directory not found: " + dir);
-				return;
-			}
-
-			try (Stream<Path> stream = Files.list(dir)) {
-				ConfigurableEnvironment env = event.getEnvironment();
-
-				List<Path> propertyFiles = stream
-						.filter(p -> p.toString().endsWith(".properties"))
-						.sorted()
-						.collect(Collectors.toList());
-
-				for (Path file : propertyFiles) {
-					try {
-						ResourcePropertySource source = new ResourcePropertySource(
-								"custom-" + file.getFileName().toString(),
-								new FileSystemResource(file.toFile()));
-						env.getPropertySources().addLast(source);
-						System.out.println("[PropertiesLoader] Loaded: " + file.getFileName());
-					} catch (IOException e) {
-						System.err.println("[PropertiesLoader] Failed to load: " + file + " - " + e.getMessage());
-					}
-				}
-
-			} catch (IOException e) {
-				System.err.println("[PropertiesLoader] Error listing directory: " + e.getMessage());
-			}
-		}
-	}
-
-	// @Bean
-	// public SolrClient solrClient(@Value("${solr.host}") String solrHost) {
-	// return new HttpSolrClient.Builder(solrHost).build();
-	// }
 }

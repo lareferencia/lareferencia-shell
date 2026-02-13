@@ -37,3 +37,6 @@ pom.xml.versionsBackup
 *.json
 *.log
 *.zip
+
+# Docker local override
+config/application.properties.d/99-docker.properties
