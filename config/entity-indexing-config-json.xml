@@ -26,6 +26,15 @@
     
         <!-- Each indexed entity can be configured separately -->
        <indexed-entity name="publication" source-type="Publication" >
+
+            <index-settings number-of-shards="1" number-of-replicas="1">
+                <analysis>
+                    <analyzer name="accent_insensitive" tokenizer="standard">
+                        <filter>lowercase</filter>
+                        <filter>asciifolding</filter>
+                    </analyzer>
+                </analysis>
+            </index-settings>
        
             <index-fields>
 				<index-field name="type" source-field="type" />
