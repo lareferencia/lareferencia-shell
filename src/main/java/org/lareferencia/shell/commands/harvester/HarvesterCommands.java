@@ -31,7 +31,9 @@ import org.lareferencia.core.domain.Transformer;
 import org.lareferencia.core.domain.Validator;
 import org.lareferencia.core.metadata.ISnapshotStore;
 import org.lareferencia.core.repository.jpa.NetworkRepository;
+import org.lareferencia.core.repository.jpa.TransformerRuleRepository;
 import org.lareferencia.core.repository.jpa.TransformerRepository;
+import org.lareferencia.core.repository.jpa.ValidatorRuleRepository;
 import org.lareferencia.core.repository.jpa.ValidatorRepository;
 import org.lareferencia.core.util.JSONSerializerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -361,6 +363,17 @@ public class HarvesterCommands {
 	@Autowired
 	TransformerRepository transformerRepository;
 
+	@Autowired
+	ValidatorRuleRepository validatorRuleRepository;
+
+	@Autowired
+	TransformerRuleRepository transformerRuleRepository;
+
+	private static final String OLD_VALIDATOR_PACKAGE = "org.lareferencia.backend.validation.validator.";
+	private static final String NEW_VALIDATOR_PACKAGE = "org.lareferencia.core.worker.validation.validator.";
+	private static final String OLD_TRANSFORMER_PACKAGE = "org.lareferencia.backend.validation.transformer.";
+	private static final String NEW_TRANSFORMER_PACKAGE = "org.lareferencia.core.worker.validation.transformer.";
+
 
 	@ShellMethod("List validators")
 	public String listValidators() throws Exception {
@@ -384,6 +397,32 @@ public class HarvesterCommands {
 		}
 
 		return "";
+	}
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@ShellMethod(value = "Migrate validator rule package references from v4 to v5", key = "migrate-validators")
+	public String migrateValidators(
+			@ShellOption(value = "--dry-run", help = "Report rows that would be updated without saving changes", defaultValue = "false") boolean dryRun) {
+
+		long updatedRules = dryRun
+				? validatorRuleRepository.countByJsonserializationContaining(OLD_VALIDATOR_PACKAGE)
+				: validatorRuleRepository.replaceJsonserializationPackage(OLD_VALIDATOR_PACKAGE, NEW_VALIDATOR_PACKAGE);
+		String action = dryRun ? "would be migrated" : "migrated";
+
+		return "Validator rules " + action + ": " + updatedRules;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@ShellMethod(value = "Migrate transformer rule package references from v4 to v5", key = "migrate-transformers")
+	public String migrateTransformers(
+			@ShellOption(value = "--dry-run", help = "Report rows that would be updated without saving changes", defaultValue = "false") boolean dryRun) {
+
+		long updatedRules = dryRun
+				? transformerRuleRepository.countByJsonserializationContaining(OLD_TRANSFORMER_PACKAGE)
+				: transformerRuleRepository.replaceJsonserializationPackage(OLD_TRANSFORMER_PACKAGE, NEW_TRANSFORMER_PACKAGE);
+		String action = dryRun ? "would be migrated" : "migrated";
+
+		return "Transformer rules " + action + ": " + updatedRules;
 	}
 
 	@ShellMethod("Export validator to json file")
@@ -581,8 +620,8 @@ public class HarvesterCommands {
 	 */
 	private String migratePackageReferencesInJson(String jsonContent) {
 		// Map transformer and validator rules from backend to core.worker
-		jsonContent = jsonContent.replace("org.lareferencia.backend.validation.validator.", "org.lareferencia.core.worker.validation.validator.");
-		jsonContent = jsonContent.replace("org.lareferencia.backend.validation.transformer.", "org.lareferencia.core.worker.validation.transformer.");
+		jsonContent = jsonContent.replace(OLD_VALIDATOR_PACKAGE, NEW_VALIDATOR_PACKAGE);
+		jsonContent = jsonContent.replace(OLD_TRANSFORMER_PACKAGE, NEW_TRANSFORMER_PACKAGE);
 		
 		return jsonContent;
 	}
