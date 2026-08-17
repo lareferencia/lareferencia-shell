@@ -10,29 +10,31 @@ when `lareferencia-shell` is built with a profile that includes that plugin
 
 ## Build
 
-From the repository root:
+Build from the parent repository root (`lareferencia-platform`) with the
+project build script:
 
 ```bash
-mvn -pl lareferencia-shell -am package
+./build.sh <profile>
 ```
 
-Build with entity commands:
+Common profiles:
 
 ```bash
-mvn -pl lareferencia-shell -am -P lareferencia package
+./build.sh lareferencia
+./build.sh ibict
+./build.sh rcaap
+./build.sh lite
 ```
 
-The package phase copies the executable jar to:
+Profiles `lareferencia`, `ibict`, and `rcaap` include
+`lareferencia-shell-entity-plugin`, so the entity loading and indexing commands
+are available in the shell. The `lite` profile builds the base shell without
+those entity plugin commands.
+
+The package phase copies the executable shell jar to:
 
 ```text
 lareferencia-shell/lareferencia-shell.jar
-```
-
-The copied jar is marked executable, so it can be run directly as a shell
-command:
-
-```bash
-./lareferencia-shell.jar
 ```
 
 ## Configuration
@@ -45,19 +47,16 @@ configuration directory:
 JAVA_OPTS="-Dapp.config.dir=/etc/lrharvester/config" ./lareferencia-shell.jar
 ```
 
-The application expects the same database, metadata store, indexing, Flowable,
-and optional entity configuration used by the platform services.
+The main configuration variables are stored in:
 
-Useful configuration properties for deleted-entity index cleanup:
-
-```properties
-elastic.host=localhost
-elastic.port=9200
-elastic.useSSL=false
-elastic.authenticate=false
-elastic.username=admin
-elastic.password=admin
+```text
+lareferencia-shell/config/application.properties
 ```
+
+Use this file to configure the shell environment, including database
+connection, Elasticsearch/OpenSearch, metadata store, indexing, Flowable, and
+optional entity settings. The application expects these values to match the
+platform services that the shell will operate on.
 
 ## Running Commands
 
@@ -65,13 +64,6 @@ Start an interactive shell:
 
 ```bash
 ./lareferencia-shell.jar
-```
-
-Run one command and exit:
-
-```bash
-./lareferencia-shell.jar database_migrate
-./lareferencia-shell.jar list-networks
 ```
 
 With a custom configuration directory:
