@@ -350,9 +350,9 @@ Provided by `lareferencia-shell-entity-plugin`.
 
 Entity loading and indexing guides:
 
-- [English](entity-loading-indexing-guide.en.md)
-- [Espanol](guia-carga-indexacion.es.md)
-- [Portugues](guia-carga-indexacao.pt.md)
+- [English](docs/entity-loading-indexing-guide.en.md)
+- [Espanol](docs/guia-carga-indexacion.es.md)
+- [Portugues](docs/guia-carga-indexacao.pt.md)
 
 - [Original vs Complementary Entity Loads](original-vs-complementary-entity-load.en.md)
 
