@@ -354,6 +354,8 @@ Entity loading and indexing guides:
 - [Espanol](docs/guia-carga-indexacion.es.md)
 - [Portugues](docs/guia-carga-indexacao.pt.md)
 
+- [Original vs Complementary Entity Loads](original-vs-complementary-entity-load.en.md)
+
 ## Notes and Safety
 
 - Prefer `database_info` before and after migrations.
