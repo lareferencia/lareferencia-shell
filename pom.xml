@@ -39,6 +39,13 @@
 			<version>5.0.0-rc</version>
 		</dependency>
 
+		<!-- dARK operational commands are available in every shell profile. -->
+		<dependency>
+			<groupId>org.lareferencia</groupId>
+			<artifactId>lareferencia-dark-lib</artifactId>
+			<version>5.0.0-rc</version>
+		</dependency>
+
 		<!-- REMOVED: spring-boot-starter-data-solr no longer exists in Spring Boot 3.x
 		     Spring Data Solr was deprecated and removed. Using direct Solr dependencies instead.
 		     The solr-core dependency is already inherited from parent POM (version 9.5.0)
@@ -198,11 +205,6 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
-					<version>5.0.0-rc</version>
-				</dependency>
-				<dependency>
-					<groupId>org.lareferencia</groupId>
-					<artifactId>lareferencia-dark-lib</artifactId>
 					<version>5.0.0-rc</version>
 				</dependency>
 			</dependencies>

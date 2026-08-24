@@ -22,6 +22,7 @@ package org.lareferencia.shell.app;
 
 import org.lareferencia.core.util.ConfigPathResolver;
 import org.lareferencia.core.util.PropertiesDirectoryListener;
+import org.lareferencia.contrib.dark.services.AppConfiguration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -29,10 +30,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication(exclude = { ElasticsearchDataAutoConfiguration.class })
 @ImportResource({ "classpath*:application-context.xml" }) // please configure commands scanning in the context file
+@Import(AppConfiguration.class)
 @Configuration
 public class MainApp {
 
