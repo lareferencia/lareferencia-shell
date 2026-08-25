@@ -22,7 +22,7 @@ package org.lareferencia.shell.app;
 
 import org.lareferencia.core.util.ConfigPathResolver;
 import org.lareferencia.core.util.PropertiesDirectoryListener;
-import org.lareferencia.contrib.dark.services.AppConfiguration;
+import org.lareferencia.contrib.dark.commands.DarkShellConfiguration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -35,7 +35,7 @@ import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication(exclude = { ElasticsearchDataAutoConfiguration.class })
 @ImportResource({ "classpath*:application-context.xml" }) // please configure commands scanning in the context file
-@Import(AppConfiguration.class)
+@Import(DarkShellConfiguration.class)
 @Configuration
 public class MainApp {
 
