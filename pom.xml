@@ -44,6 +44,12 @@
 			<groupId>org.lareferencia</groupId>
 			<artifactId>lareferencia-dark-lib</artifactId>
 			<version>5.0.0-rc</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.shell</groupId>
+					<artifactId>spring-shell-standard-commands</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- REMOVED: spring-boot-starter-data-solr no longer exists in Spring Boot 3.x
