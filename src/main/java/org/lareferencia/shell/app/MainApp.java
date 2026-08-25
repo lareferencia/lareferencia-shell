@@ -22,7 +22,6 @@ package org.lareferencia.shell.app;
 
 import org.lareferencia.core.util.ConfigPathResolver;
 import org.lareferencia.core.util.PropertiesDirectoryListener;
-import org.lareferencia.contrib.dark.commands.DarkShellConfiguration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
