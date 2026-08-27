@@ -215,11 +215,22 @@ Recommended for large indexes:
 remove_deleted_entities_from_index --indexName brc-person --pageSize 10000 --timeoutSeconds 900
 ```
 
+For very large indexes where deleted entities are referenced through a known
+nested relation field, restrict the update query to that field. For example, if
+deleted journals are referenced in `journal.id`:
+
+```bash
+remove_deleted_entities_from_index --indexName brc-nov2025-journal-v2 --pageSize 10000 --timeoutSeconds 900 --relationFields journal
+```
+
+Pass the relation object field name, such as `journal`, not the `.id` subfield.
+
 Options:
 
 - `--indexName`: target Elasticsearch/OpenSearch index. Required.
 - `--pageSize`: number of deleted entity IDs processed per batch. Default: `1000`.
 - `--timeoutSeconds`: REST request timeout for `_delete_by_query` and `_update_by_query`. Default: `300`.
+- `--relationFields`: optional comma-separated relation object fields to clean, such as `journal` or `journal,publisher`. When set, the command queries `<field>.id` instead of scanning the whole index.
 
 Run index cleanup once per target index. The command removes root documents
 whose `_id` matches a deleted entity UUID and removes nested relationship
@@ -233,8 +244,8 @@ elastic.useSSL=true
 ```
 
 The cleanup is idempotent and can be safely re-run. Large indexes may need a
-higher `--timeoutSeconds` because relationship cleanup uses `_update_by_query`
-and can scan many documents.
+higher `--timeoutSeconds`; use `--relationFields` when possible so relationship
+cleanup does not scan every document.
 
 ### Run Network Workflows
 
@@ -356,7 +367,7 @@ Provided by `lareferencia-shell-entity-plugin`.
 | `merge_dirty_entities` | none | Consolidate loaded source/dirty entity data into final entity and relation tables. |
 | `mark_entities_deleted` | `--path <uuid-file>` | Mark listed final entities as deleted. |
 | `set_entities_deleted` | `--path <uuid-file> [--deleted <true\|false>]` | Set the deleted flag for listed final entities. Default `deleted=true`. |
-| `remove_deleted_entities_from_index` | `--indexName <index> [--pageSize <n>]` | Delete root documents for deleted entities and remove nested deleted-entity references from one OpenSearch/Elasticsearch index. Default `pageSize=1000`. |
+| `remove_deleted_entities_from_index` | `--indexName <index> [--pageSize <n>] [--timeoutSeconds <n>] [--relationFields <fields>]` | Delete root documents for deleted entities and remove nested deleted-entity references from one OpenSearch/Elasticsearch index. Default `pageSize=1000`. Use `--relationFields journal` to restrict cleanup to references stored under `journal.id`. |
 
 ### Entity Indexing
 
