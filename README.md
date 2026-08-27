@@ -209,7 +209,32 @@ Remove deleted root documents and nested references from one index:
 remove_deleted_entities_from_index --indexName brc-person --pageSize 1000
 ```
 
-Run index cleanup once per target index.
+Recommended for large indexes:
+
+```bash
+remove_deleted_entities_from_index --indexName brc-person --pageSize 10000 --timeoutSeconds 900
+```
+
+Options:
+
+- `--indexName`: target Elasticsearch/OpenSearch index. Required.
+- `--pageSize`: number of deleted entity IDs processed per batch. Default: `1000`.
+- `--timeoutSeconds`: REST request timeout for `_delete_by_query` and `_update_by_query`. Default: `300`.
+
+Run index cleanup once per target index. The command removes root documents
+whose `_id` matches a deleted entity UUID and removes nested relationship
+entries with an `id` matching a deleted entity UUID from documents in the same
+index.
+
+For HTTPS Elasticsearch/OpenSearch endpoints, configure:
+
+```properties
+elastic.useSSL=true
+```
+
+The cleanup is idempotent and can be safely re-run. Large indexes may need a
+higher `--timeoutSeconds` because relationship cleanup uses `_update_by_query`
+and can scan many documents.
 
 ### Run Network Workflows
 
