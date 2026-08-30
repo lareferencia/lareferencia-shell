@@ -3,7 +3,7 @@
 Spring Shell command-line application for LA Referencia platform administration,
 maintenance, data loading, indexing, and operational diagnostics.
 
-The base module provides database, repository, workflow, dump, and maintenance
+The base module provides database, repository, dump, and maintenance
 commands. Entity commands are contributed by `lareferencia-shell-entity-plugin`
 when `lareferencia-shell` is built with a profile that includes that plugin
 (`lareferencia`, `rcaap`, or `ibict`).
@@ -54,7 +54,7 @@ lareferencia-shell/config/application.properties
 ```
 
 Use this file to configure the shell environment, including database
-connection, Elasticsearch/OpenSearch, metadata store, indexing, Flowable, and
+connection, Elasticsearch/OpenSearch, metadata store, indexing, and
 optional entity settings. The application expects these values to match the
 platform services that the shell will operate on.
 
@@ -211,20 +211,6 @@ remove_deleted_entities_from_index --indexName brc-person --pageSize 1000
 
 Run index cleanup once per target index.
 
-### Run Network Workflows
-
-Flowable workflow commands are available only when
-`workflow.engine=flowable`.
-
-```bash
-list-workflows
-list-networks
-run-process networkProcessing 42 false
-list-running
-process-status 9a52b84c-7d7e-11f0-91d6-acde48001122
-stop-process 9a52b84c-7d7e-11f0-91d6-acde48001122 "Manual stop"
-```
-
 ### Export LGK Data
 
 Export a SQLite mapping of `ACRONYM_recordId` to OAI identifiers for all
@@ -278,19 +264,6 @@ export-all-lgk-metadata /exports/lgk-metadata 42 true
 | `import-validator` | `--filename <path> [--migrate <true\|false>]` | Import a validator JSON file. `--migrate true` rewrites legacy package references before import. |
 | `export-transformer` | `--id <transformerId> --filename <path>` | Export one transformer as JSON. |
 | `import-transformer` | `--filename <path> [--migrate <true\|false>]` | Import a transformer JSON file. `--migrate true` rewrites legacy package references before import. |
-
-### Workflow Commands
-
-Available when `workflow.engine=flowable`.
-
-| Command | Arguments and options | Description |
-| --- | --- | --- |
-| `list-workflows` | none | List deployed workflow definitions. |
-| `run-process` | `<processKey> <networkId> [incremental]` | Submit a workflow for a network. Default `incremental=false`. |
-| `process-status` | `<processInstanceId>` | Show process instance details and selected variables. |
-| `list-running` | none | List running process instances. |
-| `list-queued` | none | Show queue size, running count, and busy lanes. |
-| `stop-process` | `<processInstanceId> [reason]` | Terminate a running process. Default reason is `Manual termination`. |
 
 ### Dumps and Exports
 

@@ -57,6 +57,7 @@ public class HarvesterCommands {
 
 	@Autowired
 	ISnapshotStore snapshotStore;
+	@Autowired ObjectMapper objectMapper;
 
 	// @Autowired
 	// IMetadataStore metadataStore;
@@ -132,8 +133,8 @@ public class HarvesterCommands {
 
 	@ShellMethod("Dump networks/repositories table data to excel")
 	public String networksTableDump(String excelFileFullPath) throws Exception {
-
-		dump_fields(excelFileFullPath);
+		new NetworkXlsxTransfer(networkRepository, validatorRepository, transformerRepository, objectMapper)
+				.exportTo(excelFileFullPath);
 
 		return "networks dumped to: " + excelFileFullPath;
 	}
@@ -141,14 +142,16 @@ public class HarvesterCommands {
 	@ShellMethod("Update networks/repositories table data from excel")
 	public String networksTableUpdate(String excelFileFullPath) throws Exception {
 
-		String backupFileFullPath = "backup." + excelFileFullPath;
+		String backupFileFullPath = excelFileFullPath + ".backup.xlsx";
 		System.out.println("making backup to:" + backupFileFullPath);
 
-		dump_fields(backupFileFullPath);
+		new NetworkXlsxTransfer(networkRepository, validatorRepository, transformerRepository, objectMapper)
+				.exportTo(backupFileFullPath);
 
 		System.out.println("Updating db from:" + excelFileFullPath);
 
-		upload_fields(excelFileFullPath);
+		new NetworkXlsxTransfer(networkRepository, validatorRepository, transformerRepository, objectMapper)
+				.importFrom(excelFileFullPath);
 
 		return "networks updated from: " + excelFileFullPath;
 	}
