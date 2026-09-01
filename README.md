@@ -182,12 +182,13 @@ arguments.
 
 ### Mark and Remove Deleted Entities
 
-Run migrations first so the `entity.deleted` column exists:
+Use `mark_entities_deleted` to set `deleted=true` on final entities, then run
+`remove_deleted_entities_from_index` for the main entity index and for each
+related index that embeds those entities as nested relations.
 
-```bash
-database_migrate
-```
+See the full guide:
 
+<<<<<<< Updated upstream
 Mark UUIDs as deleted:
 
 ```bash
@@ -260,6 +261,9 @@ list-running
 process-status 9a52b84c-7d7e-11f0-91d6-acde48001122
 stop-process 9a52b84c-7d7e-11f0-91d6-acde48001122 "Manual stop"
 ```
+=======
+- [Deleted Entities and Index Cleanup](docs/deleted-entities-index-cleanup.en.md)
+>>>>>>> Stashed changes
 
 ### Export LGK Data
 
@@ -367,7 +371,11 @@ Provided by `lareferencia-shell-entity-plugin`.
 | `merge_dirty_entities` | none | Consolidate loaded source/dirty entity data into final entity and relation tables. |
 | `mark_entities_deleted` | `--path <uuid-file>` | Mark listed final entities as deleted. |
 | `set_entities_deleted` | `--path <uuid-file> [--deleted <true\|false>]` | Set the deleted flag for listed final entities. Default `deleted=true`. |
+<<<<<<< Updated upstream
 | `remove_deleted_entities_from_index` | `--indexName <index> [--pageSize <n>] [--timeoutSeconds <n>] [--relationFields <fields>]` | Delete root documents for deleted entities and remove nested deleted-entity references from one OpenSearch/Elasticsearch index. Default `pageSize=1000`. Use `--relationFields journal` to restrict cleanup to references stored under `journal.id`. |
+=======
+| `remove_deleted_entities_from_index` | `--indexName <index> [--pageSize <n>] [--timeoutSeconds <n>] [--relationFields <fields>]` | Delete root documents for deleted entities and remove nested deleted-entity references from one OpenSearch/Elasticsearch index. Default `pageSize=1000`. Use `--relationFields` to restrict cleanup to known relation fields such as `sponsorOrgUnit`. |
+>>>>>>> Stashed changes
 
 ### Entity Indexing
 
@@ -389,8 +397,8 @@ Entity loading and indexing guides:
 - [English](docs/entity-loading-indexing-guide.en.md)
 - [Espanol](docs/guia-carga-indexacion.es.md)
 - [Portugues](docs/guia-carga-indexacao.pt.md)
-
-- [Original vs Complementary Entity Loads](original-vs-complementary-entity-load.en.md)
+- [Deleted Entities and Index Cleanup](docs/deleted-entities-index-cleanup.en.md)
+- [Original vs Complementary Entity Loads](docs/original-vs-complementary-entity-load.en.md)
 
 ## Notes and Safety
 
