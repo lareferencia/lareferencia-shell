@@ -187,66 +187,7 @@ Use `mark_entities_deleted` to set `deleted=true` on final entities, then run
 related index that embeds those entities as nested relations.
 
 See the full guide:
-
-<<<<<<< Updated upstream
-Mark UUIDs as deleted:
-
-```bash
-mark_entities_deleted --path /data/entities/deleted-uuids.txt
-```
-
-The UUID file may contain UUIDs separated by newlines, spaces, commas, or
-semicolons. Text after `#` on a line is ignored.
-
-Undo the deleted flag:
-
-```bash
-set_entities_deleted --path /data/entities/deleted-uuids.txt --deleted false
-```
-
-Remove deleted root documents and nested references from one index:
-
-```bash
-remove_deleted_entities_from_index --indexName brc-person --pageSize 1000
-```
-
-Recommended for large indexes:
-
-```bash
-remove_deleted_entities_from_index --indexName brc-person --pageSize 10000 --timeoutSeconds 900
-```
-
-For very large indexes where deleted entities are referenced through a known
-nested relation field, restrict the update query to that field. For example, if
-deleted journals are referenced in `journal.id`:
-
-```bash
-remove_deleted_entities_from_index --indexName brc-nov2025-journal-v2 --pageSize 10000 --timeoutSeconds 900 --relationFields journal
-```
-
-Pass the relation object field name, such as `journal`, not the `.id` subfield.
-
-Options:
-
-- `--indexName`: target Elasticsearch/OpenSearch index. Required.
-- `--pageSize`: number of deleted entity IDs processed per batch. Default: `1000`.
-- `--timeoutSeconds`: REST request timeout for `_delete_by_query` and `_update_by_query`. Default: `300`.
-- `--relationFields`: optional comma-separated relation object fields to clean, such as `journal` or `journal,publisher`. When set, the command queries `<field>.id` instead of scanning the whole index.
-
-Run index cleanup once per target index. The command removes root documents
-whose `_id` matches a deleted entity UUID and removes nested relationship
-entries with an `id` matching a deleted entity UUID from documents in the same
-index.
-
-For HTTPS Elasticsearch/OpenSearch endpoints, configure:
-
-```properties
-elastic.useSSL=true
-```
-
-The cleanup is idempotent and can be safely re-run. Large indexes may need a
-higher `--timeoutSeconds`; use `--relationFields` when possible so relationship
-cleanup does not scan every document.
+- [Deleted Entities and Index Cleanup](docs/deleted-entities-index-cleanup.en.md)
 
 ### Run Network Workflows
 
@@ -261,9 +202,6 @@ list-running
 process-status 9a52b84c-7d7e-11f0-91d6-acde48001122
 stop-process 9a52b84c-7d7e-11f0-91d6-acde48001122 "Manual stop"
 ```
-=======
-- [Deleted Entities and Index Cleanup](docs/deleted-entities-index-cleanup.en.md)
->>>>>>> Stashed changes
 
 ### Export LGK Data
 
