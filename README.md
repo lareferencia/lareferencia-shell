@@ -277,7 +277,6 @@ export-all-lgk-metadata /exports/lgk-metadata 42 true
 | Command | Arguments and options | Description |
 | --- | --- | --- |
 | `clean-orphan-metadata` | `[snapshotId] [networkId] [dryRun]` | Clean metadata store entries not referenced by a snapshot. Provide either `snapshotId` or `networkId`; `snapshotId` takes priority. Default `dryRun=false`. |
-| `migrate-catalog-parquet-to-sqlite` | `<snapshotId> [dryRun]` | Migrate one snapshot catalog from Parquet to SQLite. Default `dryRun=false`. |
 
 ### OpenAIRE Broker
 
@@ -352,4 +351,4 @@ Email: soporte@lareferencia.redclara.net
 ---
 
 LA Referencia - Red Latinoamericana y de Espana de Ciencia Abierta
-Part of the LA Referencia Platform v4.2.6 / v5.0
+Part of the LA Referencia Platform 5.0.0-rc
