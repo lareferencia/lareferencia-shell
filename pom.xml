@@ -23,12 +23,12 @@
 	<artifactId>lareferencia-shell</artifactId>
 	<name>LA Referencia shell app</name>
 	<description>LA Referencia Shell App</description>
-	<version>5.0.0-rc</version>
+	<version>5.0.0-rc2</version>
 
 	<parent>
 		<groupId>org.lareferencia</groupId>
 		<artifactId>lareferencia-parent</artifactId>
-		<version>5.0.0-rc</version>
+		<version>5.0.0-rc2</version>
 	</parent>
 
 	<dependencies>
@@ -36,14 +36,14 @@
 		<dependency>
 			<groupId>org.lareferencia</groupId>
 			<artifactId>lareferencia-core-lib</artifactId>
-			<version>5.0.0-rc</version>
+			<version>5.0.0-rc2</version>
 		</dependency>
 
 		<!-- dARK operational commands are available in every shell profile. -->
 		<dependency>
 			<groupId>org.lareferencia</groupId>
 			<artifactId>lareferencia-dark-lib</artifactId>
-			<version>5.0.0-rc</version>
+			<version>5.0.0-rc2</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.shell</groupId>
@@ -113,17 +113,17 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-entity-lib</artifactId>
-					<version>5.0.0-rc</version>
+					<version>5.0.0-rc2</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-indexing-filters-lib</artifactId>
-					<version>5.0.0-rc</version>
+					<version>5.0.0-rc2</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
-					<version>5.0.0-rc</version>
+					<version>5.0.0-rc2</version>
 				</dependency>
 			</dependencies>
 			<build>
@@ -160,12 +160,12 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-entity-lib</artifactId>
-					<version>5.0.0-rc</version>
+					<version>5.0.0-rc2</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
-					<version>5.0.0-rc</version>
+					<version>5.0.0-rc2</version>
 				</dependency>
 			</dependencies>
 			<build>
@@ -201,17 +201,17 @@
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-entity-lib</artifactId>
-					<version>5.0.0-rc</version>
+					<version>5.0.0-rc2</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-indexing-filters-lib</artifactId>
-					<version>5.0.0-rc</version>
+					<version>5.0.0-rc2</version>
 				</dependency>
 				<dependency>
 					<groupId>org.lareferencia</groupId>
 					<artifactId>lareferencia-shell-entity-plugin</artifactId>
-					<version>5.0.0-rc</version>
+					<version>5.0.0-rc2</version>
 				</dependency>
 			</dependencies>
 			<build>
