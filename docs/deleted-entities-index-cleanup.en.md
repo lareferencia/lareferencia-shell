@@ -52,7 +52,7 @@ index for that entity type.
 For example, when removing `OrgUnit` entities:
 
 ```bash
-remove_deleted_entities_from_index --indexName brc-nov2025-orgunit-v2 --pageSize 10000 --timeoutSeconds 900
+remove_deleted_entities_from_index --indexName brc-nov2025-orgunit-v2 --entity OrgUnit --pageSize 10000 --timeoutSeconds 900
 ```
 
 This deletes documents whose `_id` matches one of the entity UUIDs marked as
@@ -70,7 +70,7 @@ Example: remove deleted `OrgUnit` references from publications where the
 relation is stored in `sponsorOrgUnit.id`:
 
 ```bash
-remove_deleted_entities_from_index --indexName brc-nov2025-publication-v2 --pageSize 1000 --timeoutSeconds 900 --relationFields sponsorOrgUnit
+remove_deleted_entities_from_index --indexName brc-nov2025-publication-v2 --entity OrgUnit --pageSize 1000 --timeoutSeconds 900 --relationFields sponsorOrgUnit
 ```
 
 Pass the relation object field name, such as `sponsorOrgUnit`, not the `.id`
@@ -83,12 +83,14 @@ When more than one relation field must be cleaned in the same index, pass a
 comma-separated list:
 
 ```bash
-remove_deleted_entities_from_index --indexName brc-nov2025-publication-v2 --pageSize 1000 --timeoutSeconds 900 --relationFields sponsorOrgUnit,journal
+remove_deleted_entities_from_index --indexName brc-nov2025-publication-v2 --entity OrgUnit --pageSize 1000 --timeoutSeconds 900 --relationFields sponsorOrgUnit,journal
 ```
 
 ## Options
 
 - `--indexName`: Elasticsearch/OpenSearch index name. Required.
+- `--entity`: entity type whose records marked `deleted=true` are fetched from
+  the database. Required.
 - `--pageSize`: number of deleted UUIDs processed per batch. Default: `1000`.
 - `--timeoutSeconds`: timeout for `_delete_by_query` and `_update_by_query`
   requests. Default: `300`.
@@ -96,7 +98,8 @@ remove_deleted_entities_from_index --indexName brc-nov2025-publication-v2 --page
 
 ## Operational Notes
 
-- Run the index cleanup once per target index.
+- Run the index cleanup once per target index, specifying the type of deleted
+  entity with `--entity`.
 - Always clean the main entity index first.
 - Then clean every related index where the deleted entity appears as a nested
   relation.

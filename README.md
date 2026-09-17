@@ -281,11 +281,7 @@ Provided by `lareferencia-shell-entity-plugin`.
 | `merge_dirty_entities` | none | Consolidate loaded source/dirty entity data into final entity and relation tables. |
 | `mark_entities_deleted` | `--path <uuid-file>` | Mark listed final entities as deleted. |
 | `set_entities_deleted` | `--path <uuid-file> [--deleted <true\|false>]` | Set the deleted flag for listed final entities. Default `deleted=true`. |
-<<<<<<< Updated upstream
-| `remove_deleted_entities_from_index` | `--indexName <index> [--pageSize <n>] [--timeoutSeconds <n>] [--relationFields <fields>]` | Delete root documents for deleted entities and remove nested deleted-entity references from one OpenSearch/Elasticsearch index. Default `pageSize=1000`. Use `--relationFields journal` to restrict cleanup to references stored under `journal.id`. |
-=======
-| `remove_deleted_entities_from_index` | `--indexName <index> [--pageSize <n>] [--timeoutSeconds <n>] [--relationFields <fields>]` | Delete root documents for deleted entities and remove nested deleted-entity references from one OpenSearch/Elasticsearch index. Default `pageSize=1000`. Use `--relationFields` to restrict cleanup to known relation fields such as `sponsorOrgUnit`. |
->>>>>>> Stashed changes
+| `remove_deleted_entities_from_index` | `--indexName <index> --entity <entity-type> [--pageSize <n>] [--timeoutSeconds <n>] [--relationFields <fields>]` | Delete root documents for deleted entities and remove nested deleted-entity references from one OpenSearch/Elasticsearch index. `--entity` selects the entity type whose deleted UUIDs are cleaned. Default `pageSize=1000`. Use `--relationFields journal` to restrict cleanup to references stored under `journal.id`. |
 
 ### Entity Indexing
 
