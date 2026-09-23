@@ -228,7 +228,7 @@ export-all-lgk-metadata /exports/lgk-metadata 42 true
 | `list-networks` | none | List networks/repositories with ID, acronym, name, and publication flag. |
 | `list-snapshots` | `<networkId> [includeDeleted]` | List snapshots for a network. Default `includeDeleted=false`. |
 | `networks-table-dump` | `<excelFileFullPath>` | Export network table properties and attributes to an Excel file. |
-| `networks-table-update` | `<excelFileFullPath>` | Backup current network table data to `backup.<excelFileFullPath>` and update DB values from Excel. |
+| `networks-table-update` | `<excelFileFullPath>` | Backup current network table data to `<excelFileFullPath>.backup.xlsx` and update DB values from Excel. |
 
 ### Validators and Transformers
 
@@ -329,4 +329,4 @@ Email: soporte@lareferencia.redclara.net
 ---
 
 LA Referencia - Red Latinoamericana y de Espana de Ciencia Abierta
-Part of the LA Referencia Platform 5.0.0-rc
+Part of the LA Referencia Platform 5.0.0-rc2
