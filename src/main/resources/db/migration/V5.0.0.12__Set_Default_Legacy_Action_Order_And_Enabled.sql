@@ -1,0 +1,42 @@
+-- Keep the installation-level legacy action catalogue deterministic.
+-- This migration intentionally does not alter per-network action policy.
+
+UPDATE application_action
+SET execution_order = CASE action_key
+        WHEN 'HARVESTING_ACTION'              THEN 0
+        WHEN 'DARK_STAGE_ACTION'              THEN 1
+        WHEN 'DARK_RECONCILE_ACTION'          THEN 2
+        WHEN 'VALIDATION_ACTION'              THEN 3
+        WHEN 'FRONTEND_INDEXING_ACTION'       THEN 4
+        WHEN 'XOAI_INDEXING_ACTION'           THEN 5
+        WHEN 'SEMANTIC_INDEXING_ACTION'       THEN 6
+        WHEN 'FRONTEND_DELETE_ACTION'         THEN 7
+        WHEN 'XOAI_DELETE_ACTION'             THEN 8
+        WHEN 'SEMANTIC_DELETE_ACTION'         THEN 9
+        WHEN 'METADATA_ORPHAN_CLEANUP_ACTION' THEN 10
+        WHEN 'NETWORK_CLEAN_ACTION'           THEN 11
+        WHEN 'NETWORK_DELETE_ACTION'          THEN 12
+    END,
+    enabled = CASE action_key
+        WHEN 'HARVESTING_ACTION'              THEN TRUE
+        WHEN 'DARK_STAGE_ACTION'              THEN FALSE
+        WHEN 'DARK_RECONCILE_ACTION'          THEN FALSE
+        WHEN 'VALIDATION_ACTION'              THEN TRUE
+        WHEN 'FRONTEND_INDEXING_ACTION'       THEN TRUE
+        WHEN 'XOAI_INDEXING_ACTION'           THEN TRUE
+        WHEN 'SEMANTIC_INDEXING_ACTION'       THEN FALSE
+        WHEN 'FRONTEND_DELETE_ACTION'         THEN TRUE
+        WHEN 'XOAI_DELETE_ACTION'             THEN TRUE
+        WHEN 'SEMANTIC_DELETE_ACTION'         THEN FALSE
+        WHEN 'METADATA_ORPHAN_CLEANUP_ACTION' THEN TRUE
+        WHEN 'NETWORK_CLEAN_ACTION'           THEN TRUE
+        WHEN 'NETWORK_DELETE_ACTION'          THEN TRUE
+    END
+WHERE engine_type = 'legacy'
+  AND action_key IN (
+      'HARVESTING_ACTION', 'DARK_STAGE_ACTION', 'DARK_RECONCILE_ACTION',
+      'VALIDATION_ACTION', 'FRONTEND_INDEXING_ACTION', 'XOAI_INDEXING_ACTION',
+      'SEMANTIC_INDEXING_ACTION', 'FRONTEND_DELETE_ACTION', 'XOAI_DELETE_ACTION',
+      'SEMANTIC_DELETE_ACTION', 'METADATA_ORPHAN_CLEANUP_ACTION',
+      'NETWORK_CLEAN_ACTION', 'NETWORK_DELETE_ACTION'
+  );
