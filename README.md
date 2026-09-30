@@ -85,6 +85,26 @@ database_migrate
 database_info
 ```
 
+### Create the First Harvester v5 Administrator
+
+Harvester v5 stores local users and repository permissions in PostgreSQL. It does
+not create default credentials or import identities from Keycloak or a users file.
+Use the same database configuration as the Harvester, apply pending Flyway
+migrations, and create the initial administrator from a real interactive terminal:
+
+```text
+database_migrate
+security-create-admin admin
+```
+
+The command prompts for and confirms the password without echoing it. Passwords
+must be 12–200 characters; the command stores a BCrypt hash and refuses to run if
+an enabled administrator already exists. Do not pass passwords as shell arguments
+or seed an initial password in configuration. After this bootstrap, administer
+users, service accounts and network grants through the Harvester API/Web UI.
+Detailed session, CSRF, token and authorization behavior is documented in
+[`../docs/AUTHENTICATION.md`](../docs/AUTHENTICATION.md).
+
 For existing databases, `database_migrate` defaults to
 `baselineOnMigrate=true`.
 
