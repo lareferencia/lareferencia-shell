@@ -349,4 +349,4 @@ Email: soporte@lareferencia.redclara.net
 ---
 
 LA Referencia - Red Latinoamericana y de Espana de Ciencia Abierta
-Part of the LA Referencia Platform 5.0.0-rc2
+Part of the LA Referencia Platform 5.0.0-rc3
