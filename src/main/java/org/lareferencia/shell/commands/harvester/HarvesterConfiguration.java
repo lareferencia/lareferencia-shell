@@ -21,17 +21,26 @@
 package org.lareferencia.shell.commands.harvester;
 
 import org.lareferencia.core.service.management.SnapshotLogService;
+import org.lareferencia.core.task.NetworkActionExecutorConfig;
+import org.lareferencia.core.task.TaskManagerConfig;
+import org.lareferencia.core.task.TaskManagerRuntimeConfigurationService;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 // REMOVED: SolrTemplate no longer exists in Spring Boot 3.x (Spring Data Solr eliminated)
 
 @Configuration
 @EntityScan("org.lareferencia.core.domain")
 @EnableJpaRepositories(value = "org.lareferencia.core.repository.jpa")
-@ComponentScan(basePackages = "org.lareferencia.core")
+// Shell commands do not run background actions. In particular, migrations must
+// start before the persisted TaskManager configuration table exists.
+@ComponentScan(basePackages = "org.lareferencia.core", excludeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE,
+        classes = { TaskManagerConfig.class, TaskManagerRuntimeConfigurationService.class,
+                NetworkActionExecutorConfig.class }))
 public class HarvesterConfiguration {
 
     // snapshotLogService bean
