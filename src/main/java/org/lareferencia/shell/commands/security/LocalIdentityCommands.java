@@ -40,4 +40,30 @@ public class LocalIdentityCommands {
             java.util.Arrays.fill(second, '\0');
         }
     }
+
+    @ShellMethod(key = "security-reset-password", value = "Reset a local user's password interactively")
+    @Transactional
+    public String resetPassword(@ShellOption(help = "Existing local username") String username) {
+        Console console = System.console();
+        if (console == null) throw new IllegalStateException("Run this command from an interactive terminal so the password is not echoed");
+        String normalized = username == null ? "" : username.trim().toLowerCase(Locale.ROOT);
+        if (!normalized.matches("[a-z0-9._@+-]{3,100}")) throw new IllegalArgumentException("Username must be 3-100 characters using letters, digits, . _ @ + or -");
+        Integer users = jdbc.queryForObject("SELECT COUNT(*) FROM local_user WHERE username=?", Integer.class, normalized);
+        if (users == null || users == 0) throw new IllegalArgumentException("Local user '" + normalized + "' was not found");
+
+        char[] first = console.readPassword("New password: ");
+        char[] second = console.readPassword("Confirm password: ");
+        try {
+            String password = new String(first);
+            if (password.length() < 12 || password.length() > 200) throw new IllegalArgumentException("Password must contain between 12 and 200 characters");
+            if (!password.equals(new String(second))) throw new IllegalArgumentException("Passwords do not match");
+            jdbc.update("UPDATE local_user SET password_hash=?, updated_at=CURRENT_TIMESTAMP WHERE username=?",
+                    passwords.encode(password), normalized);
+            jdbc.update("DELETE FROM spring_session WHERE principal_name=?", normalized);
+            return "Password reset for local user '" + normalized + "'. Existing sessions have been revoked.";
+        } finally {
+            java.util.Arrays.fill(first, '\0');
+            java.util.Arrays.fill(second, '\0');
+        }
+    }
 }
