@@ -1,0 +1,16 @@
+{
+  "specVersion": 1,
+  "name": "licenses",
+  "version": "1.0",
+  "inputSchema": "xoai",
+  "fields": {
+    "licenses": {
+      "select": "dc.rights.*",
+      "type": "string",
+      "many": true,
+      "normalize": ["trim"],
+      "unique": true,
+      "maxLength": 300
+    }
+  }
+}

@@ -7,6 +7,7 @@ Estos son los perfiles de ejemplo mantenidos en el repositorio del shell.
 | `publications-v1.json` | 1.0 | Ejemplo inicial: identificadores, dark, títulos y abstracts. |
 | `common-full-metadata-v1.json` | 1.1 | Metadata completa de UY y AREANDINA en 19 familias comunes. Calificadores opcionales y extensiones identificadas por `path`. |
 | `classification-embeddings-v1.json` | 1.0 | Títulos, posibles resúmenes y keywords para clasificación y embeddings. Incluye descripciones sin calificar. |
+| `licenses-v1.json` | 1.0 | Licencias de `dc.rights.*` de hasta 300 caracteres; omite textos largos sin truncarlos. |
 
 Los perfiles se leen desde archivos mediante `--mapping`. Se pueden editar o
 versionar independientemente del JAR. Al instalar el shell, copiar este directorio
@@ -21,6 +22,8 @@ export-mapping-validate --mapping config/exports/publications-v1.json
 export-mapping-validate --mapping config/exports/common-full-metadata-v1.json
 export-metadata-preview --network AREANDINA --variant processed --mapping config/exports/common-full-metadata-v1.json --limit 3
 export-metadata --networks UY,AREANDINA --variant processed --format jsonl --mapping config/exports/common-full-metadata-v1.json --output /exports
+export-mapping-validate --mapping config/exports/licenses-v1.json
+export-metadata-preview --network UY --variant processed --mapping config/exports/licenses-v1.json --limit 3
 ```
 
 El perfil común se comprobó contra los snapshots estudiados de UY y AREANDINA.
