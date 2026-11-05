@@ -1,0 +1,308 @@
+{
+  "network": "AREANDINA",
+  "catalogId": "063fdd6841bd0e726ee51f721e66e205",
+  "identifier": "oai:digitk.areandina.edu.co:areandina/4305",
+  "metadataHash": "C428608BC7EC752A",
+  "data": {
+    "titles": [
+      {
+        "value": "Una mirada sistémica a la familia en proceso de separación o divorcio: efectos socioemocionales en el menor",
+        "language": "spa"
+      },
+      {
+        "value": "A systemic look at the family in the process of separation or divorce: Socioemotional effects on the minor",
+        "language": "eng"
+      }
+    ],
+    "creators": [
+      {
+        "value": "Díaz Aragón, Angi Karina",
+        "qualifier": "author"
+      }
+    ],
+    "contributors": [],
+    "keywords": [
+      {
+        "value": "Divorcio - Aspectos psicológicos",
+        "qualifier": "armarc"
+      },
+      {
+        "value": "Niños - Actitudes",
+        "qualifier": "armarc"
+      },
+      {
+        "value": "Conflicto (Psicología) - Niños",
+        "qualifier": "armarc"
+      }
+    ],
+    "descriptions": [
+      {
+        "value": "ilustraciones, gráficos, tablas ; 28 cm.",
+        "language": "spa"
+      },
+      {
+        "value": "Es una realidad que durante mucho\ntiempo, la separación en la familia fue\nasumida bajo una concepción fatalista,\nrelacionada inevitablemente con “fin”,\n“terminación” “abandono familiar”, lo\nque a su vez trae a colación muchos\nsentimiento y pensamientos llenos de\nfrustración, negación y hasta ira, entre\notros detonantes, los cuales de no ser\nabordados tempranamente van\ncreciendo en efecto de bola de nieve\nconvirtiendo este proceso en una batalla\nlegal muchas veces interminable en la\nque no solo se compite por temas como\ncustodia, alimentos, entre otros sino que\npuede acarrear graves consecuencias\nemocionales y conductuales al menor\ninvolucrado.\nNo es producto del azar que en los\nmotivos de consulta más frecuentes de\nlos menores involucrados en procesos\nde divorcio de sus padres estén\ntrastornos del sueño, comportamientos\ndisruptivos e incluso anti-sociales,\nenuresis, ecopresis entre otros. A partir\nde esto subyace la importancia de\nconocer a fondo como se configura la\npsique del niño de acuerdo a la etapa del\nciclo evolutiva en el que se encuentre\npara poder dimensionar la concepción\ndel mundo externo que este instrúyete\nen su realidad subjetiva, es decir, la manera cómo el chico o adolescente\ncapte o asimile el proceso de divorcio\nde su funcionamiento del bienestar y\ncalidad de vida.\nDesde un punto de vista personal basada\nen una reflexión donde la fundamental\nfunción de la pareja, la familia, el\nconcepto de divorcio según diferentes\nautores y teorías, sus etapas; y se\naterriza en lo más específico que es el\nabordaje sistémico de la separación o\ndivorcio, primeramente haciendo una\nintroducción de los orígenes de dicho\nenfoque y su utilidad, y posteriormente\nrevisando las repercusiones socioemocionales derivadas del divorcio en\nlos hijos/as. Así como también se revisa\nla concepción e importancia que la\nterapia sistémica le brinda a la\nparticipación de todos los miembros de\nla familia dentro del abordaje\nterapéutico, las causas que motivan la\nderivación de los hijos a un especialista,\nsus bondades a largo plazo y consigo se\nexponen las actitudes terapéuticas y noterapéuticas dentro de la intervención\nsistémica.",
+        "language": "spa",
+        "qualifier": "abstract"
+      },
+      {
+        "value": "It is a reality that for a long time, the\nseparation in the family was assumed\nunder a fatalistic conception, inevitably\nrelated to \"end\", \"termination\" \"family\nabandonment\", which in turn brings up\nmany feelings and thoughts full of\nfrustration , denial and even anger,\namong other triggers, which, if not\naddressed early, grow in snowball\neffect, turning this process into a legal\nbattle that is often endless in which not\nonly competes for issues such as\ncustody, food, between others but can\nhave serious emotional and behavioral\nconsequences to the minor involved.\nIt is not a result of chance that in the\nmost frequent reasons for consultation\nof minors involved in divorce proceedings of their parents are sleep\ndisorders, disruptive and even antisocial behaviors, bedwetting, ecopresis\namong others. From this underlies the\nimportance of knowing in depth how\nthe child's psyche is configured\naccording to the stage of the\nevolutionary cycle in which it is to be\nable to dimension the conception of the\nexternal world that this introjects into its\nsubjective reality, that is, The way in\nwhich the child or adolescent captures\nor assimilates the divorce process of\ntheir parents is fundamental for their\nquality of life in the short and long\nterm.\nThe following article illustrates a\nreflection that starts from the concept of\ncouple, family, the concept of divorce\naccording to different authors and\ntheories, their stages; and it lands on the\nmost specific that is the systemic\napproach to separation or divorce,\nfirstly making an introduction of the\norigins of said approach and its\nusefulness, and subsequently reviewing\nthe socio-emotional repercussions\nderived from divorce in children. As\nwell as the conception and importance\nthat systemic therapy gives to the\nparticipation of all family members in\nthe therapeutic approach, the causes that\nmotivate the referral of children to a\nspecialist, their long-term benefits and\nwith them are reviewed Therapeutic and\nnon-therapeutic attitudes are exposed\nwithin the systemic intervention.",
+        "language": "spa",
+        "qualifier": "abstract"
+      },
+      {
+        "value": "Pregrado",
+        "language": "spa",
+        "qualifier": "degreelevel"
+      },
+      {
+        "value": "Psicólogo",
+        "language": "spa",
+        "qualifier": "degreename"
+      },
+      {
+        "value": "Psicología",
+        "language": "spa",
+        "qualifier": "program"
+      }
+    ],
+    "publishers": [
+      {
+        "value": "Fundación Universitaria del Área Ándina",
+        "language": "spa"
+      },
+      {
+        "value": "Valledupar",
+        "language": "spa",
+        "qualifier": "place"
+      },
+      {
+        "value": "Facultad de Ciencias Sociales y Humanas",
+        "language": "spa",
+        "qualifier": "faculty"
+      }
+    ],
+    "dates": [
+      {
+        "value": "2022-07-11T16:45:11Z",
+        "qualifier": "accessioned"
+      },
+      {
+        "value": "2022-07-11T16:45:11Z",
+        "qualifier": "available"
+      },
+      {
+        "value": "2019-12",
+        "qualifier": "issued"
+      }
+    ],
+    "types": [
+      {
+        "value": "Trabajo de grado - Pregrado",
+        "language": "spa"
+      },
+      {
+        "value": "http://purl.org/coar/resource_type/c_2df8fbb1",
+        "language": "spa",
+        "qualifier": "coar"
+      },
+      {
+        "value": "http://purl.org/coar/resource_type/c_7a1f",
+        "language": "spa",
+        "qualifier": "coar"
+      },
+      {
+        "value": "Text",
+        "language": "spa",
+        "qualifier": "content"
+      },
+      {
+        "value": "info:eu-repo/semantics/bachelorThesis",
+        "language": "spa",
+        "qualifier": "driver"
+      },
+      {
+        "value": "https://purl.org/redcol/resource_type/TP",
+        "language": "spa",
+        "qualifier": "redcol"
+      },
+      {
+        "value": "info:eu-repo/semantics/publishedVersion",
+        "language": "spa",
+        "qualifier": "version"
+      },
+      {
+        "value": "http://purl.org/coar/version/c_970fb48d4fbd8a85",
+        "language": "spa",
+        "qualifier": "coarversion"
+      }
+    ],
+    "formats": [
+      {
+        "value": "26 páginas",
+        "language": "spa",
+        "qualifier": "extent"
+      },
+      {
+        "value": "application/pdf",
+        "language": "spa",
+        "qualifier": "mimetype"
+      }
+    ],
+    "identifiers": [
+      {
+        "value": "https://digitk.areandina.edu.co/handle/areandina/4305",
+        "qualifier": "uri"
+      }
+    ],
+    "sources": [],
+    "languages": [
+      {
+        "value": "spa",
+        "language": "spa",
+        "qualifier": "iso"
+      }
+    ],
+    "relations": [
+      {
+        "value": "Amato, P.R., y Cheadle, J. (2005). The\nlong reach of divorce: divorce\nand child well-being across three\ngenerations. Journal of Marriage\nand Family, 67, 191-206.",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Beyebach, M. (2009). La repercusión\nsobre el menor de los procesos\nde ruptura matrimonial: aspectos\nemocionales y relacionales.\nRecuperado de\nfile:///C:/Users/Carmen/Downlo\nads/PROYECTO%20DANIRIS/\nRpercusionesMenorDivorcio.pdf",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Bolaños, I. (1998). Conflicto familiar y\nruptura matrimonial. Aspectos\npsicolegales. En Marrero, J.L. (Comp.) Psicología Jurídica de\nla familia, Madrid: Fundación\nUniversidad Empresa, Retos\njurídicos en las Ciencias\nSociales.",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Dowling, E y Gorell, G. (2000) Cómo\nayudar a la familia durante la\nseparación y el divorcio: Los\ncambios en la vida de los hijos.\nEdiciones Morata: Madrid.",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Fernández, M. (2010). Las víctimas\ninocentes de la separación o\ndivorcio. Consecuencias en los\nhijos/as. Recuperado de\nhttps://www.avntfevntf.com/wpcontent/uploads/2016/11/Fernan\ndezMaiderTrab3BI1415.pdf",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Garrido, M (2016). El trabajo con las\nemociones de las familias y los\nprofesionales ante las\nsituaciones del divorcio. En:\nAEPap (ed.). Curso de\nActualización Pediatría. Madrid:\nLúa Ediciones 3.0; 2016. p. 45-\n55.",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Gorvein. S. (1996). \"Matrimonio,\nfamilia y divorcio\": Tres\nmomentos del ciclo vital\nfamiliar. Recuperado de\nfile:///C:/Users/Carmen/Downlo\nads/PROYECTO%20DANIRIS/\nDialnetMatrimonioFamiliaYDivorcio5617387.pdf",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Gutiérrez de Pineda V. La familia en\nColombia: trasfondo histórico.\n2a ed. Medellín: Ministerio de\nCultura-Universidad de\nAntioquia; 1997.",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Hodges, W.(1986) Interventions for\nchildren of divorce. John Wiley\n& Sons, New York",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Jiménez, Amarís y Valle (2012).\nAfrontamiento en crisis\nfamiliares: El caso del divorcio\ncuando se tienen hijos\nadolescentes. Salud Uninorte.\n28(1), 99-112.",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Kirchner T. Estrategias de\nafrontamiento y nivel de\npsicoterapia en jóvenes\npresidiarios. Relación con el\ntiempo de reclusión y situación\npenitenciaria. Revista de Acción\nPsicológica 2003; 2 (3): 199 -\n211.",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Parsons, T. (1966). El sistema social»,\nbiblioteca de política y\nsociología· revista de occidente,\nMadrid.",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Pinsof, W. (2002). The death of “till\ndeath do us apart”: the\ntransformation of pair-bonding\nin the 20th century. Family\nProcess, 41, 135-158.",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Quevedo (2016). Un análisis del\nautoestima desde un enfoque\nsistémico familiar en\nadolescentes con padres que\nafrontan un divorcio en malos\ntérminos. (Tesis de Psicología).\nUniversidad Técnica de\nMachala, Ecuador",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "Raheb, C. (2015). El niño y las\nviscicitudes de separación o\ndivorcio. Recuperado de\nhttps://es.scribd.com/document/3\n67631818/Les-Turas",
+        "language": "spa",
+        "qualifier": "references"
+      },
+      {
+        "value": "RedCol",
+        "language": "spa",
+        "qualifier": "indexed"
+      }
+    ],
+    "coverage": [],
+    "rights": [
+      {
+        "value": "EL AUTOR-ESTUDIANTE, manifiesta que la obra objeto de la presente autorización es original y la realizó sin violar o usurpar derechos de autor de terceros, por lo tanto, la obra es de su exclusiva autoría y tiene la titularidad sobre la misma. PARÁGRAFO: en caso de presentarse cualquier reclamación o acción por parte de un tercero en cuanto a los derechos de autor sobre la obra en cuestión, EL ESTUDIANTE-AUTOR, asumirá toda la responsabilidad, y saldrá en defensa de los derechos aquí autorizados; para todos los efectos la Fundación Universitaria del Área Andina actúa como un tercero de buena fe.",
+        "language": "spa"
+      },
+      {
+        "value": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+        "language": "spa",
+        "qualifier": "uri"
+      },
+      {
+        "value": "Atribución-NoComercial-SinDerivadas 4.0 Internacional (CC BY-NC-ND 4.0)",
+        "language": "spa",
+        "qualifier": "license"
+      },
+      {
+        "value": "info:eu-repo/semantics/openAccess",
+        "language": "spa",
+        "qualifier": "accessrights"
+      },
+      {
+        "value": "http://purl.org/coar/access_right/c_abf2",
+        "language": "spa",
+        "qualifier": "coar"
+      }
+    ],
+    "others": [
+      {
+        "handle": [
+          ""
+        ],
+        "identifier": [
+          "oai:digitk.areandina.edu.co:areandina/4305"
+        ],
+        "lastModifyDate": [
+          "2024-07-12T20:23:36Z"
+        ]
+      }
+    ],
+    "repository": [
+      {
+        "mail": [
+          ""
+        ],
+        "name": [
+          ""
+        ]
+      }
+    ],
+    "bundles": [
+      {}
+    ],
+    "additionalMetadata": [
+      {
+        "value": "Publication",
+        "path": "dspace.entity.type"
+      }
+    ]
+  }
+}

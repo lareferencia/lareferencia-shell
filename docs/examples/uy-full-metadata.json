@@ -1,0 +1,181 @@
+{
+  "network": "UY",
+  "catalogId": "045225d6cb1fa470fd1d2355b9975874",
+  "identifier": "oai:repositorio.catie.ac.cr:11554/9453",
+  "metadataHash": "D0156717D16ABDA5",
+  "data": {
+    "titles": [
+      {
+        "value": "Modelo de agronegocio para la produccion de arroz sostenible bajo las condiciones agroclimáticas de la meseta de Ibague en el departamento del Tolima, Colombia"
+      }
+    ],
+    "creators": [
+      {
+        "value": "Díaz Carrillo, Carlos Julio"
+      }
+    ],
+    "contributors": [
+      {
+        "value": "Miranda Salas, María Inés"
+      },
+      {
+        "value": "CATIE - Centro Agronómico Tropical de Investigación y Enseñanza Turrialba, Costa Rica"
+      }
+    ],
+    "keywords": [
+      {
+        "value": "EMPRESAS"
+      },
+      {
+        "value": "ENTERPRISES"
+      },
+      {
+        "value": "SOSTENIBILIDAD"
+      },
+      {
+        "value": "SUSTAINABILITY"
+      },
+      {
+        "value": "ARROZ"
+      },
+      {
+        "value": "RICE"
+      },
+      {
+        "value": "CADENAS DE VALOR"
+      },
+      {
+        "value": "VALUE CHAINS"
+      },
+      {
+        "value": "VALUE CHAINS"
+      },
+      {
+        "value": "PRODUCTION SYSTEMS"
+      },
+      {
+        "value": "COLOMBIA"
+      },
+      {
+        "value": "COLOMBIA"
+      },
+      {
+        "value": "MODELO DE NEGOCIOS"
+      },
+      {
+        "value": "BUSINESS MODEL"
+      },
+      {
+        "value": "PROPUESTA DE VALOR"
+      },
+      {
+        "value": "VALUE PROPOSAL"
+      },
+      {
+        "value": "CADENA PRODUCTIVA"
+      },
+      {
+        "value": "PRODUCTIVE CHAIN"
+      }
+    ],
+    "descriptions": [
+      {
+        "value": "Tesis (Mag.) –CATIE, Turrialba (Costa Rica), 2023"
+      },
+      {
+        "value": "Presenta la creación de un modelo de negocio para la producción de arroz sostenible bajo las condiciones agroclimáticas de la zona de la meseta de Ibagué, la cual es considerada como una zona productora de este cereal privilegiada, convirtiéndola en la región de Colombia con los índices mas altos de productividad y calidad. Se realizó la caracterización de la cadena del cereal, para la cual se realizo una serie de encuestas a los actores claves, de los diferentes eslabones que la componen. Mediante la aplicación de encuestas a cincuenta y ocho consumidores mayores de 18 años residentes en la meseta de Ibagué, se creó el perfil del consumidor (perfil persona principal). Con esta información se construyó la propuesta de valor, la que posteriormente fue el eje fundamental en la construcción del Lienzo del Modelo de negocios, el cual también fue propuesto por Osterwalder (2010) para la producción de arroz sostenible bajo las condiciones agroclimáticas de la meseta de Ibagué."
+      },
+      {
+        "value": "Rice is a commodity product for Colombia, it is necessary to create a business model for sustainable rice production under the agroclimatic conditions of the Ibagué plateau area, which is considered a privileged producing area of this cereal, making it the region of Colombia with the highest rates of productivity and quality. The characterization of the chain of this cereal was carried out, for which a series of surveys was carried out with the key actors, of the different links that compose it. The implementation of surveys to fifty-eight consumers over the age of 18 residing in the Ibagué highlands, managed to generate the profile of the main person, which helped us build the value proposition, which will later be our fundamental axis in the implementation of the Business Model Canvas that was also proposed by Osterwalder (2010), in order to generate the eight remaining components of the business model generated for the sustainable production of rice under the agroclimatic conditions of the Ibagué highlands."
+      }
+    ],
+    "publishers": [
+      {
+        "value": "Centro Agronómico Tropical de Investigación y Enseñanza (CATIE)"
+      }
+    ],
+    "dates": [
+      {
+        "value": "2020-02-19T20:30:52Z"
+      },
+      {
+        "value": "2020-02-19T20:30:52Z"
+      },
+      {
+        "value": "2023"
+      }
+    ],
+    "types": [
+      {
+        "value": "info:eu-repo/semantics/masterThesis"
+      }
+    ],
+    "formats": [
+      {
+        "value": "94 páginas"
+      }
+    ],
+    "identifiers": [
+      {
+        "value": "https://repositorio.catie.ac.cr/handle/11554/9453"
+      }
+    ],
+    "sources": [
+      {
+        "value": "reponame:Repositorio CATIE"
+      },
+      {
+        "value": "instname:Centro Agronómico Tropical de Investigación y Enseñanza"
+      },
+      {
+        "value": "instacron:CATIE"
+      }
+    ],
+    "languages": [
+      {
+        "value": "en"
+      }
+    ],
+    "relations": [
+      {
+        "value": "Maestría en Gestión de agronegocios y mercados sostenibles"
+      }
+    ],
+    "coverage": [
+      {
+        "value": "Turrialba, Costa Rica"
+      }
+    ],
+    "rights": [
+      {
+        "value": "info:eu-repo/semantics/openAccess"
+      }
+    ],
+    "others": [
+      {
+        "handle": [
+          ""
+        ],
+        "identifier": [
+          "oai:repositorio.catie.ac.cr:11554/9453"
+        ],
+        "lastModifyDate": [
+          "2023-05-29T00:49:32Z"
+        ]
+      }
+    ],
+    "repository": [
+      {
+        "mail": [
+          ""
+        ],
+        "name": [
+          ""
+        ]
+      }
+    ],
+    "bundles": [
+      {}
+    ]
+  }
+}

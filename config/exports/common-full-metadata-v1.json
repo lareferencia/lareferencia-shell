@@ -1,0 +1,517 @@
+{
+  "specVersion": 1,
+  "name": "common-full-metadata",
+  "version": "1.1",
+  "inputSchema": "xoai",
+  "fields": {
+    "titles": {
+      "forEach": [
+        "dc.title.alternative",
+        "dc.title.none",
+        "dc.title.subtitle",
+        "dc.title.translated"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "creators": {
+      "forEach": [
+        "dc.contributor.author",
+        "dc.creator.none"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "contributors": {
+      "forEach": [
+        "dc.contributor.advisor",
+        "dc.contributor.audiovisualdesigner",
+        "dc.contributor.colaborator",
+        "dc.contributor.compilator",
+        "dc.contributor.compiler",
+        "dc.contributor.corpauthor",
+        "dc.contributor.corporatename",
+        "dc.contributor.datamanager",
+        "dc.contributor.editor",
+        "dc.contributor.educationalvalidator",
+        "dc.contributor.graphicaldesigner",
+        "dc.contributor.illustrator",
+        "dc.contributor.none",
+        "dc.contributor.other",
+        "dc.contributor.projectleader",
+        "dc.contributor.projectmember",
+        "dc.contributor.referee",
+        "dc.contributor.relatedperson",
+        "dc.contributor.researcher",
+        "dc.contributor.researchgroup",
+        "dc.contributor.rol",
+        "dc.contributor.role",
+        "dc.contributor.subjectmatterexpert",
+        "dc.contributor.translator"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "keywords": {
+      "forEach": [
+        "dc.subject.armarc",
+        "dc.subject.ddc",
+        "dc.subject.decs",
+        "dc.subject.keyword",
+        "dc.subject.keywords",
+        "dc.subject.lcsh",
+        "dc.subject.lemb",
+        "dc.subject.mesh",
+        "dc.subject.none",
+        "dc.subject.other",
+        "dc.subject.proposal",
+        "dc.subject.spines",
+        "dc.subject.unesco"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "descriptions": {
+      "forEach": [
+        "dc.description.abstract",
+        "dc.description.abstractenglish",
+        "dc.description.degreelevel",
+        "dc.description.degreename",
+        "dc.description.edition",
+        "dc.description.methods",
+        "dc.description.none",
+        "dc.description.notes",
+        "dc.description.program",
+        "dc.description.researcharea",
+        "dc.description.resumen",
+        "dc.description.sponsorship",
+        "dc.description.statementofresponsibility",
+        "dc.description.tableofcontents",
+        "dc.description.version"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "publishers": {
+      "forEach": [
+        "dc.publisher.faculty",
+        "dc.publisher.none",
+        "dc.publisher.place",
+        "dc.publisher.providerCountry"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "dates": {
+      "forEach": [
+        "dc.date.accessioned",
+        "dc.date.available",
+        "dc.date.copyright",
+        "dc.date.created",
+        "dc.date.issued",
+        "dc.date.none",
+        "dc.date.submitted"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "types": {
+      "forEach": [
+        "dc.type.coar",
+        "dc.type.coarversion",
+        "dc.type.content",
+        "dc.type.dcmi-type-vocabulary",
+        "dc.type.driver",
+        "dc.type.none",
+        "dc.type.redcol",
+        "dc.type.spa",
+        "dc.type.version"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "formats": {
+      "forEach": [
+        "dc.format.extent",
+        "dc.format.medium",
+        "dc.format.mimetype",
+        "dc.format.none"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "identifiers": {
+      "forEach": [
+        "dc.identifier.canvas",
+        "dc.identifier.citation",
+        "dc.identifier.doi",
+        "dc.identifier.eisbn",
+        "dc.identifier.interactividad",
+        "dc.identifier.isbn",
+        "dc.identifier.issn",
+        "dc.identifier.local",
+        "dc.identifier.none",
+        "dc.identifier.other",
+        "dc.identifier.reutilizacion",
+        "dc.identifier.uri",
+        "dc.identifier.url"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "sources": {
+      "forEach": [
+        "dc.source.none",
+        "dc.source.uri"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "languages": {
+      "forEach": [
+        "dc.language.iso",
+        "dc.language.none"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "relations": {
+      "forEach": [
+        "dc.relation.citationedition",
+        "dc.relation.citationendpage",
+        "dc.relation.citationstartpage",
+        "dc.relation.citationvolume",
+        "dc.relation.conferencedate",
+        "dc.relation.conferenceplace",
+        "dc.relation.indexed",
+        "dc.relation.ispartofbook",
+        "dc.relation.ispartofconference",
+        "dc.relation.none",
+        "dc.relation.references"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "coverage": {
+      "forEach": [
+        "dc.coverage.none",
+        "dc.coverage.spatial"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "rights": {
+      "forEach": [
+        "dc.rights.access",
+        "dc.rights.accessrights",
+        "dc.rights.coar",
+        "dc.rights.creativecommons",
+        "dc.rights.holder",
+        "dc.rights.licencia",
+        "dc.rights.license",
+        "dc.rights.none",
+        "dc.rights.uri"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "others": {
+      "forEach": "others",
+      "fields": {
+        "handle": {
+          "select": ":handle",
+          "type": "string",
+          "many": true
+        },
+        "identifier": {
+          "select": ":identifier",
+          "type": "string",
+          "many": true
+        },
+        "lastModifyDate": {
+          "select": ":lastModifyDate",
+          "type": "string",
+          "many": true
+        }
+      }
+    },
+    "repository": {
+      "forEach": "repository",
+      "fields": {
+        "mail": {
+          "select": ":mail",
+          "type": "string",
+          "many": true
+        },
+        "name": {
+          "select": ":name",
+          "type": "string",
+          "many": true
+        }
+      }
+    },
+    "bundles": {
+      "forEach": "bundles",
+      "fields": {}
+    },
+    "additionalMetadata": {
+      "forEach": [
+        "dc.audience.none",
+        "dc.thesis.discipline",
+        "dc.thesis.level",
+        "dc.thesis.name",
+        "dcterms.abstract.none",
+        "dcterms.audience.none",
+        "dcterms.bibliographicCitation.none",
+        "dcterms.description.none",
+        "dcterms.extent.none",
+        "dcterms.license.none",
+        "dcterms.subject.Lemb",
+        "dcterms.subject.none",
+        "dspace.entity.type",
+        "lom.aggregationLevel.none",
+        "lom.context.educativeLevel",
+        "lom.context.gradeGroup",
+        "lom.difficulty.none",
+        "lom.intentedEndUserRole.none",
+        "lom.intentedEndUserRole.populationGroup",
+        "lom.interactivityLevel.none",
+        "lom.interactivitytype.none",
+        "lom.language.none",
+        "lom.resourceType.core",
+        "lom.resourceType.detail",
+        "lom.resourceType.main",
+        "lom.semanticDensity.none",
+        "lom.status.none",
+        "lom.structure.none",
+        "oaire.fundername.none"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "path"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    }
+  }
+}

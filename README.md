@@ -209,6 +209,23 @@ related index that embeds those entities as nested relations.
 See the full guide:
 - [Deleted Entities and Index Cleanup](docs/deleted-entities-index-cleanup.en.md)
 
+### Export Metadata for External Enrichment
+
+Use source acronyms to export original or processed LGK metadata with a record
+mapping index, provenance manifest and configurable JSON projections. The
+maintained profiles live in [`config/exports/`](config/exports/README.md); copy
+them to `exports/` inside the installation configuration directory:
+
+```text
+export-metadata --network RCAAP --variant processed --format jsonl --mapping /config/exports/publications-v1.json --max-records 10000 --max-bytes 128MiB --output /exports
+export-mapping-validate --mapping /config/exports/publications-v1.json
+export-metadata-preview --network RCAAP --mapping /config/exports/publications-v1.json --limit 5
+```
+
+Supports XML, JSON and JSONL, gzip, per-source or combined partitions, and batches
+limited by records and uncompressed UTF-8 bytes. See the
+[metadata export guide and enrichment return contract](docs/metadata-export.es.md).
+
 ### Export LGK Data
 
 Export a SQLite mapping of `ACRONYM_recordId` to OAI identifiers for all
@@ -267,6 +284,9 @@ export-all-lgk-metadata /exports/lgk-metadata 42 true
 
 | Command | Arguments and options | Description |
 | --- | --- | --- |
+| `export-metadata` | `--network <acronym> / --networks <list> / --all-networks; --output <directory>` | Export traceable LGK packages; use `help export-metadata` for formats, mappings and batch options. |
+| `export-mapping-validate` | `--mapping <path>` | Validate a versioned XOAI mapping. |
+| `export-metadata-preview` | `--network <acronym> --mapping <path> [--variant processed] [--limit 5]` | Preview mapped records without creating a package. |
 | `export-all-lgk-identifiers-mapping` | `<sqliteFilePath> [overwrite]` | Export LGK identifier mapping for all networks into one SQLite file. Default `overwrite=false`. |
 | `export-all-lgk-metadata` | `<outputDirectory> [networkId] [overwrite]` | Export LGK original metadata to `.xml.gz` files. If `networkId` is omitted, all networks are exported. Default `overwrite=false`. |
 

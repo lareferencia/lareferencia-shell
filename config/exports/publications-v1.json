@@ -1,0 +1,43 @@
+{
+  "specVersion": 1,
+  "name": "publications",
+  "version": "1.0",
+  "inputSchema": "xoai",
+  "fields": {
+    "identifiers": {
+      "select": "dc.identifier.*",
+      "type": "string",
+      "many": true,
+      "normalize": [
+        "trim"
+      ],
+      "unique": true
+    },
+    "dark": {
+      "select": "dc.identifier.dark",
+      "type": "string",
+      "many": false
+    },
+    "titles": {
+      "forEach": "dc.title.*",
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      },
+      "occurrenceStart": "value"
+    },
+    "abstracts": {
+      "select": "dc.description.abstract",
+      "type": "string",
+      "many": true
+    }
+  }
+}
