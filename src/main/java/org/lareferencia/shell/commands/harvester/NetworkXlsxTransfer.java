@@ -62,7 +62,7 @@ final class NetworkXlsxTransfer {
     }
 
     private void validate(RowData row, Set<String> seen) {
-        if (row.acronym == null || !row.acronym.matches("^[A-Za-z0-9][A-Za-z0-9._-]{1,9}$")) throw new IllegalArgumentException("Invalid acronym at row " + row.row);
+        if (row.acronym == null || !row.acronym.matches("^[A-Za-z0-9][A-Za-z0-9_-]{1,19}$")) throw new IllegalArgumentException("Invalid acronym at row " + row.row);
         if (!seen.add(row.acronym)) throw new IllegalArgumentException("Duplicate acronym at row " + row.row);
         if (blank(row.name) || blank(row.institutionName)) throw new IllegalArgumentException("Missing required source fields at row " + row.row);
         try { URI uri = URI.create(row.originUrl); if (uri.getScheme() == null || uri.getHost() == null) throw new IllegalArgumentException(); } catch (Exception e) { throw new IllegalArgumentException("Invalid originUrl at row " + row.row); }
