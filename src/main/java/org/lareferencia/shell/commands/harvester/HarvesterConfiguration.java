@@ -24,6 +24,7 @@ import org.lareferencia.core.service.management.SnapshotLogService;
 import org.lareferencia.core.task.NetworkActionExecutorConfig;
 import org.lareferencia.core.task.TaskManagerConfig;
 import org.lareferencia.core.task.TaskManagerRuntimeConfigurationService;
+import org.springframework.boot.ExitCodeExceptionMapper;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -47,6 +48,12 @@ public class HarvesterConfiguration {
     @Bean
     public SnapshotLogService snapshotLogService() {
         return new SnapshotLogService();
+    }
+
+    /** Exit codes for export-metadata scripting: COMPLETE = 0, PARTIAL = 2, FAILED = 1 (unmapped exceptions). */
+    @Bean
+    public ExitCodeExceptionMapper metadataExportExitCodeMapper() {
+        return exception -> exception instanceof MetadataExportCommands.PartialExportException ? 2 : 0;
     }
 
 }

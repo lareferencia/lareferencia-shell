@@ -18,6 +18,8 @@ Por ejemplo, si la configuración está en `/config`, los archivos quedan en
 Desde el shell, ejecutado en la raíz de este repositorio:
 
 ```text
+export-mapping-list
+export-mapping-list --directory config/exports
 export-mapping-validate --mapping config/exports/publications-v1.json
 export-mapping-validate --mapping config/exports/common-full-metadata-v1.json
 export-metadata-preview --network AREANDINA --variant processed --mapping config/exports/common-full-metadata-v1.json --limit 3
