@@ -1,6 +1,8 @@
 # Exportación de metadata para enriquecimientos externos
 
-Los comandos `export-metadata`, `export-mapping-validate` y
+**Status:** current · **Last verified:** 2026-11-16
+
+Los comandos `export-metadata`, `export-mapping-list`, `export-mapping-validate` y
 `export-metadata-preview` exportan entradas trazables para procesos externos.
 El servicio reutilizable está en `org.lareferencia.core.export`, en core-lib.
 Esta versión define también el contrato de retorno; la importación de resultados
@@ -24,6 +26,7 @@ universal: cada perfil define su propio contrato en `data`.
 Desde el shell interactivo:
 
 ```text
+export-mapping-list
 export-mapping-validate --mapping /config/exports/publications-v1.json
 export-metadata-preview --network RCAAP --variant processed --mapping /config/exports/publications-v1.json --limit 5
 export-metadata --networks RCAAP,IBICT --variant processed --format jsonl --mapping /config/exports/publications-v1.json --partition-by network --max-records 10000 --max-bytes 128MiB --compression gzip --output /exports
@@ -195,8 +198,10 @@ históricas; recuperar su XML sigue dependiendo de la retención del almacén.
 
 ## Consistencia, errores y ejecución por lotes
 
-El lector usa conexiones SQLite propias `mode=ro` y `query_only`, con validación
-vinculada por `identifier_hash`. No ejecuta migraciones ni checkpoints del origen.
+El lector usa conexiones SQLite propias `mode=ro&immutable=1` y `query_only`, con validación
+vinculada por `identifier_hash`. Rechaza un WAL no vacío en catálogo o validación
+para no leer un snapshot sin finalizar; no se debe borrar ese WAL manualmente.
+No ejecuta migraciones ni checkpoints del origen.
 Las bases legacy sin columna `deleted` de validación se leen sin modificar su
 esquema. No se cambia el hash seleccionado ni se sustituye una validación ausente
 por metadata original. Los XML se procesan uno por uno y el parser rechaza DTD y
@@ -220,8 +225,9 @@ manifiesto enumera tamaños y SHA-256 de todos los archivos entregados salvo él
 mismo; excluye temporales y journals. Antes de procesar un paquete comprobar su
 estado y los checksums. No consumir como completo un paquete parcial o fallido.
 
-En modo no interactivo, una exportación parcial o fallida produce error del shell
-y salida no exitosa. Interactivamente se muestra el resumen o error y se mantiene
+En modo no interactivo, `COMPLETE` termina con código 0, `PARTIAL` con 2 y un
+fallo fatal con 1. El progreso se registra cada 10.000 intentos y al inicio/final
+de cada fuente, identificado por `exportId`. Interactivamente se muestra el resumen o error y se mantiene
 la sesión. Una interrupción controlada puede registrar `FAILED`; una terminación
 abrupta deja `RUNNING`. Esta versión no reanuda ejecuciones.
 
