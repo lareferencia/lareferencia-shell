@@ -33,7 +33,7 @@ class MetadataExportCommandsTest {
     }
     @AfterEach void close() { application.close(); }
     @Test void registersCommandsAndDescribesOptions() {
-        assertEquals(Set.of("export-metadata", "export-mapping-validate", "export-metadata-preview"), catalog.getRegistrations().keySet());
+        assertEquals(Set.of("export-metadata", "export-mapping-validate", "export-mapping-list", "export-metadata-preview"), catalog.getRegistrations().keySet());
         var registration = catalog.getRegistrations().get("export-metadata");
         assertTrue(registration.getDescription().contains("provenance"));
         assertTrue(registration.getOptions().size() >= 13);
@@ -48,9 +48,16 @@ class MetadataExportCommandsTest {
     }
     @Test void partialExportFailsInBatchAndReturnsSummaryInteractively() throws Exception {
         when(service.export(any())).thenReturn(new MetadataExportService.Result(Path.of("exports/exp-test"), "PARTIAL", 2, 1, 0, 1));
-        assertThrows(IllegalStateException.class, this::invoke);
+        var partial = assertThrows(MetadataExportCommands.PartialExportException.class, this::invoke);
+        assertEquals(Path.of("exports/exp-test"), partial.directory());
+        assertTrue(partial instanceof IllegalStateException);
         when(context.getInteractionMode()).thenReturn(InteractionMode.INTERACTIVE);
         assertTrue(invoke().startsWith("PARTIAL"));
+    }
+    @Test void partialExportMapsToExitCodeTwoAndOtherFailuresToZero() {
+        var mapper = new HarvesterConfiguration().metadataExportExitCodeMapper();
+        assertEquals(2, mapper.getExitCode(new MetadataExportCommands.PartialExportException("PARTIAL", Path.of("d"))));
+        assertEquals(0, mapper.getExitCode(new IllegalStateException("FAILED")));
     }
     @Test void actualShellParserExecutesFlagsAndPropagatesBatchFailures() throws Exception {
         when(service.export(any())).thenReturn(new MetadataExportService.Result(Path.of("exports/exp-test"), "PARTIAL", 2, 1, 0, 1));

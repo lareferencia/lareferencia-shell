@@ -218,13 +218,15 @@ them to `exports/` inside the installation configuration directory:
 
 ```text
 export-metadata --network RCAAP --variant processed --format jsonl --mapping /config/exports/publications-v1.json --max-records 10000 --max-bytes 128MiB --output /exports
+export-mapping-list
 export-mapping-validate --mapping /config/exports/publications-v1.json
 export-metadata-preview --network RCAAP --mapping /config/exports/publications-v1.json --limit 5
 ```
 
 Supports XML, JSON and JSONL, gzip, per-source or combined partitions, and batches
 limited by records and uncompressed UTF-8 bytes. See the
-[metadata export guide and enrichment return contract](docs/metadata-export.es.md).
+[metadata export guide](../docs/METADATA_EXPORT.md) and the
+[detailed exchange format](../docs/METADATA_EXCHANGE_FORMAT.md).
 
 ### Export LGK Data
 
@@ -285,6 +287,7 @@ export-all-lgk-metadata /exports/lgk-metadata 42 true
 | Command | Arguments and options | Description |
 | --- | --- | --- |
 | `export-metadata` | `--network <acronym> / --networks <list> / --all-networks; --output <directory>` | Export traceable LGK packages; use `help export-metadata` for formats, mappings and batch options. |
+| `export-mapping-list` | `[--directory <path>]` | List mapping profiles under `<config>/exports` or another directory. |
 | `export-mapping-validate` | `--mapping <path>` | Validate a versioned XOAI mapping. |
 | `export-metadata-preview` | `--network <acronym> --mapping <path> [--variant processed] [--limit 5]` | Preview mapped records without creating a package. |
 | `export-all-lgk-identifiers-mapping` | `<sqliteFilePath> [overwrite]` | Export LGK identifier mapping for all networks into one SQLite file. Default `overwrite=false`. |
@@ -369,4 +372,4 @@ Email: soporte@lareferencia.redclara.net
 ---
 
 LA Referencia - Red Latinoamericana y de Espana de Ciencia Abierta
-Part of the LA Referencia Platform 5.0.0-rc3
+Part of the LA Referencia Platform; Maven version inherited from `lareferencia-parent`.

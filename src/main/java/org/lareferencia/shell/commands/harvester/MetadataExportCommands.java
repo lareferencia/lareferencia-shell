@@ -2,8 +2,10 @@ package org.lareferencia.shell.commands.harvester;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.Path;
+import java.nio.file.Files;
 import java.util.*;
 import org.lareferencia.core.export.*;
+import org.lareferencia.core.util.ConfigPathResolver;
 import org.springframework.shell.context.*;
 import org.springframework.shell.standard.*;
 
@@ -36,13 +38,49 @@ public class MetadataExportCommands {
         String summary = result.status() + ": " + result.directory() + "\nAttempted: " + result.attempted()
                 + "; exported: " + result.exported() + "; filtered: " + result.filtered() + "; errors: " + result.errors();
         if (!result.successful() && context.getInteractionMode() != InteractionMode.INTERACTIVE)
-            throw new IllegalStateException(summary);
+            throw new PartialExportException(summary, result.directory());
         return summary;
+    }
+
+    /** Non-interactive batch outcome with per-record errors. Extends IllegalStateException for compatibility
+     * while remaining distinct so exit-code mapping can report PARTIAL (2) differently from FAILED (1). */
+    public static final class PartialExportException extends IllegalStateException {
+        private final Path directory;
+        PartialExportException(String summary, Path directory) { super(summary); this.directory = directory; }
+        public Path directory() { return directory; }
     }
     @ShellMethod(key = "export-mapping-validate", value = "Validate a versioned XOAI to JSON mapping")
     public String validate(@ShellOption(value = "--mapping", help = "Mapping JSON path") String mapping) throws Exception {
         var profile = service.validateMapping(Path.of(mapping)).specification();
         return "Valid mapping: " + profile.path("name").asText() + " " + profile.path("version").asText();
+    }
+    @ShellMethod(key = "export-mapping-list", value = "List installed metadata export mapping profiles")
+    public String listMappings(@ShellOption(value = "--directory", defaultValue = ShellOption.NULL,
+            help = "Profile directory; defaults to <config>/exports") String directory) throws Exception {
+        Path profileDirectory = directory == null
+                ? ConfigPathResolver.resolvePath("exports")
+                : Path.of(directory);
+        if (!Files.isDirectory(profileDirectory))
+            return "No export profile directory found: " + profileDirectory.toAbsolutePath().normalize();
+
+        List<String> entries = new ArrayList<>();
+        try (var files = Files.list(profileDirectory)) {
+            for (Path file : files.filter(Files::isRegularFile)
+                    .filter(path -> path.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(".json"))
+                    .sorted(Comparator.comparing(path -> path.getFileName().toString()))
+                    .toList()) {
+                try {
+                    var profile = new XoaiExportMapping(json.readTree(file.toFile())).specification();
+                    entries.add(file.getFileName() + " — " + profile.path("name").asText()
+                            + " v" + profile.path("version").asText());
+                } catch (Exception exception) {
+                    entries.add(file.getFileName() + " — INVALID: " + exception.getMessage());
+                }
+            }
+        }
+        if (entries.isEmpty()) return "No JSON export profiles found in " + profileDirectory.toAbsolutePath().normalize();
+        return "Export profiles (" + profileDirectory.toAbsolutePath().normalize() + "):\n"
+                + String.join("\n", entries);
     }
     @ShellMethod(key = "export-metadata-preview", value = "Preview XOAI mapping and provenance without writing an export package")
     public String preview(
