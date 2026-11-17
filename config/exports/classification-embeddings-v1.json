@@ -1,16 +1,11 @@
 {
   "specVersion": 1,
   "name": "classification-embeddings",
-  "version": "1.0",
+  "version": "2.0",
   "inputSchema": "xoai",
   "fields": {
     "titles": {
-      "forEach": [
-        "dc.title.alternative",
-        "dc.title.none",
-        "dc.title.subtitle",
-        "dc.title.translated"
-      ],
+      "forEach": "dc.title.*",
       "occurrenceStart": "value",
       "includeContext": [
         "qualifier"
@@ -28,14 +23,8 @@
         }
       }
     },
-    "abstracts": {
-      "forEach": [
-        "dc.description.abstract",
-        "dc.description.abstractenglish",
-        "dc.description.resumen",
-        "dc.description.none",
-        "dcterms.abstract.none"
-      ],
+    "descriptions": {
+      "forEach": "dc.description.*",
       "occurrenceStart": "value",
       "includeContext": [
         "qualifier"
@@ -54,23 +43,7 @@
       }
     },
     "keywords": {
-      "forEach": [
-        "dc.subject.armarc",
-        "dc.subject.ddc",
-        "dc.subject.decs",
-        "dc.subject.keyword",
-        "dc.subject.keywords",
-        "dc.subject.lcsh",
-        "dc.subject.lemb",
-        "dc.subject.mesh",
-        "dc.subject.none",
-        "dc.subject.other",
-        "dc.subject.proposal",
-        "dc.subject.spines",
-        "dc.subject.unesco",
-        "dcterms.subject.Lemb",
-        "dcterms.subject.none"
-      ],
+      "forEach": "dc.subject.*",
       "occurrenceStart": "value",
       "includeContext": [
         "qualifier"
