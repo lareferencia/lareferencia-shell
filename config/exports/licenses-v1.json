@@ -1,7 +1,7 @@
 {
   "specVersion": 1,
   "name": "licenses",
-  "version": "1.0",
+  "version": "1.1",
   "inputSchema": "xoai",
   "fields": {
     "licenses": {
@@ -10,7 +10,23 @@
       "many": true,
       "normalize": ["trim"],
       "unique": true,
-      "maxLength": 300
+      "maxLength": 300,
+      "excludePrefixes": [
+        "info:eu-repo",
+        "purl.org/coar",
+        "www.purl.org/coar",
+        "http://purl.org/coar",
+        "http://www.purl.org/coar",
+        "https://purl.org/coar",
+        "https://www.purl.org/coar",
+        "vocabularies.coar-repositories.org",
+        "www.vocabularies.coar-repositories.org",
+        "http://vocabularies.coar-repositories.org",
+        "http://www.vocabularies.coar-repositories.org",
+        "https://vocabularies.coar-repositories.org",
+        "https://www.vocabularies.coar-repositories.org"
+      ],
+      "prefixDelimiters": "/?#"
     }
   }
 }
