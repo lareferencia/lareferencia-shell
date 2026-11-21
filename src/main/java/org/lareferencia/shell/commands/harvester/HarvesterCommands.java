@@ -36,6 +36,7 @@ import org.lareferencia.core.repository.jpa.TransformerRepository;
 import org.lareferencia.core.repository.jpa.ValidatorRuleRepository;
 import org.lareferencia.core.repository.jpa.ValidatorRepository;
 import org.lareferencia.core.util.JSONSerializerHelper;
+import org.lareferencia.core.worker.validation.RuleTypeAliases;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -372,12 +373,6 @@ public class HarvesterCommands {
 	@Autowired
 	TransformerRuleRepository transformerRuleRepository;
 
-	private static final String OLD_VALIDATOR_PACKAGE = "org.lareferencia.backend.validation.validator.";
-	private static final String NEW_VALIDATOR_PACKAGE = "org.lareferencia.core.worker.validation.validator.";
-	private static final String OLD_TRANSFORMER_PACKAGE = "org.lareferencia.backend.validation.transformer.";
-	private static final String NEW_TRANSFORMER_PACKAGE = "org.lareferencia.core.worker.validation.transformer.";
-
-
 	@ShellMethod("List validators")
 	public String listValidators() throws Exception {
 
@@ -402,27 +397,39 @@ public class HarvesterCommands {
 		return "";
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = IOException.class)
 	@ShellMethod(value = "Migrate validator rule package references from v4 to v5", key = "migrate-validators")
 	public String migrateValidators(
-			@ShellOption(value = "--dry-run", help = "Report rows that would be updated without saving changes", defaultValue = "false") boolean dryRun) {
+			@ShellOption(value = "--dry-run", help = "Report rows that would be updated without saving changes", defaultValue = "false") boolean dryRun) throws IOException {
 
-		long updatedRules = dryRun
-				? validatorRuleRepository.countByJsonserializationContaining(OLD_VALIDATOR_PACKAGE)
-				: validatorRuleRepository.replaceJsonserializationPackage(OLD_VALIDATOR_PACKAGE, NEW_VALIDATOR_PACKAGE);
+        long updatedRules = 0;
+        for (var rule : validatorRuleRepository.findAll()) {
+            String original = rule.getJsonserialization();
+            String resolved = RuleTypeAliases.resolve(original);
+            if (!Objects.equals(resolved, original)) {
+                updatedRules++;
+                if (!dryRun) rule.setJsonserialization(resolved);
+            }
+        }
 		String action = dryRun ? "would be migrated" : "migrated";
 
 		return "Validator rules " + action + ": " + updatedRules;
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = IOException.class)
 	@ShellMethod(value = "Migrate transformer rule package references from v4 to v5", key = "migrate-transformers")
 	public String migrateTransformers(
-			@ShellOption(value = "--dry-run", help = "Report rows that would be updated without saving changes", defaultValue = "false") boolean dryRun) {
+			@ShellOption(value = "--dry-run", help = "Report rows that would be updated without saving changes", defaultValue = "false") boolean dryRun) throws IOException {
 
-		long updatedRules = dryRun
-				? transformerRuleRepository.countByJsonserializationContaining(OLD_TRANSFORMER_PACKAGE)
-				: transformerRuleRepository.replaceJsonserializationPackage(OLD_TRANSFORMER_PACKAGE, NEW_TRANSFORMER_PACKAGE);
+        long updatedRules = 0;
+        for (var rule : transformerRuleRepository.findAll()) {
+            String original = rule.getJsonserialization();
+            String resolved = RuleTypeAliases.resolve(original);
+            if (!Objects.equals(resolved, original)) {
+                updatedRules++;
+                if (!dryRun) rule.setJsonserialization(resolved);
+            }
+        }
 		String action = dryRun ? "would be migrated" : "migrated";
 
 		return "Transformer rules " + action + ": " + updatedRules;
@@ -489,12 +496,6 @@ public class HarvesterCommands {
 			byte[] jsonBytes = Files.readAllBytes(file.toPath());
 			String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
 			
-			// Optionally migrate package references from old backend.* to new core.* structure
-			if (migrate) {
-				jsonContent = migratePackageReferencesInJson(jsonContent);
-				System.out.println("Package references migrated from backend.* to core.*");
-			}
-			
 			// Deserialize using ObjectMapper
 			ObjectMapper objectMapper = new ObjectMapper();
 			Validator validator = objectMapper.readValue(jsonContent, Validator.class);
@@ -504,6 +505,12 @@ public class HarvesterCommands {
 				return;
 			}
 			
+
+            if (migrate) {
+                for (var rule : validator.getRules()) {
+                    rule.setJsonserialization(RuleTypeAliases.resolve(rule.getJsonserialization()));
+                }
+            }
 			validator.resetId();
 
 			validatorRepository.saveAndFlush(validator);
@@ -580,12 +587,6 @@ public class HarvesterCommands {
 			byte[] jsonBytes = Files.readAllBytes(file.toPath());
 			String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
 			
-			// Optionally migrate package references from old backend.* to new core.* structure
-			if (migrate) {
-				jsonContent = migratePackageReferencesInJson(jsonContent);
-				System.out.println("Package references migrated from backend.* to core.*");
-			}
-			
 			// Deserialize using ObjectMapper
 			ObjectMapper objectMapper = new ObjectMapper();
 			Transformer transformer = objectMapper.readValue(jsonContent, Transformer.class);
@@ -595,6 +596,12 @@ public class HarvesterCommands {
 				return;
 			}
 			
+
+            if (migrate) {
+                for (var rule : transformer.getRules()) {
+                    rule.setJsonserialization(RuleTypeAliases.resolve(rule.getJsonserialization()));
+                }
+            }
 			transformer.resetId();
 
 			transformerRepository.saveAndFlush(transformer);
@@ -610,24 +617,7 @@ public class HarvesterCommands {
 
 	}
 
-	/**
-	 * Migrates package references in JSON content from old backend.* structure to new core.* structure.
-	 * This ensures JSON exported from old versions can be imported into new versions.
-	 *
-	 * Mapping rules for transformer and validator rules only:
-	 * org.lareferencia.backend.validation.validator.* -> org.lareferencia.core.worker.validation.validator.*
-	 * org.lareferencia.backend.validation.transformer.* -> org.lareferencia.core.worker.validation.transformer.*
-	 *
-	 * @param jsonContent the JSON string to migrate
-	 * @return the migrated JSON with updated package references
-	 */
-	private String migratePackageReferencesInJson(String jsonContent) {
-		// Map transformer and validator rules from backend to core.worker
-		jsonContent = jsonContent.replace(OLD_VALIDATOR_PACKAGE, NEW_VALIDATOR_PACKAGE);
-		jsonContent = jsonContent.replace(OLD_TRANSFORMER_PACKAGE, NEW_TRANSFORMER_PACKAGE);
-		
-		return jsonContent;
-	}
+
 
 
 	
