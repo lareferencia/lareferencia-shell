@@ -7,6 +7,7 @@ Estos son los perfiles de ejemplo mantenidos en el repositorio del shell.
 | `publications-v1.json` | 1.0 | Ejemplo inicial: identificadores, dark, títulos y abstracts. |
 | `common-full-metadata-v1.json` | 1.1 | Metadata completa de UY y AREANDINA en 19 familias comunes. Calificadores opcionales y extensiones identificadas por `path`. |
 | `classification-embeddings-v1.json` | 1.0 | Títulos, posibles resúmenes y keywords para clasificación y embeddings. Incluye descripciones sin calificar. |
+| `bibliographic-roles-v1.json` | 1.0 | Títulos, descripciones, keywords, tipos, afiliaciones y financiadores para el preparador de metadata de embeddings. |
 | `licenses-v1.json` | 1.1 | Valores de `dc.rights.*` de hasta 300 puntos de código Unicode. Excluye las URI de `info:eu-repo` y COAR. |
 
 Los perfiles se leen desde archivos mediante `--mapping`. Se pueden editar o

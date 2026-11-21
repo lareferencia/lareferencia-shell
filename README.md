@@ -223,6 +223,8 @@ export-mapping-validate --mapping /config/exports/publications-v1.json
 export-metadata-preview --network RCAAP --mapping /config/exports/publications-v1.json --limit 5
 ```
 
+To prepare a standalone embeddings input package from a completed export, follow the [installation and package guide](docs/EMBEDDING_METADATA.md).
+
 Supports XML, JSON and JSONL, gzip, per-source or combined partitions, and batches
 limited by records and uncompressed UTF-8 bytes. See the
 [metadata export guide](../docs/METADATA_EXPORT.md) and the
