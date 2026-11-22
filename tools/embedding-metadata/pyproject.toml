@@ -4,14 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lareferencia-embedding-metadata"
-version = "1.1.0"
-description = "Prepare standalone bibliographic metadata packages for embeddings"
+version = "1.2.0"
+description = "Compatibility installation for LA Referencia metadata tools"
 requires-python = ">=3.11,<3.13"
-dependencies = ["fasttext==0.9.3", "numpy==1.26.4"]
-
-[project.scripts]
-prepare-embedding-metadata = "lareferencia_embedding_metadata.prepare:main"
+dependencies = ["lareferencia-metadata-tools[bibliographic]>=1.0"]
 
 [tool.setuptools]
-packages = ["lareferencia_embedding_metadata"]
-package-dir = {lareferencia_embedding_metadata = "."}
+packages = []

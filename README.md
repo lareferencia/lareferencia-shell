@@ -10,18 +10,9 @@ when `lareferencia-shell` is built with a profile that includes that plugin
 
 ## Metadata enrichment tools
 
-The Python rights pipeline, normalizer, SQLite package writer and their tests live in
-`tools/metadata-enrichment/`. They use Python 3.9 or newer and the standard library.
-
-Run the complete pipeline from this shell checkout:
-
-```sh
-python3 tools/metadata-enrichment/run_rights_pipeline.py --network PY
-python3 -m unittest discover -s tools/metadata-enrichment -p 'test_*.py'
-```
-
-See the [enrichment package guide](docs/METADATA_ENRICHMENT_PACKAGE.md) for server
-operation, existing exports, incremental producers and item lookup.
+Install the Python workflows from [lareferencia-metadata-tools](https://github.com/LA-Referencia-IOI/lareferencia-metadata-tools).
+Use `run-rights-pipeline --shell-dir /path/to/lareferencia-shell` to export
+rights from this Java shell and produce a published enrichment edition.
 
 ## Build
 
