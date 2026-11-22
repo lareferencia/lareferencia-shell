@@ -9,8 +9,9 @@ from pathlib import Path
 
 def build_inputs(package, classified_only=False):
     manifest = json.loads((package / "manifest.json").read_bytes())
-    if (manifest["status"], manifest["packageType"], manifest["contractVersion"]) != ("COMPLETE", "annotated-metadata", 1):
-        raise ValueError("Expected a COMPLETE annotated-metadata v1 package")
+    contract = manifest["contractVersion"]
+    if manifest["status"] != "COMPLETE" or manifest["packageType"] != "annotated-metadata" or contract not in (1, 2):
+        raise ValueError("Expected a COMPLETE annotated-metadata v1 or v2 package")
     files = {entry["path"]: entry for entry in manifest["files"]}
     for name in manifest["parts"]:
         part = (package / name).resolve()
@@ -37,7 +38,7 @@ def build_inputs(package, classified_only=False):
                         key = (language, field, index) if language == "und" else (language,)
                         groups[key].append((field, index))
                 by_language = defaultdict(list)
-                for index, keyword in enumerate(data["keywords"]):
+                for index, keyword in enumerate(data["keywords"] if contract == 1 else []):
                     language = keyword.get("language")
                     if keyword.get("languageSource") and language and language != "und" and keyword["value"].strip():
                         by_language[language].append(("keywords", index))

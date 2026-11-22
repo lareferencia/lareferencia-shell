@@ -53,9 +53,9 @@ class PackageTest(unittest.TestCase):
                              for f in self.root.rglob('*') if f.is_file() and f!=path]
         path.write_text(p.compact(manifest))
 
-    def execute(self):
+    def execute(self, **options):
         with patch.object(p.postprocess, 'Annotator', return_value=self.fake):
-            return p.prepare(self.root,self.output,self.models)
+            return p.prepare(self.root,self.output,self.models, **options)
 
     def test_partial_then_retry_and_locators(self):
         self.rows[0]['data']['titles'] = None
@@ -63,14 +63,12 @@ class PackageTest(unittest.TestCase):
         status, dest = self.execute()
         self.assertEqual(status,'PARTIAL')
         with sqlite3.connect(dest/'records.sqlite') as con:
-            rows = list(con.execute('SELECT network,parent_position,position,status FROM records ORDER BY network'))
-            self.assertEqual(rows,[('AR',1,None,'ERROR'),('UY',2,1,'ANNOTATED')])
-            origins = json.loads(con.execute("SELECT origins FROM records WHERE network='UY'").fetchone()[0])
-            self.assertEqual(origins['abstracts'],[['descriptions',0]])
+            rows = list(con.execute('SELECT network,position,status FROM records ORDER BY network'))
+            self.assertEqual(rows,[('AR',None,'ERROR'),('UY',1,'ANNOTATED')])
         with gzip.open(dest/(self.part+'.gz'),'rt') as f:
             data = json.loads(f.readline())['data']
         self.assertEqual(data['abstracts'],[dict(value='Breve.',language='und',selection='uncertain_fallback')])
-        self.assertEqual(data['keywords'],[{'value':'Cielo','language':'und','languageSource':'undetermined'}])
+        self.assertEqual(data['keywords'],[{'value':'Cielo'}])
         self.assertEqual(json.loads((dest/'errors.jsonl').read_text())['network'],'AR')
         self.rows[0]['data']['titles'] = []
         self.dump()
@@ -79,7 +77,7 @@ class PackageTest(unittest.TestCase):
         self.assertNotEqual(dest,second)
         self.assertEqual(json.loads((second/'manifest.json').read_text())['countsByNetwork']['AR']['title.missing'],1)
 
-    def test_consumer_uses_only_matching_keywords_in_original_order(self):
+    def test_new_annotated_keywords_are_kept_out_of_consumer_texts(self):
         from examples.build_inputs import build_inputs
 
         self.rows = self.rows[:1]
@@ -93,10 +91,11 @@ class PackageTest(unittest.TestCase):
         _, dest = self.execute()
         inputs = list(build_inputs(dest, classified_only=True))
         self.assertEqual([(r['language'],r['text']) for r in inputs],
-                         [('es','Heridas de mano\n\nmano, heridas'),('en','Wounds of hand\n\nhand')])
-        self.assertEqual(inputs[0]['fields'], [('titles',0),('keywords',0),('keywords',2)])
+                         [('es','Heridas de mano'),('en','Wounds of hand')])
+        self.assertEqual(inputs[0]['fields'], [('titles',0)])
         totals = json.loads((dest/'manifest.json').read_bytes())['counts']
-        self.assertEqual((totals['keywordOccurrences'],totals['keywordsUndetermined']), (4,1))
+        self.assertEqual(totals['keywordOccurrences'], 4)
+        self.assertNotIn('keywordsUndetermined', totals)
 
     def test_corrupt_input_or_index_never_publishes(self):
         (self.root/self.part).write_text('')
@@ -122,3 +121,59 @@ class PackageTest(unittest.TestCase):
         path.write_text(json.dumps(m))
         with self.assertRaisesRegex(ValueError,'COMPLETE'):
             self.execute()
+
+    def test_combined_order_and_opt_in_provenance(self):
+        first, second = self.rows
+        first['data'].update(
+            titles=[{'value': 'Un título'}, {'value': 'An English title'}, {'value': 'Another English title'}],
+            descriptions=[{'value': 'Un resumen. Financiado por alguien.'},
+                          {'value': 'A summary. A tradução. CC BY.'},
+                          {'value': 'Otro resumen.'}, {'value': 'A doubtful note.'}],
+            keywords=[{'value': 'tema', 'language': 'es'}, {'value': ' '}, {'value': 'policy'}],
+        )
+        second['data'].update(descriptions=[{'value': 'Pequeño.'}, {'value': 'Longer uncertain description.'}])
+        self.dump()
+
+        def language(value):
+            self.assertNotIn(value, {'tema', 'policy'})
+            return ('en', 'en') if value.startswith(('An', 'A summary')) else ('es', 'es')
+
+        self.fake.detect_language = language
+        self.fake.detect_role = lambda s: 'abstract' if 'resumen' in s or 'summary' in s else 'uncertain'
+        status, minimal = self.execute(combine=True)
+        self.assertEqual(status, 'COMPLETE')
+        _, audited = self.execute(combine=True, include_provenance=True)
+        part = self.part + '.gz'
+        rows = list(p.postprocess.read_rows(minimal / part))
+        self.assertEqual(rows, list(p.postprocess.read_rows(audited / part)))
+        self.assertEqual(rows[0], {
+            'network': 'AR', 'catalogId': 'A',
+            'text': 'title: An English title\n\nAnother English title\n\nUn título | text: '
+                    'A summary. A tradução. CC BY.\n\nUn resumen. Financiado por alguien.\n\n'
+                    'Otro resumen.\n\ntema, policy',
+        })
+        self.assertEqual(rows[1]['text'], 'title: Sol | text: Longer uncertain description.\n\nCielo')
+        audit = list(p.postprocess.read_rows(audited / p.PROVENANCE))
+        self.assertEqual(audit[0]['origins'], {
+            'titles': [1, 2, 0], 'keywords': [0, 2],
+            'descriptions': [{'index': index, 'selection': 'classified'} for index in [1, 0, 2]],
+        })
+        self.assertEqual(audit[1]['origins']['descriptions'], [{'index': 1, 'selection': 'uncertain_fallback'}])
+        self.assertEqual(audit[1]['sourceLine'], 2)
+        manifest = json.loads((minimal / 'manifest.json').read_bytes())
+        self.assertNotIn('parent', manifest)
+        self.assertNotIn('processor', manifest)
+        self.assertFalse((minimal / p.PROVENANCE).exists())
+        self.assertEqual(manifest['counts']['emitted'], 2)
+
+    def test_combined_title_fallback_and_missing_title(self):
+        self.fake.detect_role = lambda _: 'non_abstract'
+        self.rows[1]['data']['titles'] = [{'value': '  '}]
+        self.dump()
+        status, dest = self.execute(combine=True)
+        self.assertEqual(status, 'COMPLETE')
+        rows = list(p.postprocess.read_rows(dest / (self.part + '.gz')))
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]['text'], 'title: Sol | text: Sol\n\nCielo')
+        manifest = json.loads((dest / 'manifest.json').read_bytes())
+        self.assertEqual(manifest['counts']['omittedMissingTitle'], 1)

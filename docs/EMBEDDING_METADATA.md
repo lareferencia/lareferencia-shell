@@ -1,80 +1,65 @@
-# Paquete bibliográfico para embeddings
+# Prepare metadata for embeddings
 
-El comando `prepare-embedding-metadata` materializa registros de metadata clasificada y publica un directorio autónomo por ejecución. El consumidor puede trasladar ese directorio y leer las partes por orden con Python estándar. El perfil `bibliographic-roles` 1.0 incluye todas las familias. El preparador también acepta exportaciones con `classification-embeddings` 2.0, cuya proyección contiene títulos, descripciones y palabras clave.
+The pipeline has two preparation steps. The Java shell exports metadata from a snapshot. The Python command in this repository selects descriptions and builds the text for the batch embedding calculator. Use `--combine` for one vector per record with a title.
 
-## Instalación y ejecución
+## Export and prepare
 
-Desde la raíz del repositorio del shell, con Python 3.12, instalar el comando en un entorno virtual. Provisionar en un directorio los archivos aprobados `lid.176.ftz` y `role.bin`. El [procedimiento del piloto](../tools/embedding-metadata/README.md) documenta la obtención del detector de idiomas y el entrenamiento del clasificador de roles. El manifiesto identifica los archivos exactos utilizados mediante SHA-256.
+From the LA Referencia shell, export the original metadata for the required network. Add `--valid-only` when the campaign is limited to validated records.
+
+```text
+export-metadata --network UY --variant original --format jsonl --mapping config/exports/bibliographic-roles-v1.json --compression gzip --output /srv/metadata-exports
+```
+
+Install the Python command from the shell repository and provision the approved `lid.176.ftz` and `role.bin` files in the same models directory. The [pilot guide](../tools/embedding-metadata/README.md) documents how to obtain the language model and train the role model. The preparer also accepts the `classification-embeddings` 2.0 profile.
 
 ```sh
 python3.12 -m venv .venv
 .venv/bin/python -m pip install ./tools/embedding-metadata
-export LR_EMBEDDING_MODELS=/opt/lareferencia/modelos
+
+.venv/bin/prepare-embedding-metadata \
+  --input "$EXPORT_DIR" --models-dir "$MODELS_DIR" \
+  --output /srv/metadata-exports/prepared --combine
 ```
 
-Para ejecutar las pruebas desde la raíz del repositorio después de instalar el paquete:
+Use the exact `exp-…` directory reported by Java as `EXPORT_DIR`. You can set `LR_EMBEDDING_MODELS` in place of `--models-dir`. The Python command validates the export inventory, checks each input against its index and writes a new package directory. It publishes by renaming a temporary directory. Exit code 0 means `COMPLETE`, 2 means `PARTIAL` with row errors in `errors.jsonl`, and 1 signals a fatal failure. Automated consumers must require `COMPLETE`.
+
+## Combined text
+
+fastText and the role rules evaluate every description. The preparer retains all accepted descriptions. When none is accepted, it picks the longest nonblank uncertain description after cleaning, breaking ties by source order. Each selected occurrence keeps its original literal, including any languages, rights statements or acknowledgments it contains.
+
+The title and abstract blocks each put detected English occurrences first and preserve source order within the English and remaining groups. Two newlines separate occurrences. The body uses the title block when no description was selected. The preparer appends all nonblank keywords as the last paragraph of the body, in source order and separated by commas. It performs language detection only on titles and descriptions. The template is `title: {titles} | text: {body}`.
+
+The `embedding-inputs` v1 manifest lists the recipe, completion status, ordered GZIP JSONL parts, file sizes, SHA-256 checksums and counts. The main data rows contain only `network`, `catalogId` and `text`. Counts reconcile input rows with emitted rows, omissions for missing titles and errors. The abstract counts describe the emitted records and distinguish direct classification, uncertain fallback and missing descriptions.
+
+Add `--include-provenance` to produce `provenance.jsonl.gz`. The sidecar uses `(network, catalogId)` to join to the data rows. It includes the OAI identifier, metadata hash, snapshot reference, export part and 1-based line, and the 0-based occurrence indexes in text order. Description references record `classified` or `uncertain_fallback`. The manifest resolves snapshot references and identifies the parent export, profile and fastText model hashes. Keep the parent export to inspect original projected occurrences and the snapshot store to access historical XML.
+
+## Calculate vectors
+
+Use the batch calculator from the embedding-service repository. Pass the prepared package directory reported by Python. Pin a model revision available in the GPU environment.
+
+```sh
+python scripts/python/compute_metadata_embeddings.py \
+  "$PREPARED_DIR" "$VECTOR_DIR" --revision "$MODEL_REVISION"
+```
+
+The calculator verifies the data checksums and encodes the supplied text. It emits one row containing `network`, `catalogId` and `vector` per input row. The default overflow policy for this format truncates the encoder input and records the part, line and token counts in the vector manifest. Use `--on-overflow error` to reject oversize inputs. The prepared text stays complete on disk.
+
+## Annotated metadata and per-language texts
+
+Omit `--combine` to produce an `annotated-metadata` v2 package. It includes a local SQLite index and arrays for titles, abstracts, raw keywords, affiliations, funders, document types and other descriptions. Titles and abstracts include their detected languages. Abstracts record their selection. Records without a title remain available for inspection. Add `--include-provenance` for the export locators and occurrence indexes.
+
+```sh
+python3.12 tools/embedding-metadata/examples/build_inputs.py "$ANNOTATED_DIR" > entries.jsonl
+```
+
+This example creates texts per language for records with a title. Unknown-language occurrences get individual entries. New annotated packages keep the keywords in metadata and omit them from these texts. The example also reads historical v1 packages and respects their recorded keyword assignments. Use `--classified-only` to exclude uncertain fallbacks from this per-language view.
+
+## Verification with Uruguay
+
+The reference export for UY snapshot 4186 contains 30,752 records with usable titles. The combined recipe produces 30,752 inputs and preserves the 2,040 uncertain description selections from the historical annotation. The historical per-language pilot produced 53,737 inputs.
+
+Run the preparer tests from the shell repository after installing the package.
 
 ```sh
 .venv/bin/python -m unittest discover -s tools/embedding-metadata
 ```
-
-Desde el shell de LA Referencia, con el perfil del [catálogo del shell](../config/exports/bibliographic-roles-v1.json) instalado en su directorio de configuración:
-
-```text
-export-metadata --network UY --variant original --format jsonl --mapping config/exports/bibliographic-roles-v1.json --compression gzip --output /srv/metadata/exports
-```
-
-Desde el sistema operativo, asignar a `EXPORT_DIR` el directorio exacto comunicado por el shell. La ubicación de modelos también puede indicarse con `--models-dir`.
-
-```sh
-.venv/bin/prepare-embedding-metadata --input "$EXPORT_DIR" --output /srv/metadata/embedding-inputs
-```
-
-El comando comprueba el inventario y el índice del padre. Un error en los datos proyectados de una fila identificada se registra en `errors.jsonl`. Las inconsistencias de integridad, identidad o infraestructura detienen la ejecución. Trabaja en un directorio temporal de la raíz de salida, cierra SQLite, relee las partes para comprobar cada localizador y publica por renombre. Devuelve 0 con `COMPLETE`, 2 con `PARTIAL` o 1 con `FAILED`. En un fallo fatal se comunica el motivo por stderr y se descarta la salida provisional. Un reintento genera un nuevo identificador. Los consumidores automáticos deben exigir `COMPLETE`.
-
-## Contrato annotated-metadata 1
-
-- El manifiesto contiene `packageId`, tipo y versión de contrato, estado, fechas, redes y snapshots, referencia y SHA-256 del manifiesto padre, variante, perfil, modelos, reglas, umbrales y versiones. `parts` contiene la lista ordenada de rutas relativas con datos. `files` inventaría las partes, el índice y los errores con tamaños y hashes.
-- Cada parte de entrada genera una parte JSONL GZIP en la misma partición y mantiene el orden de origen. El tamaño en bytes varía al materializar la clasificación. Cada fila contiene `network`, `catalogId`, `identifier`, `metadataHash` y `data`.
-- Las siete familias siempre son arrays. `titles` y `abstracts` llevan `value` y el idioma detectado en `language` (código concreto, o `und` si quedó indeterminado). Los resúmenes llevan `selection` con `classified` o `uncertain_fallback`. Se elige un único respaldo cuando falta un resumen en todo el registro. Los índices de origen conservan el orden de las ocurrencias.
-- `keywords` conserva las ocurrencias y los atributos del perfil. `affiliations` usa el literal institucional extraído, o la ocurrencia de origen si faltó un literal separable. `funders` conserva el valor y la evidencia. `agency_mention` identifica una mera mención. `documentTypes` contiene tipos normalizados. `otherDescriptions` conserva otras descripciones, incluidas las dudosas restantes, con su idioma y rol.
-- Un registro sin título queda disponible y se cuenta en `title.missing`. La ausencia de categorías opcionales es válida. Los conteos concilian entrada = anotados + errores. El manifiesto da la cobertura por red y tipo de selección.
-- `records.sqlite` contiene una fila por entrada exportada, identificada por `(network, catalog_id)`. Incluye identificador, hash, snapshot, parte y línea padre, parte y línea de salida y estado. Las líneas comienzan en 1. El JSON en `origins` apunta desde cada ocurrencia entregada a `[campo, índice]` en el `data` del padre, con índices desde 0. En el manifiesto, `parent.exportId` identifica el export original.
-- Para recuperar los XML históricos sigue siendo necesario conservar el almacén correspondiente. La preparación de texto para embeddings solo requiere la carpeta entregada.
-
-## Idioma de las palabras clave
-
-Desde la versión 1.1 del preparador, cada elemento de `keywords` contiene el literal original, `language` y `languageSource`. Si la fuente incluía el atributo de idioma, `declaredLanguage` conserva su valor original. La selección sigue este orden.
-
-1. Para un literal con texto, usar el idioma explícito válido, normalizado a su código de idioma base (`pt-BR` → `pt`, `spa` → `es`). La evidencia es `declared`.
-2. Buscar el término o frase completos en títulos y resúmenes clasificados de idioma conocido del mismo registro. La comparación normaliza Unicode, mayúsculas y espacios y conserva los acentos. Una coincidencia exclusiva de un idioma da `record_text`. Si aparece en varios idiomas queda `und`.
-3. Sin coincidencias, aplicar el detector existente a la keyword. Una frase de al menos tres palabras con puntuación y margen suficientes da `model`. Ante evidencia insuficiente el idioma es `und` y la evidencia es `undetermined`. Los calificadores XOAI se preservan. En UY se observaron términos ingleses y españoles bajo un mismo calificador `es`, por lo que este por sí solo no decide el idioma.
-
-El manifiesto registra `counts.keywordOccurrences` y `counts.keywordsUndetermined` sobre todas las ocurrencias entregadas, incluidas las vacías. El desglose por red distingue idiomas y evidencias.
-
-## Consumidor de ejemplo
-
-[build_inputs.py](../tools/embedding-metadata/examples/build_inputs.py) usa únicamente la biblioteca estándar de Python 3.11+. Ejecutado sobre una copia del paquete, verifica los hashes de las partes y arma textos agrupando títulos y resúmenes por idioma dentro de cada registro con título. Los títulos y resúmenes indeterminados se entregan individualmente. A cada grupo con idioma conocido se añade un último párrafo con sus keywords en orden original, separadas por comas, y los índices se agregan a `fields`. Las keywords indeterminadas o sin grupo de texto en ese idioma quedan en el paquete. Los paquetes anteriores que carecen de `languageSource` conservan el resultado previo de títulos y resúmenes. Cada texto conserva las referencias a sus campos e índices. Para excluir los resúmenes de respaldo, añadir `--classified-only`.
-
-```sh
-python3.12 tools/embedding-metadata/examples/build_inputs.py "$PACKAGE_DIR" > entradas.jsonl
-```
-
-## Validación de la entrega con UY
-
-El preparador 1.1.0 se probó sobre los 30.752 registros activos de UY del snapshot 4186, con metadata original y el perfil `bibliographic-roles` 1.0. El export `exp-01b83c75-1d65-4883-bd8c-d22fa911f847` produjo el paquete anotado `ann-fc3c9eac-76b1-406c-bd5b-136eb63670cc` en estado `COMPLETE`, con 30.752 filas y cero errores.
-
-| Indicador | Resultado |
-| --- | ---: |
-| Registros con título | 30.752 |
-| Registros con resumen clasificado | 23.869 |
-| Registros con descripción dudosa seleccionada como resumen | 2.040 |
-| Registros sin resumen | 4.843 |
-| Ocurrencias de palabras clave | 177.463 |
-| Ocurrencias con idioma indeterminado | 101.239 (57,05 %) |
-| Textos preparados para embeddings | 53.737 |
-| Textos que incorporaron palabras clave | 29.855 |
-
-El consumidor leyó una copia del paquete anotado y generó los textos por idioma. Se comprobó que los índices de los campos recuperan el texto entregado. En el registro `2650dec7ea16ad480565ad17203e8f5d`, la entrada en español incorpora «heridas» y la inglesa incorpora «wounds». «traumatismos» y «traumatisms» permanecen en el paquete con idioma indeterminado.
-
-La validación cubre exportación, trazabilidad y preparación de textos. Medir la precisión lingüística requiere una muestra etiquetada manualmente. La generación de vectores pertenece a la siguiente etapa.

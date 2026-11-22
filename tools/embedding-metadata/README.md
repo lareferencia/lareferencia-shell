@@ -1,6 +1,6 @@
 # Preparar títulos y resúmenes para embeddings
 
-Para la entrega autónoma del producto usar [prepare-embedding-metadata](../../docs/EMBEDDING_METADATA.md). A continuación se documentan el entrenamiento y las herramientas del piloto.
+Use [prepare-embedding-metadata](../../docs/EMBEDDING_METADATA.md) for the Java-to-Python workflow and the combined input contract. The rest of this guide describes the original training and evaluation pilot.
 
 Este piloto lee paquetes JSONL completos de los perfiles `classification-embeddings` 2.0 y `bibliographic-roles` 1.0. Clasifica cada ocurrencia con fastText en CPU. La entrada mínima comprende `manifest.json`, `mapping.json` y las partes JSONL correspondientes. Comprueba el SHA-256 de las partes y reconcilia las filas con el manifiesto.
 
