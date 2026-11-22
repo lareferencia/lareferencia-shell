@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "lareferencia-embedding-metadata"
 version = "1.2.0"
 description = "Compatibility installation for LA Referencia metadata tools"
-requires-python = ">=3.11,<3.13"
+requires-python = ">=3.12"
 dependencies = ["lareferencia-metadata-tools[bibliographic]>=1.0"]
 
 [tool.setuptools]
