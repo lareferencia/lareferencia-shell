@@ -1,3 +1,0 @@
-# Metadata tools
-
-See the [maintained guide](https://github.com/LA-Referencia-IOI/lareferencia-metadata-tools/blob/main/docs/LICENSE_METADATA_EXTRACTION.md).

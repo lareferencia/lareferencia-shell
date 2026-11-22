@@ -274,8 +274,12 @@ que procedan del repositorio y registrar su propia auditoría.
 `common-full-metadata-v1.json` normaliza UY y AREANDINA a las mismas familias.
 Consultar [el contrato común, ejemplos y límites](metadata-export-common.es.md).
 
-Los perfiles disponibles son `publications-v1.json` (ejemplo bibliográfico inicial),
-`common-full-metadata-v1.json` (formato común completo) y
-`classification-embeddings-v1.json` (títulos, posibles resúmenes y keywords). Los perfiles
-intermedios de texto y los específicos de UY/AREANDINA se retiraron. Los análisis
+Consultá el [catálogo de perfiles](../config/exports/README.md) para elegir una
+proyección bibliográfica, de licencias o de metadata completa. Los análisis
 por fuente se conservan como antecedentes del perfil común.
+
+## Procesamiento del paquete
+
+Usá el directorio `exp-…` completo de una ejecución `COMPLETE` como entrada de
+los comandos instalados de Python. Para elegir el entorno y la revisión del
+procesador, consultá la [guía de metadata tools](https://github.com/LA-Referencia-IOI/lareferencia-metadata-tools#installation).

@@ -8,12 +8,6 @@ commands. Entity commands are contributed by `lareferencia-shell-entity-plugin`
 when `lareferencia-shell` is built with a profile that includes that plugin
 (`lareferencia`, `rcaap`, or `ibict`).
 
-## Metadata enrichment tools
-
-Install the Python workflows from [lareferencia-metadata-tools](https://github.com/LA-Referencia-IOI/lareferencia-metadata-tools).
-Use `run-rights-pipeline --shell-dir /path/to/lareferencia-shell` to export
-rights from this Java shell and produce a published enrichment edition.
-
 ## Build
 
 Build from the parent repository root (`lareferencia-platform`) with the
@@ -229,7 +223,8 @@ export-mapping-validate --mapping /config/exports/publications-v1.json
 export-metadata-preview --network RCAAP --mapping /config/exports/publications-v1.json --limit 5
 ```
 
-To prepare a standalone embeddings input package from a completed export, follow the [installation and package guide](docs/EMBEDDING_METADATA.md).
+Pass the completed `exp-…` directory to the installed Python commands for
+rights, enrichment or embeddings. [Processing workflows](https://github.com/LA-Referencia-IOI/lareferencia-metadata-tools).
 
 Supports XML, JSON and JSONL, gzip, per-source or combined partitions, and batches
 limited by records and uncompressed UTF-8 bytes. See the

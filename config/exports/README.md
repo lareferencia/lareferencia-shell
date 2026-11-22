@@ -6,7 +6,7 @@ Estos son los perfiles de ejemplo mantenidos en el repositorio del shell.
 | --- | --- | --- |
 | `publications-v1.json` | 1.0 | Ejemplo inicial: identificadores, dark, títulos y abstracts. |
 | `common-full-metadata-v1.json` | 1.1 | Metadata completa de UY y AREANDINA en 19 familias comunes. Calificadores opcionales y extensiones identificadas por `path`. |
-| `classification-embeddings-v1.json` | 1.0 | Títulos, posibles resúmenes y keywords para clasificación y embeddings. Incluye descripciones sin calificar. |
+| `classification-embeddings-v1.json` | 2.0 | Títulos, descripciones y keywords de todas las variantes de Dublin Core. |
 | `bibliographic-roles-v1.json` | 1.0 | Títulos, descripciones, keywords, tipos, afiliaciones y financiadores para el preparador de metadata de embeddings. |
 | `licenses-v1.json` | 1.1 | Valores de `dc.rights.*` de hasta 300 puntos de código Unicode. Excluye las URI de `info:eu-repo` y COAR. |
 
@@ -46,32 +46,17 @@ Consultar [la guía de exportación](../../docs/metadata-export.es.md) y
 
 ## Perfil para clasificación y embeddings
 
-`classification-embeddings-v1.json` exporta únicamente `titles`, `abstracts` y
-`keywords` dentro de `data`. Las tres familias son arrays de ocurrencias con
-`value`, `language` opcional y `qualifier` opcional, sin repetir `schema`.
-Se mantiene el envoltorio común con `network`, `catalogId`, `identifier` y
-`metadataHash` para vincular las clasificaciones con sus registros originales.
+`classification-embeddings-v1.json` exporta `titles`, `descriptions` y
+`keywords` a partir de `dc.title.*`, `dc.description.*` y `dc.subject.*`.
+Cada array conserva las ocurrencias con su `value`, `language` y `qualifier`
+cuando estos últimos están presentes. Las descripciones pueden incluir
+resúmenes, notas o afiliaciones.
 
-- Títulos: las variantes de `dc.title` del perfil común, incluidos alternativos,
-  subtítulos y traducciones.
-- Resúmenes: `dc.description.abstract`, `abstractenglish`, `resumen` y `none`,
-  además de `dcterms.abstract.none`.
-- Keywords: todas las variantes de `dc.subject` del perfil común, más
-  `dcterms.subject.none` y `dcterms.subject.Lemb`.
-
-Las descripciones sin calificar se incluyen por decisión explícita para aprovechar
-UY, donde no se distinguen resúmenes, notas y afiliaciones. Por tanto, `abstracts`
-contiene **posibles resúmenes**, no textos garantizados como resúmenes. En ambas
-fuentes, los valores sin calificar se reconocen por la ausencia de `qualifier`.
-Se excluyen rutas explícitas como `dc.description.notes`, `tableofcontents`,
-`program` y `degreename`. Las keywords pueden incluir términos de vocabularios
-controlados o códigos, identificables por su calificador.
-
-Se conservan repeticiones, espacios, valores vacíos y orden; un campo ausente es
-`[]`. No se infieren idiomas, no se concatenan textos ni se generan embeddings.
-Para construir la entrada del modelo, usar los `value` y elegir una política de
-idiomas, deduplicación y longitud en el procesamiento externo. El índice y el
-manifiesto del paquete conservan la trazabilidad para devolver enriquecimientos.
+El export conserva `network`, `catalogId`, `identifier` y `metadataHash`.
+El preparador Python recibe el directorio `exp-…` completo y clasifica las
+descripciones antes de componer los textos de entrada. Para incluir campos
+dedicados de tipos, afiliaciones y financiadores, usar
+`bibliographic-roles-v1.json`. [Preparar metadata para embeddings](https://github.com/LA-Referencia-IOI/lareferencia-metadata-tools/blob/main/docs/EMBEDDING_METADATA.md).
 
 ```text
 export-mapping-validate --mapping config/exports/classification-embeddings-v1.json
