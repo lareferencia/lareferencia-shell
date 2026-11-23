@@ -1,0 +1,121 @@
+{
+  "specVersion": 1,
+  "name": "bibliographic-roles",
+  "version": "1.0",
+  "inputSchema": "xoai",
+  "fields": {
+    "titles": {
+      "forEach": "dc.title.*",
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "descriptions": {
+      "forEach": "dc.description.*",
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "keywords": {
+      "forEach": "dc.subject.*",
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "types": {
+      "forEach": [
+        "dc.type",
+        "dc.type.*"
+      ],
+      "includeContext": [
+        "path",
+        "qualifier"
+      ],
+      "occurrenceStart": "value",
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "funders": {
+      "forEach": [
+        "oaire.fundername",
+        "oaire.fundername.*",
+        "oaire.funderName",
+        "oaire.funderName.*"
+      ],
+      "includeContext": [
+        "path",
+        "qualifier"
+      ],
+      "occurrenceStart": "value",
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "affiliations": {
+      "forEach": [
+        "dc.contributor.affiliation",
+        "dc.contributor.affiliation.*"
+      ],
+      "includeContext": [
+        "path",
+        "qualifier"
+      ],
+      "occurrenceStart": "value",
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        }
+      }
+    }
+  }
+}

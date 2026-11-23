@@ -223,6 +223,9 @@ export-mapping-validate --mapping /config/exports/publications-v1.json
 export-metadata-preview --network RCAAP --mapping /config/exports/publications-v1.json --limit 5
 ```
 
+Pass the completed `exp-…` directory to the installed Python commands for
+rights, enrichment or embeddings. [Processing workflows](https://github.com/LA-Referencia-IOI/lareferencia-metadata-tools).
+
 Supports XML, JSON and JSONL, gzip, per-source or combined partitions, and batches
 limited by records and uncompressed UTF-8 bytes. See the
 [metadata export guide](../docs/METADATA_EXPORT.md) and the
