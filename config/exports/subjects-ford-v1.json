@@ -1,0 +1,86 @@
+{
+  "specVersion": 1,
+  "name": "subjects-ford",
+  "version": "1.0",
+  "inputSchema": "xoai",
+  "recordFilter": {
+    "select": [
+      "dc.subject",
+      "dc.subject.*"
+    ],
+    "startsWithAny": [
+      "https://purl.org/becyt/ford/",
+      "http://purl.org/becyt/ford/",
+      "https://purl.org/pe-repo/ocde/ford#",
+      "http://purl.org/pe-repo/ocde/ford#"
+    ]
+  },
+  "fields": {
+    "titles": {
+      "forEach": [
+        "dc.title",
+        "dc.title.*"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "descriptions": {
+      "forEach": [
+        "dc.description",
+        "dc.description.*"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    },
+    "subjects": {
+      "forEach": [
+        "dc.subject",
+        "dc.subject.*"
+      ],
+      "occurrenceStart": "value",
+      "includeContext": [
+        "qualifier"
+      ],
+      "fields": {
+        "value": {
+          "select": ":value",
+          "type": "string",
+          "many": false
+        },
+        "language": {
+          "select": ":language",
+          "type": "string",
+          "many": false
+        }
+      }
+    }
+  }
+}

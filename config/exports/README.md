@@ -8,6 +8,7 @@ Estos son los perfiles de ejemplo mantenidos en el repositorio del shell.
 | `common-full-metadata-v1.json` | 1.1 | Metadata completa de UY y AREANDINA en 19 familias comunes. Calificadores opcionales y extensiones identificadas por `path`. |
 | `classification-embeddings-v1.json` | 2.0 | Títulos, descripciones y keywords de todas las variantes de Dublin Core. |
 | `bibliographic-roles-v1.json` | 1.0 | Títulos, descripciones, keywords, tipos, afiliaciones y financiadores para el preparador de metadata de embeddings. |
+| `subjects-ford-v1.json` | 1.0 | Registros con una materia cuyo valor empieza por una URI FORD de BECyT o de Perú. Exporta títulos, descripciones y todas las materias. |
 | `licenses-v1.json` | 1.1 | Valores de `dc.rights.*` de hasta 300 puntos de código Unicode. Excluye las URI de `info:eu-repo` y COAR. |
 
 Los perfiles se leen desde archivos mediante `--mapping`. Se pueden editar o
